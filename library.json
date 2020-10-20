@@ -1,0 +1,34 @@
+{
+  "name": "Timezone_Generic",
+  "version": "1.2.4",
+  "keywords": "Timing, Device, Control, RTC, wifi, ethernet",
+  "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
+  "authors": [
+    {
+      "name": "Jack Christensen",
+      "email": "jack.christensen@outlook.com"
+    },
+    {
+      "name":  "Khoi Hoang",
+      "url":   "https://github.com/khoih-prog",
+      "email": "khoih.prog@gmail.com",
+      "maintainer": true
+    }  
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khoih-prog/Timezone_Generic"
+  },
+  "homepage": "https://github.com/khoih-prog/Timezone_Generic",
+  "export": {
+    "exclude": [
+      "linux",
+      "extras",
+      "tests"
+    ]
+  },
+  "frameworks": "*",
+  "platforms": "*",
+  "examples": "examples/*/*/*.ino",
+  "license": "MIT"
+}
