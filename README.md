@@ -28,6 +28,10 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ---
 
+### Releases v1.2.5
+
+1. Add examples to use STM32 Built-In RTC.
+
 ### Releases v1.2.4
 
 1. Initial porting to many Generic boards using WiFi/Ethernet modules/shields.
@@ -105,6 +109,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 18. [`EthernetWebServer_STM32 library v1.0.6+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
 19. [`ESP8266_AT_WebServer library v1.1.1+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
 20. [`DS323x_Generic library v1.0.0+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
+21. [`STM32RTC library v1.0.3+`](https://github.com/stm32duino/STM32RTC) to use examples using built-in STM32 RTC.
 
 ---
 ---
@@ -129,7 +134,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**Timezone_Generic** library](https://platformio.org/lib/show/11329/Timezone_Generic) by using [Library Manager](https://platformio.org/lib/show/11329/Timezone_Generic/installation). Search for UPnP_Generic in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**Timezone_Generic** library](https://platformio.org/lib/show/11329/Timezone_Generic) by using [Library Manager](https://platformio.org/lib/show/11329/Timezone_Generic/installation). Search for **Timezone_Generic** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 
@@ -689,15 +694,17 @@ tz.display_STD_Rule();
  
 ### STM32F/L/H/G/WB/MP1 Boards with Ethernet
  
- 6. [RTC_STM32_Ethernet](examples/Ethernet/RTC_STM32_Ethernet)
- 7. [TZ_NTP_Clock_STM32_Ethernet](examples/Ethernet/TZ_NTP_Clock_STM32_Ethernet)
- 8. [TZ_NTP_WorldClock_STM32_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_STM32_Ethernet)
+ 6. [BI_RTC_Alarm_STM32_Ethernet](examples/Ethernet/BI_RTC_Alarm_STM32_Ethernet)
+ 7. [BI_RTC_STM32_Ethernet](examples/Ethernet/BI_RTC_STM32_Ethernet)
+ 8. [RTC_STM32_Ethernet](examples/Ethernet/RTC_STM32_Ethernet)
+ 9. [TZ_NTP_Clock_STM32_Ethernet](examples/Ethernet/TZ_NTP_Clock_STM32_Ethernet)
+10. [TZ_NTP_WorldClock_STM32_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_STM32_Ethernet)
  
 ### Generic Boards with WiFiNINA 
  
- 9. [RTC_WiFiNINA](examples/WiFiNINA/RTC_WiFiNINA) 
-10. [TZ_NTP_Clock_WiFiNINA](examples/WiFiNINA/TZ_NTP_Clock_WiFiNINA)
-11. [TZ_NTP_WorldClock_WiFiNINA](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA)
+11. [RTC_WiFiNINA](examples/WiFiNINA/RTC_WiFiNINA) 
+12. [TZ_NTP_Clock_WiFiNINA](examples/WiFiNINA/TZ_NTP_Clock_WiFiNINA)
+13. [TZ_NTP_WorldClock_WiFiNINA](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA)
 
 ---
 ---
@@ -1891,11 +1898,97 @@ readRules done
 [TZ] dow : 1 , month : 11
 [TZ] hour : 2 , offset : -300
 ```
+---
+
+12. The following is debug terminal output when running example [**BI_RTC_STM32_Ethernet**](examples/Ethernet/BI_RTC_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A using STM32Ethernet Library to demonstrate the usage of STM32 built-in RTC
+
+```
+Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
+[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 11
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 13
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+You're connected to the network, IP = 192.168.2.97
+Packet received
+Seconds since Jan 1 1900 = 3812898366
+Unix time = 1603909566
+
+Updating Time for STM32 RTC
+The UTC time is 18:26:06
+============================
+18:26:06 Wed 28 Oct 2020 UTC
+14:26:06 Wed 28 Oct 2020 EDT
+============================
+18:26:15 Wed 28 Oct 2020 UTC
+14:26:15 Wed 28 Oct 2020 EDT
+============================
+18:26:24 Wed 28 Oct 2020 UTC
+14:26:24 Wed 28 Oct 2020 EDT
+============================
+18:26:33 Wed 28 Oct 2020 UTC
+14:26:33 Wed 28 Oct 2020 EDT
+============================
+18:26:43 Wed 28 Oct 2020 UTC
+14:26:43 Wed 28 Oct 2020 EDT
+```
+
+
+---
+
+13. The following is debug terminal output when running example [**BI_RTC_Alarm_STM32_Ethernet**](examples/Ethernet/BI_RTC_Alarm_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A using STM32Ethernet Library to demonstrate the usage of STM32 built-in RTC Alarm function
+
+```
+Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
+[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 11
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 13
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+You're connected to the network, IP = 192.168.2.96
+Packet received
+Seconds since Jan 1 1900 = 3812900198
+Unix time = 1603911398
+
+Updating Time for STM32 RTC
+=======RTC ALARM SET========
+18:57:08 Wed 28 Oct 2020 UTC
+14:57:08 Wed 28 Oct 2020 EDT
+============================
+The UTC time is 18:56:38
+============================
+18:56:38 Wed 28 Oct 2020 UTC
+14:56:38 Wed 28 Oct 2020 EDT
+============================
+18:56:47 Wed 28 Oct 2020 UTC
+14:56:47 Wed 28 Oct 2020 EDT
+============================
+18:56:56 Wed 28 Oct 2020 UTC
+14:56:56 Wed 28 Oct 2020 EDT
+============================
+18:57:05 Wed 28 Oct 2020 UTC
+14:57:05 Wed 28 Oct 2020 EDT
+*****RTC ALARM ACTIVATED*****
+*****RTC ALARM ACTIVATED*****
+============================
+18:57:15 Wed 28 Oct 2020 UTC
+14:57:15 Wed 28 Oct 2020 EDT
+```
+
+
 
 ---
 ---
 
 ## Releases
+
+### Releases v1.2.5
+
+1. Add examples to use STM32 Built-In RTC.
 
 ### Releases v1.2.4
 

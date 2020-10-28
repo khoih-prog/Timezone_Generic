@@ -1,11 +1,13 @@
 /****************************************************************************************************************************
-  TZ_NTP_Clock_Ethernet.ino
-  
+  BI_RTC_STM32_Ethernet.ino
+
+  Self-adjusting clock for one time zone using Built-in STM32 RTC
+
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32 boards
 
   Based on and modified from Arduino Timezone Library (https://github.com/JChristensen/Timezone)
   to support other boards such as ESP8266/ESP32, SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
-  
+
   Copyright (C) 2018 by Jack Christensen and licensed under GNU GPL v3.0, https://www.gnu.org/licenses/gpl.html
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
@@ -18,29 +20,47 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
  *****************************************************************************************************************************/
+/****************************************************************************************************************************
+  STM32 has five clock sources: HSI, HSE, LSI, LSE, PLL.
+  
+  (1) HSI is a high-speed internal clock, RC oscillator, with a frequency of 8MHz and low accuracy.
+  (2) HSE is a high-speed external clock, which can be connected with quartz/ceramic resonator or external clock source. 
+      Its frequency range is from 4MHz to 16MHz.
+  (3) LSI is a low-speed internal clock, RC oscillator, with a frequency of 40 kHz, providing a low-power clock. 　
+  (4) LSE is a low-speed external clock connected to 32.768 kHz quartz crystal.
+  (5) PLL is the frequency doubling output of PLL, and its clock input source can be HSI/2, HSE or HSE/2. 
+      Frequency doubling can be chosen as 2 to 16 times, but the maximum output frequency should not exceed 72MHz.
+      
+  The system clock SYSCLK can be derived from three clock sources:
+  (1) HSI oscillator clock
+  (2) HSE oscillator clock
+  (3) PLL Clock
+  STM32 can choose a clock signal to output to MCO foot (PA8), and can choose 2-frequency, HSI, HSE, or system clock for PLL output.
+  Before any peripheral can be used, its corresponding clock must be enabled first.
+ *****************************************************************************************************************************/
 
-/*
-   The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
-   and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53,
-   is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
-*/
 
 #include "defines.h"
 
+#include <Timezone_Generic.h>             // https://github.com/khoih-prog/Timezone_Generic
+
+#include <STM32RTC.h>
+
+/* Get the rtc object */
+STM32RTC& rtc = STM32RTC::getInstance();
+
 //////////////////////////////////////////
 
-#include <Timezone_Generic.h>    // https://github.com/khoih-prog/Timezone_Generic
-
 // US Eastern Time Zone (New York, Detroit)
-TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
-TimeChangeRule mySTD = {"EST", First, Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    //Daylight time = UTC - 4 hours
+TimeChangeRule mySTD = {"EST", First, Sun, Nov, 2, -300};     //Standard time = UTC - 5 hours
 Timezone myTZ(myDST, mySTD);
 
 // If TimeChangeRules are already stored in EEPROM, comment out the three
 // lines above and uncomment the line below.
-//Timezone myTZ(100);       // assumes rules stored at EEPROM address 100
+//Timezone myTZ(100);       //assumes rules stored at EEPROM address 100
 
-TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ abbrev
+TimeChangeRule *tcr;        //pointer to the time change rule, use to get TZ abbrev
 
 //////////////////////////////////////////
 
@@ -82,35 +102,31 @@ void sendNTPpacket(char *ntpSrv)
   Udp.endPacket();
 }
 
-//////////////////////////////////////////
-
-// format and print a time_t value, with a time zone appended.
-void printDateTime(time_t t, const char *tz)
+void update_RTC(unsigned long epoch)
 {
-    char buf[32];
-    char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-    strcpy(m, monthShortStr(month(t)));
-    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
-        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
-    Serial.println(buf);
-}
-
-void displayClock(void)
-{
-  time_t utc = now();
-
-  time_t local = myTZ.toLocal(utc, &tcr);
+  // Get the time_t from epoch
+  time_t epoch_t = epoch;
   
-  Serial.println();
-  printDateTime(utc, "UTC");
-  printDateTime(local, tcr -> abbrev);
-  delay(10000);
+  // Update RTC
+  Serial.println("\nUpdating Time for STM32 RTC");
+
+  // STM32 RTC clock starts from 01/01/2000 if not set. No battery-backed RTC.
+  // STM32 RTC specific code
+
+  // Can use either one of these functions
+  
+  // 1. The best way to set from epoch
+  rtc.setEpoch(epoch);
+  
+  // 2. you can also use the harder way
+  //rtc.setTime(hour(epoch_t), minute(epoch_t), second(epoch_t));
+  //rtc.setDate(weekday(epoch_t), day(epoch_t), month(epoch_t), year(epoch_t));
 }
 
 void getNTPTime(void)
 {
   static bool gotCurrentTime = false;
-  
+
   // Just get the correct ime once
   if (!gotCurrentTime)
   {
@@ -142,6 +158,9 @@ void getNTPTime(void)
       // subtract seventy years:
       unsigned long epoch = secsSince1900 - seventyYears;
 
+      // print Unix time:
+      Serial.println(epoch);
+      
       // Get the time_t from epoch
       time_t epoch_t = epoch;
 
@@ -149,10 +168,9 @@ void getNTPTime(void)
       // warning: assumes that compileTime() returns US EDT
       // adjust the following line accordingly if you're in another time zone
       setTime(epoch_t);
-      
-      // print Unix time:
-      Serial.println(epoch);
 
+      update_RTC(epoch);
+       
       // print the hour, minute and second:
       Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
       Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
@@ -185,33 +203,25 @@ void getNTPTime(void)
 
 //////////////////////////////////////////
 
+// format and print a time_t value, with a time zone appended.
+void printDateTime(time_t t, const char *tz)
+{
+  char buf[32];
+  char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+  strcpy(m, monthShortStr(month(t)));
+  sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+          hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+  Serial.println(buf);
+}
+
 void setup()
 {
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStart TZ_NTP_Clock_Ethernet on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.println("\nStart BI_RTC_STM32_Ethernet on " + String(BOARD_NAME) + ", using " + String(SHIELD_TYPE));
 
-#if USE_ETHERNET_WRAPPER
-
-  EthernetInit();
-
-#else
-
-#if USE_ETHERNET
-  ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
-#elif USE_ETHERNET2
-  ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
-#elif USE_ETHERNET3
-  ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
-#elif USE_ETHERNET_LARGE
-  ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
-#elif USE_ETHERNET_ESP8266
-  ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
-#else
-  ET_LOGWARN(F("========================="));
-#endif
+  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
 
   ET_LOGWARN(F("Default SPI pinout:"));
   ET_LOGWARN1(F("MOSI:"), MOSI);
@@ -220,97 +230,10 @@ void setup()
   ET_LOGWARN1(F("SS:"),   SS);
   ET_LOGWARN(F("========================="));
 
-#if defined(ESP8266)
-  // For ESP8266, change for other boards if necessary
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   D2    // For ESP8266
-  #endif
-
-  ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
-
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
-    // For ESP8266
-    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-    // Ethernet           0                 X            X            X            X        0
-    // Ethernet2          X                 X            X            X            X        0
-    // Ethernet3          X                 X            X            X            X        0
-    // EthernetLarge      X                 X            X            X            X        0
-    // Ethernet_ESP8266   0                 0            0            0            0        0
-    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    Ethernet.init (USE_THIS_SS_PIN);
-
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-  
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN);
-  
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#elif defined(ESP32)
-
-  // You can use Ethernet.init(pin) to configure the CS pin
-  //Ethernet.init(10);  // Most Arduino shields
-  //Ethernet.init(5);   // MKR ETH shield
-  //Ethernet.init(0);   // Teensy 2.0
-  //Ethernet.init(20);  // Teensy++ 2.0
-  //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
-  //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
-
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   22    // For ESP32
-  #endif
-
-  ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
-
-  // For other boards, to change if necessary
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
-    // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
-  
-    //Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (USE_THIS_SS_PIN);
-  
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-  
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN); 
-  
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#else   //defined(ESP8266)
-  // unknown board, do nothing, use default SS = 10
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   10    // For other boards
-  #endif
-
-  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
-
+#if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
   // For other boards, to change if necessary
   #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC )
     // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-  
     Ethernet.init (USE_THIS_SS_PIN);
   
   #elif USE_ETHERNET3
@@ -321,20 +244,14 @@ void setup()
   
     Ethernet.setCsPin (USE_THIS_SS_PIN);
     Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-  #elif USE_CUSTOM_ETHERNET
   
+  #elif USE_CUSTOM_ETHERNET
     // You have to add initialization for your Custom Ethernet here
     // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN);
-    
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#endif    //defined(ESP8266)
-
-
-#endif  //USE_ETHERNET_WRAPPER
-
+    //Ethernet.init(USE_THIS_SS_PIN);
+  
+  #endif  //( ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC )
+#endif
 
   // start the ethernet connection and the server:
   // Use DHCP dynamic IP and random mac
@@ -343,35 +260,36 @@ void setup()
   //Ethernet.begin(mac[index], ip);
   Ethernet.begin(mac[index]);
 
-  // Just info to know how to connect correctly
-  Serial.println(F("========================="));
-  Serial.println(F("Currently Used SPI pinout:"));
-  Serial.print(F("MOSI:"));
-  Serial.println(MOSI);
-  Serial.print(F("MISO:"));
-  Serial.println(MISO);
-  Serial.print(F("SCK:"));
-  Serial.println(SCK);
-  Serial.print(F("SS:"));
-  Serial.println(SS);
-#if USE_ETHERNET3
-  Serial.print(F("SPI_CS:"));
-  Serial.println(SPI_CS);
-#endif
-  Serial.println(F("========================="));
-
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
-
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(Ethernet.localIP());
 
   Udp.begin(localPort);
+
+  // STM32 RTC specific code
+  // Select RTC clock source: LSI_CLOCK, LSE_CLOCK or HSE_CLOCK.
+  // By default the LSI is selected as source.
+  //rtc.setClockSource(STM32RTC::LSE_CLOCK);
+  rtc.begin(); // initialize RTC 24H format
+  //////
 }
 
 void loop()
 {
+  // Get time from NTP once, then update RTC
+  // You certainly can make NTP check every hour/day to update RTC ti have better accuracy
   getNTPTime();
-  displayClock();
+
+  // Display time from RTC
+  Serial.println("============================");
+
+  // STM32 RTC specific code
+  time_t utc = rtc.getEpoch();
+  time_t local = myTZ.toLocal(utc, &tcr);
+  //////
+  
+  printDateTime(utc, "UTC");
+  printDateTime(local, tcr -> abbrev);
+  
+  delay(10000);
 }

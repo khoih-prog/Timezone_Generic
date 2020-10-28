@@ -12,12 +12,13 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.4
+  Version: 1.2.5
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
-  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards 
+  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
+  1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
  *****************************************************************************************************************************/
 
 #ifndef defines_h
@@ -37,8 +38,8 @@
 // If USE_BUILTIN_ETHERNET == false and USE_UIP_ETHERNET == false => 
 // either use W5x00 with EthernetXYZ library
 // or ENC28J60 with EthernetENC library
-#define USE_BUILTIN_ETHERNET    true
-//#define USE_BUILTIN_ETHERNET    false
+//#define USE_BUILTIN_ETHERNET    true
+#define USE_BUILTIN_ETHERNET    false
 
 //#define USE_UIP_ETHERNET        true
 #define USE_UIP_ETHERNET        false
@@ -54,9 +55,9 @@
   #define USE_ETHERNET          false //true
   #define USE_ETHERNET2         false //true
   #define USE_ETHERNET3         false //true
-  #define USE_ETHERNET_LARGE    true
+  #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false //true
-  #define USE_ETHERNET_ENC      false
+  #define USE_ETHERNET_ENC      true
   #define USE_CUSTOM_ETHERNET   false
 #endif
 

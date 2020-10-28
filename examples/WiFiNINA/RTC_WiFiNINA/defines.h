@@ -10,12 +10,13 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.4
+  Version: 1.2.5
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
-  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards 
+  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
+  1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
  *****************************************************************************************************************************/
 
 #ifndef defines_h
@@ -309,7 +310,9 @@
 
 #include <WiFiWebServer.h>
 
-char ssid[] = "****";        // your network SSID (name)
-char pass[] = "****";        // your network password
+char ssid[] = "HueNet1";        // your network SSID (name)
+char pass[] = "jenniqqs";        // your network password
+//char ssid[] = "****";        // your network SSID (name)
+//char pass[] = "****";        // your network password
 
 #endif    //defines_h
