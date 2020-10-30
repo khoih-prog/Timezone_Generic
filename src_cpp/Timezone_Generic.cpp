@@ -22,6 +22,8 @@
 #include "Timezone_Generic.h"
 #include "Timezone_Generic_Debug.h"
 
+#define TIMEZONE_GENERIC_VERSION "1.2.5"
+
 #define  TZ_FILENAME      "/timezone.dat"
 #define  TZ_DATA_OFFSET   0
 
@@ -139,9 +141,6 @@
 #ifndef TZ_DEBUG
   #define TZ_DEBUG       false
 #endif
-
-#define TIMEZONE_GENERIC_VERSION "1.2.4"
-
 
 /*----------------------------------------------------------------------*
    Create a Timezone object from the given time change rules.
