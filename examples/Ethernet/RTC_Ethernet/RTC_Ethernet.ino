@@ -12,13 +12,14 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.5
+  Version: 1.2.6
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
   1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
+  1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
  *****************************************************************************************************************************/
 
 #include "defines.h"
@@ -31,10 +32,20 @@ DS323x rtc;
 
 //////////////////////////////////////////
 
-// US Eastern Time Zone (New York, Detroit)
-TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    //Daylight time = UTC - 4 hours
-TimeChangeRule mySTD = {"EST", First, Sun, Nov, 2, -300};     //Standard time = UTC - 5 hours
-Timezone myTZ(myDST, mySTD);
+#define USING_INITIALIZED_TZ      false   //true
+
+#if USING_INITIALIZED_TZ
+  // US Eastern Time Zone (New York, Detroit,Toronto)
+  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+  Timezone myTZ(myDST, mySTD);
+#else
+  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
+  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+  Timezone myTZ ;
+  TimeChangeRule myDST;
+  TimeChangeRule mySTD;
+#endif
 
 TimeChangeRule *tcr;        //pointer to the time change rule, use to get TZ abbrev
 
@@ -367,6 +378,38 @@ void setup()
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(Ethernet.localIP());
+
+#if !(USING_INITIALIZED_TZ)
+
+  // Can read this info from EEPROM, storage, etc
+  String tzName = "EDT/EST" ;
+
+  // Time zone rules can be set as below or dynamically built, say through a configuration
+  //  interface, or fetched from eeprom, flash etc.
+
+  if ( tzName == "EDT/EST" )
+  {
+    // America Eastern Time
+    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+  }
+  else if ( tzName == "CET/CEST" ) 
+  {
+    // central Europe
+    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
+    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
+  }
+  
+  else if ( tzName == "GMT/BST" ) 
+  {
+    // UK
+    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
+    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
+  }
+
+  myTZ.init( myDST, mySTD ) ;
+  
+#endif
 
   Udp.begin(localPort);
 

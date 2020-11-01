@@ -28,6 +28,11 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ---
 
+### Releases v1.2.6
+
+1. Allow un-initialized TZ then use begin() method to set the actual TZ. Credit of **6v6gt**, see [**Timezone_Generic Library to convert UTC to local time**](https://forum.arduino.cc/index.php?topic=711259)
+2. Modify examples to use new un-initialized-TZ feature.
+
 ### Releases v1.2.5
 
 1. Add examples to use STM32 Built-In RTC.
@@ -409,7 +414,9 @@ TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
 
 ### Timezone class
 
-There are three ways to define **Timezone** objects.
+There are several ways to define **Timezone** objects.
+
+#### 1. Using initialzed Timezone
 
 By first defining **TimeChangeRule**s and giving the daylight time rule and the standard time rule (assuming usEDT and usEST defined as above):
 
@@ -424,6 +431,63 @@ By reading rules previously stored in **EEPROM/DueFlashStorage/FlashStorage/Litt
 `Timezone usPacific(0);`
 
 Note that **TimeChangeRule**s require TZ_DATA_SIZE (12) bytes of storage each, so the pair of rules associated with a Timezone object requires 24 bytes total.  This could possibly change in future versions of the library.  The size of a **TimeChangeRule** can be checked with `TZ_DATA_SIZE` or `sizeof(TimeChangeRule)`.
+
+#### 2. Using un-initialzed Timezone (from v1.2.6)
+
+Just initialize the Timezone object without any TimeChangeRule.
+
+```
+#define USING_INITIALIZED_TZ      false   //true
+
+#if USING_INITIALIZED_TZ
+  // US Eastern Time Zone (New York, Detroit,Toronto)
+  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+  Timezone myTZ(myDST, mySTD);
+#else
+  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
+  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+  Timezone myTZ ;
+  TimeChangeRule myDST;
+  TimeChangeRule mySTD;
+#endif
+```
+
+then in setup(), get the correct TimeChangeRule (from SAM DUE DueFlashStorage, SAMD FlashStorage, nRF52 LittleFS, STM32 and AVR EEPROM, etc. or from any input), and initialzed the Timezone.
+
+```
+#if !(USING_INITIALIZED_TZ)
+
+  // Can read this info from EEPROM, storage, etc
+  String tzName = "EDT/EST" ;
+
+  // Time zone rules can be set as below or dynamically built, say through a configuration
+  //  interface, or fetched from eeprom, flash etc.
+
+  if ( tzName == "EDT/EST" )
+  {
+    // America Eastern Time
+    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+  }
+  else if ( tzName == "CET/CEST" ) 
+  {
+    // central Europe
+    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
+    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
+  }
+  
+  else if ( tzName == "GMT/BST" ) 
+  {
+    // UK
+    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
+    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
+  }
+
+  myTZ.init( myDST, mySTD ) ;
+  
+#endif
+```
 
 ---
 ---
@@ -709,9 +773,9 @@ tz.display_STD_Rule();
 ---
 ---
 
-### Example [TZ_NTP_WorldClock_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_Ethernet)
+### Example [TZ_NTP_Clock_Ethernet](examples/Ethernet/TZ_NTP_Clock_Ethernet)
 
-#### 1. File [TZ_NTP_WorldClock_Ethernet.ino](examples/Ethernet/TZ_NTP_WorldClock_Ethernet/TZ_NTP_WorldClock_Ethernet.ino)
+#### 1. File [TZ_NTP_Clock_Ethernet.ino](examples/Ethernet/TZ_NTP_Clock_Ethernet/TZ_NTP_Clock_Ethernet.ino)
 
 ```cpp
 #include "defines.h"
@@ -720,51 +784,26 @@ tz.display_STD_Rule();
 
 #include <Timezone_Generic.h>    // https://github.com/khoih-prog/Timezone_Generic
 
-// Australia Eastern Time Zone (Sydney, Melbourne)
-TimeChangeRule aEDT = {"AEDT", First, Sun, Oct, 2, 660};    // UTC + 11 hours
-TimeChangeRule aEST = {"AEST", First, Sun, Apr, 3, 600};    // UTC + 10 hours
-Timezone ausET(aEDT, aEST);
+#define USING_INITIALIZED_TZ      false   //true
 
-// Moscow Standard Time (MSK, does not observe DST)
-TimeChangeRule msk = {"MSK", Last, Sun, Mar, 1, 180};
-Timezone tzMSK(msk);
+#if USING_INITIALIZED_TZ
+  // US Eastern Time Zone (New York, Detroit,Toronto)
+  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+  Timezone myTZ(myDST, mySTD);
+#else
+  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
+  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+  Timezone myTZ ;
+  TimeChangeRule myDST;
+  TimeChangeRule mySTD;
+#endif
 
-// Central European Time (Frankfurt, Paris)
-TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 120};     // Central European Summer Time
-TimeChangeRule CET = {"CET ", Last, Sun, Oct, 3, 60};       // Central European Standard Time
-Timezone CE(CEST, CET);
+// If TimeChangeRules are already stored in EEPROM, comment out the three
+// lines above and uncomment the line below.
+//Timezone myTZ(100);       // assumes rules stored at EEPROM address 100
 
-// United Kingdom (London, Belfast)
-TimeChangeRule BST = {"BST", Last, Sun, Mar, 1, 60};        // British Summer Time
-TimeChangeRule GMT = {"GMT", Last, Sun, Oct, 2, 0};         // Standard Time
-Timezone UK(BST, GMT);
-
-// UTC
-TimeChangeRule utcRule = {"UTC", Last, Sun, Mar, 1, 0};     // UTC
-Timezone UTC(utcRule);
-
-// US Eastern Time Zone (New York, Detroit)
-TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  // Eastern Daylight Time = UTC - 4 hours
-TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   // Eastern Standard Time = UTC - 5 hours
-Timezone usET(usEDT, usEST);
-
-// US Central Time Zone (Chicago, Houston)
-TimeChangeRule usCDT = {"CDT", Second, Sun, Mar, 2, -300};
-TimeChangeRule usCST = {"CST", First, Sun, Nov, 2, -360};
-Timezone usCT(usCDT, usCST);
-
-// US Mountain Time Zone (Denver, Salt Lake City)
-TimeChangeRule usMDT = {"MDT", Second, Sun, Mar, 2, -360};
-TimeChangeRule usMST = {"MST", First, Sun, Nov, 2, -420};
-Timezone usMT(usMDT, usMST);
-
-// Arizona is US Mountain Time Zone but does not use DST
-Timezone usAZ(usMST);
-
-// US Pacific Time Zone (Las Vegas, Los Angeles)
-TimeChangeRule usPDT = {"PDT", Second, Sun, Mar, 2, -420};
-TimeChangeRule usPST = {"PST", First, Sun, Nov, 2, -480};
-Timezone usPT(usPDT, usPST);
+TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ abbrev
 
 //////////////////////////////////////////
 
@@ -808,38 +847,26 @@ void sendNTPpacket(char *ntpSrv)
 
 //////////////////////////////////////////
 
-// given a Timezone object, UTC and a string description, convert and print local time with time zone
-void printDateTime(Timezone tz, time_t utc, const char *descr)
+// format and print a time_t value, with a time zone appended.
+void printDateTime(time_t t, const char *tz)
 {
-    char buf[40];
+    char buf[32];
     char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-    TimeChangeRule *tcr;        // pointer to the time change rule, use to get the TZ abbrev
-
-    time_t t = tz.toLocal(utc, &tcr);
     strcpy(m, monthShortStr(month(t)));
     sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
-        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tcr -> abbrev);
-    Serial.print(buf);
-    Serial.print(' ');
-    Serial.println(descr);
+        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+    Serial.println(buf);
 }
 
-
-void displayWorldClock(void)
+void displayClock(void)
 {
   time_t utc = now();
+
+  time_t local = myTZ.toLocal(utc, &tcr);
   
   Serial.println();
-  printDateTime(ausET,  utc, "Sydney");
-  printDateTime(tzMSK,  utc, " Moscow");
-  printDateTime(CE,     utc, "Paris");
-  printDateTime(UK,     utc, " London");
-  printDateTime(UTC,    utc, " Universal Coordinated Time");
-  printDateTime(usET,   utc, " New York");
-  printDateTime(usCT,   utc, " Chicago");
-  printDateTime(usMT,   utc, " Denver");
-  printDateTime(usAZ,   utc, " Phoenix");
-  printDateTime(usPT,   utc, " Los Angeles");
+  printDateTime(utc, "UTC");
+  printDateTime(local, tcr -> abbrev);
   delay(10000);
 }
 
@@ -926,7 +953,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStart TZ_NTP_WorldClock_Ethernet on " + String(BOARD_NAME));
+  Serial.print("\nStart TZ_NTP_Clock_Ethernet on " + String(BOARD_NAME));
   Serial.println(" with " + String(SHIELD_TYPE));
 
 #if USE_ETHERNET_WRAPPER
@@ -1103,19 +1130,51 @@ void setup()
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(Ethernet.localIP());
 
+#if !(USING_INITIALIZED_TZ)
+
+  // Can read this info from EEPROM, storage, etc
+  String tzName = "EDT/EST" ;
+
+  // Time zone rules can be set as below or dynamically built, say through a configuration
+  //  interface, or fetched from eeprom, flash etc.
+
+  if ( tzName == "EDT/EST" )
+  {
+    // America Eastern Time
+    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+  }
+  else if ( tzName == "CET/CEST" ) 
+  {
+    // central Europe
+    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
+    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
+  }
+  
+  else if ( tzName == "GMT/BST" ) 
+  {
+    // UK
+    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
+    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
+  }
+
+  myTZ.init( myDST, mySTD ) ;
+  
+#endif
+
   Udp.begin(localPort);
 }
 
 void loop()
 {
   getNTPTime();
-  displayWorldClock();
+  displayClock();
 }
 ```
 
 ---
 
-#### 2. File [defines.h](examples/Ethernet/TZ_NTP_WorldClock_Ethernet/defines.h)
+#### 2. File [defines.h](examples/Ethernet/TZ_NTP_Clock_Ethernet/defines.h)
 
 ```cpp
 #ifndef defines_h
@@ -1986,6 +2045,11 @@ The UTC time is 18:56:38
 
 ## Releases
 
+### Releases v1.2.6
+
+1. Allow un-initialized TZ then use begin() method to set the actual TZ. Credit of **6v6gt**, see [**Timezone_Generic Library to convert UTC to local time**](https://forum.arduino.cc/index.php?topic=711259)
+2. Modify examples to use new un-initialized-TZ feature.
+
 ### Releases v1.2.5
 
 1. Add examples to use STM32 Built-In RTC.
@@ -2067,10 +2131,14 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
 1. Based on and modified from the [**Jack Christensen's Timezone Library**](https://github.com/JChristensen/Timezone).
+2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing.
+3. Thanks to **6v6gt** to contribute the new feature to allow un-initialized TZ. Check [**Timezone_Generic Library to convert UTC to local time**](https://forum.arduino.cc/index.php?topic=711259).
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/JChristensen"><img src="https://github.com/JChristensen.png" width="100px;" alt="JChristensen"/><br /><sub><b>⭐️ Jack Christensen</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b> Miguel Wisintainer</b></sub></a><br /></td>
+    <td align="center"><a href="https://forum.arduino.cc/index.php?action=profile;u=454553"><img src="https://dcw9y8se13llu.cloudfront.net/avatars/6v6gt.jpg" width="100px;" alt="6v6gt"/><br /><sub><b> 6v6gt</b></sub></a><br /></td>
   </tr> 
 </table>
 

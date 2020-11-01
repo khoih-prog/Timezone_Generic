@@ -1,7 +1,7 @@
 {
   "name": "Timezone_Generic",
-  "version": "1.2.5",
-  "keywords": "Timing, Device, Control, RTC, wifi, ethernet",
+  "version": "1.2.6",
+  "keywords": "timing, device, control, rtc, wifi, ethernet",
   "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
   "authors": [
     {

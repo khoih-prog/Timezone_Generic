@@ -21,6 +21,7 @@ month_t KEYWORD1
 # Timezone Class
 ###################
 
+init  KEYWORD2
 toLocal	KEYWORD2
 toUTC	KEYWORD2
 utcIsDST	KEYWORD2

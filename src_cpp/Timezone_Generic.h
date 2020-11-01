@@ -10,13 +10,14 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.5
+  Version: 1.2.6
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
   1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
+  1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
  *****************************************************************************************************************************/
 
 #pragma once
@@ -62,6 +63,12 @@ class Timezone
     Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart);
     Timezone(TimeChangeRule stdTime);
     Timezone(int address);
+    
+    // Allow a "blank" TZ object then use begin() method to set the actual TZ.
+    // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+    Timezone(void);
+		void init(TimeChangeRule dstStart, TimeChangeRule stdStart);
+		//////
     
     time_t  toLocal(time_t utc);
     time_t  toLocal(time_t utc, TimeChangeRule **tcr);
