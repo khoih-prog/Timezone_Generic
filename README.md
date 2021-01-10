@@ -18,7 +18,7 @@
   * [Currently Supported Ethernet Modules and Shields](#currently-supported-ethernet-modules-and-shields)
   * [Currently Supported Storage](#currently-supported-storage)
 * [Changelog](#changelog)
-  * [Releases v1.3.0](#releases-v130)
+  * [Major Releases v1.3.0](#major-releases-v130)
   * [Releases v1.2.6](#releases-v126)
   * [Releases v1.2.5](#releases-v125)
   * [Releases v1.2.4](#releases-v124)
@@ -102,7 +102,7 @@
   * [ 9. WriteRules on SAMD_NANO_33_IOT using FlashStorage_SAMD](#9-writerules-on-samd_nano_33_iot-using-flashstorage_samd)
   * [10. WriteRules on STM32F7 Nucleo-144 NUCLEO_F767ZI using EEPROM](#10-writerules-on-stm32f7-nucleo-144-nucleo_f767zi-using-eeprom)
   * [11. WriteRules on Arduino SAM DUE using dueFlashStorage](#11-writerules-on-arduino-sam-due-using-dueflashstorage)
-  * [12. WriteRules on ESP32_DEV using new ESP32 LittleFS](#12-writerules-on-esp32_dev-using-new-littlefs)
+  * [12. WriteRules on ESP32_DEV using new ESP32 LittleFS](#12-writerules-on-esp32_dev-using-new-esp32-littlefs)
   * [13. WriteRules on ESP8266_NODEMCU using LittleFS](#13-writerules-on-esp8266_nodemcu-using-littlefs)
   * [14. BI_RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A](#14-bi_rtc_stm32_ethernet-on-stm32f7-nucleo-144-nucleo_f767zi-with-lan8742a)
   * [15. BI_RTC_Alarm_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A](#15-bi_rtc_alarm_stm32_ethernet-on-stm32f7-nucleo-144-nucleo_f767zi-with-lan8742a)
@@ -139,7 +139,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ---
 
-#### Currently Supported Boards
+### Currently Supported Boards
 
   - **ESP8266**.
   - **ESP32**.
@@ -153,20 +153,20 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - **Arduino AVR boards (UNO, Nano, Mega, etc.)**
   - **Arduino MegaAVR boards (UNO WiFi Rev 2, Nano Every, etc.)**
   
-#### Currently Supported WiFi Modules and Shields
+### Currently Supported WiFi Modules and Shields
 
   - **ESP8266 built-in WiFi**.
   - **ESP32 built-in WiFi**.
   - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
   - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
   
-#### Currently Supported Ethernet Modules and Shields
+### Currently Supported Ethernet Modules and Shields
 
   - **W5x00's using Ethernet, EthernetLarge, Ethernet2 or Ethernet3 Library.**
   - **ENC28J60 using EthernetENC or UIPEthernet library.**
   - **LAN8742A using STM32Ethernet / STM32 LwIP libraries.**
 
-#### Currently Supported Storage
+### Currently Supported Storage
 
   - **ESP8266 LittleFS, SPIFFS**.
   - **ESP32 SPIFFS and LittleFS**.
@@ -180,7 +180,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ## Changelog
 
-### Releases v1.3.0
+###  Major Releases v1.3.0
 
 1. Add support to ESP32/ESP8266 using LittleFS/SPIFFS
 2. Add support to AVR, UNO WiFi Rev2 boards.
@@ -222,7 +222,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 10. [`Seeeduino SAMD core v1.8.1+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
 11. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
 12. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. To install go to Arduino IDE, select Boards Manager, search for **`STM32`**
-13. [`Time v1.6+`](https://github.com/PaulStoffregen/Time)
+13. [`Time v1.6+`](https://github.com/PaulStoffregen/Time) or for PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 14. Depending on which board you're using:
    - [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
    - [`FlashStorage_SAMD library v1.0.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21/SAMD51 (ZERO, MKR, NANO_33_IOT, AdaFruit Itsy-Bitsy M0/M4, etc.)
@@ -2320,7 +2320,7 @@ The UTC time is 18:56:38
 
 ## Releases
 
-### Releases v1.3.0
+### Major Releases v1.3.0
 
 1. Add support to ESP32/ESP8266 using LittleFS/SPIFFS
 2. Add support to AVR, UNO WiFi Rev2 boards.
