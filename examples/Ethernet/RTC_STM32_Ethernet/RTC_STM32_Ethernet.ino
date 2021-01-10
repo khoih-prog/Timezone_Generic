@@ -12,7 +12,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.6
+  Version: 1.3.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,8 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
+  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
+                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
 #include "defines.h"
@@ -32,20 +34,10 @@ DS323x rtc;
 
 //////////////////////////////////////////
 
-#define USING_INITIALIZED_TZ      false   //true
-
-#if USING_INITIALIZED_TZ
-  // US Eastern Time Zone (New York, Detroit,Toronto)
-  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
-  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
-  Timezone myTZ(myDST, mySTD);
-#else
-  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
-  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-  Timezone myTZ ;
-  TimeChangeRule myDST;
-  TimeChangeRule mySTD;
-#endif
+// US Eastern Time Zone (New York, Detroit)
+TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    //Daylight time = UTC - 4 hours
+TimeChangeRule mySTD = {"EST", First, Sun, Nov, 2, -300};     //Standard time = UTC - 5 hours
+Timezone myTZ(myDST, mySTD);
 
 // If TimeChangeRules are already stored in EEPROM, comment out the three
 // lines above and uncomment the line below.
@@ -130,7 +122,7 @@ void getNTPTime(void)
 
       // print Unix time:
       Serial.println(epoch);
-      
+
       // Get the time_t from epoch
       time_t epoch_t = epoch;
 
@@ -154,8 +146,8 @@ void getNTPTime(void)
       //rtc.now( DateTime(epoch_t) );
 
       // 4) DateTime(unsigned long epoch). The best and easiest way
-      rtc.now( DateTime(epoch) );
-       
+      rtc.now( DateTime((uint32_t) epoch) );
+      
       // print the hour, minute and second:
       Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
       Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
@@ -204,7 +196,12 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("\nStart RTC_STM32_Ethernet on " + String(BOARD_NAME) + ", using " + String(SHIELD_TYPE));
+  delay(200);
+
+  Serial.print(F("\nStart RTC_STM32_Ethernet on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+  Serial.println(DS323X_GENERIC_VERSION); 
 
   Wire.begin();
 
@@ -251,38 +248,6 @@ void setup()
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(Ethernet.localIP());
 
-#if !(USING_INITIALIZED_TZ)
-
-  // Can read this info from EEPROM, storage, etc
-  String tzName = "EDT/EST" ;
-
-  // Time zone rules can be set as below or dynamically built, say through a configuration
-  //  interface, or fetched from eeprom, flash etc.
-
-  if ( tzName == "EDT/EST" )
-  {
-    // America Eastern Time
-    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
-    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
-  }
-  else if ( tzName == "CET/CEST" ) 
-  {
-    // central Europe
-    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
-    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
-  }
-  
-  else if ( tzName == "GMT/BST" ) 
-  {
-    // UK
-    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
-    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
-  }
-
-  myTZ.init( myDST, mySTD ) ;
-  
-#endif
-
   Udp.begin(localPort);
 
   rtc.attach(Wire);
@@ -297,7 +262,7 @@ void loop()
   // Display time from RTC
   DateTime now = rtc.now();
 
-  Serial.println("============================");
+  Serial.println(F("============================"));
 
   time_t utc = now.get_time_t();
   time_t local = myTZ.toLocal(utc, &tcr);

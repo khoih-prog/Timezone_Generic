@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.6
+  Version: 1.3.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -18,6 +18,8 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
+  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
+                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
 #ifndef defines_h
@@ -229,19 +231,25 @@
 #endif
 
 #elif ( defined(ESP8266) )
-// For ESP8266
-#warning Use ESP8266 architecture
-#include <ESP8266mDNS.h>
-#define ETHERNET_USE_ESP8266
-#define BOARD_TYPE      "ESP8266"
+  // For ESP8266
+  #warning Use ESP8266 architecture
+  #include <ESP8266mDNS.h>
+  #define ETHERNET_USE_ESP8266
+  #define BOARD_TYPE      "ESP8266"
+  
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false
 
 #elif ( defined(ESP32) )
-// For ESP32
-#warning Use ESP32 architecture
-#define ETHERNET_USE_ESP32
-#define BOARD_TYPE      "ESP32"
+  // For ESP32
+  #warning Use ESP32 architecture
+  #define ETHERNET_USE_ESP32
+  #define BOARD_TYPE      "ESP32"
+  
+  #define W5500_RST_PORT   21
 
-#define W5500_RST_PORT   21
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false 
 
 #else
 // For Mega

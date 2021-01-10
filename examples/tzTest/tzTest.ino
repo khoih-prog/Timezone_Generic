@@ -12,7 +12,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.6
+  Version: 1.3.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,8 +20,15 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
+  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
+                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
+#if (ESP8266 || ESP32)
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false
+#endif
+  
 #include <Timezone_Generic.h>   // https://github.com/khoih-prog/Timezone_Generic
 #include <TimeLib.h>            // https://github.com/PaulStoffregen/Time
 
@@ -90,14 +97,20 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
+  delay(200);
+
+  Serial.print(F("\nStart TZTest on ")); 
+
 #if defined(ARDUINO_BOARD)
-  Serial.println("\nStarting TZTest on " + String(ARDUINO_BOARD));
+  Serial.println(ARDUINO_BOARD);
 #elif defined(BOARD_NAME)
-  Serial.println("\nStarting TZTest on " + String(BOARD_NAME));
+  Serial.println(BOARD_NAME);
 #else
-  Serial.println("\nStarting TZTest");
+  Serial.println();
 #endif
 
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+  
   // New Zealand
   printTimes( 1,  4, 2018, nzSTD.hour, nzDST.offset, nz); // day, month, year, hour, offset, tz
   printTimes(30,  9, 2018, nzDST.hour, nzSTD.offset, nz);

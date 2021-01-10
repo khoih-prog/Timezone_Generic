@@ -12,7 +12,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.6
+  Version: 1.3.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,8 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
+  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
+                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
 #include "defines.h"
@@ -150,7 +152,7 @@ void getNTPTime(void)
       //rtc.now( DateTime(epoch_t) );
 
       // 4) DateTime(unsigned long epoch). The best and easiest way
-      rtc.now( DateTime(epoch) );
+      rtc.now( DateTime((uint32_t) epoch) );
        
       // print the hour, minute and second:
       Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
@@ -200,8 +202,12 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStart RTC_Ethernet on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  delay(200);
+
+  Serial.print(F("\nStart RTC_Ethernet on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+  Serial.println(DS323X_GENERIC_VERSION); 
 
   Wire.begin();
 

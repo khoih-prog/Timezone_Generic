@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.2.6
+  Version: 1.3.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -18,9 +18,15 @@
                                   using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
   1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
+  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
+                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
 #pragma once
+
+#ifndef TIMEZONE_GENERIC_H
+#define TIMEZONE_GENERIC_H
+
 
 // For AVR, Teensy, STM32 boards, use EEPROM
 // For SAM DUE, use DueFlashStorage. 
@@ -28,6 +34,8 @@
 // For nRF52, use LittleFS/InternalFS.
 // For ESP8266, use LitteFS, SPIFFS or EEPROM.
 // For ESP32, use SPIFFS or EEPROM.
+
+#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.3.0"
 
 #if defined(ARDUINO) && (ARDUINO >= 100)
   #include <Arduino.h>
@@ -67,7 +75,7 @@ class Timezone
     
     // Allow a "blank" TZ object then use begin() method to set the actual TZ.
     // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-    Timezone(void);
+    Timezone();
 		void init(TimeChangeRule dstStart, TimeChangeRule stdStart);
 		//////
     
@@ -79,21 +87,21 @@ class Timezone
     void    setRules(TimeChangeRule dstStart, TimeChangeRule stdStart);
     
     //void    readRules(int address);
-    void    readRules(void);
+    void    readRules();
     void    writeRules(int address = 0);
     
-    TimeChangeRule* read_DST_Rule(void)
+    TimeChangeRule* read_DST_Rule()
     {
       return &m_dst;
     }
     
-    TimeChangeRule* read_STD_Rule(void)
+    TimeChangeRule* read_STD_Rule()
     {
       return &m_std;
     }
     
-    void display_DST_Rule(void);  
-    void display_STD_Rule(void);
+    void display_DST_Rule();  
+    void display_STD_Rule();
 
   private:
     void    calcTimeChanges(int yr);
@@ -108,7 +116,7 @@ class Timezone
     time_t m_dstLoc;        // dst start for given/current year, given in local time
     time_t m_stdLoc;        // std time start for given/current year, given in local time
     
-    void      readTZData(void);
+    void      readTZData();
     void      writeTZData(int address);
     
     uint16_t  TZ_DATA_START     = 0;
@@ -118,3 +126,4 @@ class Timezone
 
 #include "Timezone_Generic_Impl.h"
 
+#endif    // TIMEZONE_GENERIC_H
