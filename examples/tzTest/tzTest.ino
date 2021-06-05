@@ -12,7 +12,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -22,6 +22,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
  *****************************************************************************************************************************/
 
 #if (ESP8266 || ESP32)
@@ -35,12 +36,14 @@
 // New Zealand Time Zone
 TimeChangeRule nzSTD = {"NZST", First, Sun, Apr, 3, 720};   // UTC + 12 hours
 TimeChangeRule nzDST = {"NZDT", Last, Sun, Sep, 2, 780};    // UTC + 13 hours
-Timezone nz(nzDST, nzSTD);
+//Timezone nz(nzDST, nzSTD);
+Timezone *nz;
 
 // US Eastern Time Zone (New York, Detroit)
 TimeChangeRule etDST = {"EDT", Second, Sun, Mar, 2, -240};  // Daylight time = UTC - 4 hours
 TimeChangeRule etSTD = {"EST", First, Sun, Nov, 2, -300};   // Standard time = UTC - 5 hours
-Timezone et(etDST, etSTD);
+//Timezone et(etDST, etSTD);
+Timezone *et;
 
 #ifndef LED_BUILTIN
   #define LED_BUILTIN       13
@@ -61,7 +64,7 @@ void printDateTime(time_t t, const char *tz)
 // print corresponding UTC and local times "n" seconds before and after the time change.
 // h is the hour to change the clock using the *current* time (i.e. before the change).
 // offset is the utc offset in minutes for the time *after* the change.
-void printTimes(uint8_t d, uint8_t m, int y, uint8_t h, int offset, Timezone tz)
+void printTimes(uint8_t d, uint8_t m, int y, uint8_t h, int offset, Timezone *tz)
 {
   const time_t n(3);      // number of times to print before and after the time change
   tmElements_t tm;
@@ -82,7 +85,7 @@ void printTimes(uint8_t d, uint8_t m, int y, uint8_t h, int offset, Timezone tz)
   for (uint16_t i = 0; i < n * 2; i++)
   {
     TimeChangeRule *tcr;    // pointer to the time change rule, use to get TZ abbrev
-    time_t local = tz.toLocal(utc, &tcr);
+    time_t local = tz->toLocal(utc, &tcr);
     printDateTime(utc, "UTC = ");
     printDateTime(local, tcr -> abbrev);
     Serial.println();
@@ -110,6 +113,9 @@ void setup()
 #endif
 
   Serial.println(TIMEZONE_GENERIC_VERSION);
+
+  nz = new Timezone(nzDST, nzSTD);
+  et = new Timezone(etDST, etSTD);
   
   // New Zealand
   printTimes( 1,  4, 2018, nzSTD.hour, nzDST.offset, nz); // day, month, year, hour, offset, tz

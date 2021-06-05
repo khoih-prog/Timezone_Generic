@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
  *****************************************************************************************************************************/
 
 #include "defines.h"
@@ -31,48 +32,49 @@
 // Australia Eastern Time Zone (Sydney, Melbourne)
 TimeChangeRule aEDT = {"AEDT", First, Sun, Oct, 2, 660};    // UTC + 11 hours
 TimeChangeRule aEST = {"AEST", First, Sun, Apr, 3, 600};    // UTC + 10 hours
-Timezone ausET(aEDT, aEST);
+Timezone *ausET;
 
 // Moscow Standard Time (MSK, does not observe DST)
 TimeChangeRule msk = {"MSK", Last, Sun, Mar, 1, 180};
-Timezone tzMSK(msk);
+Timezone *tzMSK;
+
 
 // Central European Time (Frankfurt, Paris)
 TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 120};     // Central European Summer Time
 TimeChangeRule CET = {"CET ", Last, Sun, Oct, 3, 60};       // Central European Standard Time
-Timezone CE(CEST, CET);
+Timezone *CE;
 
 // United Kingdom (London, Belfast)
 TimeChangeRule BST = {"BST", Last, Sun, Mar, 1, 60};        // British Summer Time
 TimeChangeRule GMT = {"GMT", Last, Sun, Oct, 2, 0};         // Standard Time
-Timezone UK(BST, GMT);
+Timezone *UK;
 
 // UTC
 TimeChangeRule utcRule = {"UTC", Last, Sun, Mar, 1, 0};     // UTC
-Timezone UTC(utcRule);
+Timezone *UTC;
 
 // US Eastern Time Zone (New York, Detroit)
 TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  // Eastern Daylight Time = UTC - 4 hours
 TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   // Eastern Standard Time = UTC - 5 hours
-Timezone usET(usEDT, usEST);
+Timezone *usET;
 
 // US Central Time Zone (Chicago, Houston)
 TimeChangeRule usCDT = {"CDT", Second, Sun, Mar, 2, -300};
 TimeChangeRule usCST = {"CST", First, Sun, Nov, 2, -360};
-Timezone usCT(usCDT, usCST);
+Timezone *usCT;
 
 // US Mountain Time Zone (Denver, Salt Lake City)
 TimeChangeRule usMDT = {"MDT", Second, Sun, Mar, 2, -360};
 TimeChangeRule usMST = {"MST", First, Sun, Nov, 2, -420};
-Timezone usMT(usMDT, usMST);
+Timezone *usMT;
 
 // Arizona is US Mountain Time Zone but does not use DST
-Timezone usAZ(usMST);
+Timezone *usAZ;
 
 // US Pacific Time Zone (Las Vegas, Los Angeles)
 TimeChangeRule usPDT = {"PDT", Second, Sun, Mar, 2, -420};
 TimeChangeRule usPST = {"PST", First, Sun, Nov, 2, -480};
-Timezone usPT(usPDT, usPST);
+Timezone *usPT;
 
 //////////////////////////////////////////
 
@@ -117,13 +119,13 @@ void sendNTPpacket(char *ntpSrv)
 }
 
 // given a Timezone object, UTC and a string description, convert and print local time with time zone
-void printDateTime(Timezone tz, time_t utc, const char *descr)
+void printDateTime(Timezone *tz, time_t utc, const char *descr)
 {
     char buf[40];
     char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
     TimeChangeRule *tcr;        // pointer to the time change rule, use to get the TZ abbrev
 
-    time_t t = tz.toLocal(utc, &tcr);
+    time_t t = tz->toLocal(utc, &tcr);
     strcpy(m, monthShortStr(month(t)));
     sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
         hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tcr -> abbrev);
@@ -270,6 +272,21 @@ void setup()
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(WiFi.localIP());
 
+  ////////////////////////////////
+  
+  ausET = new Timezone(aEDT, aEST);
+  tzMSK = new Timezone(msk);
+  CE    = new Timezone(CEST, CET);
+  UK    = new Timezone(BST, GMT);
+  UTC   = new Timezone(utcRule);
+  usET  = new Timezone(usEDT, usEST);
+  usCT  = new Timezone(usCDT, usCST);
+  usMT  = new Timezone(usMDT, usMST);
+  usAZ  = new Timezone(usMST);
+  usPT  = new Timezone(usPDT, usPST);
+
+  ////////////////////////////////
+  
   Udp.begin(localPort);
 
   Serial.print(F("Listening on port "));

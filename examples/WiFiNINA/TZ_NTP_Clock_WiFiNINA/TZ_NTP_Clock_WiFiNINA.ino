@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
  *****************************************************************************************************************************/
 
 #include "defines.h"
@@ -34,11 +35,11 @@
   // US Eastern Time Zone (New York, Detroit,Toronto)
   TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
   TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
-  Timezone myTZ(myDST, mySTD);
+  Timezone *myTZ;
 #else
   // Allow a "blank" TZ object then use begin() method to set the actual TZ.
   // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-  Timezone myTZ ;
+  Timezone *myTZ;
   TimeChangeRule myDST;
   TimeChangeRule mySTD;
 #endif
@@ -108,7 +109,7 @@ void displayClock(void)
 {
   time_t utc = now();
 
-  time_t local = myTZ.toLocal(utc, &tcr);
+  time_t local = myTZ->toLocal(utc, &tcr);
   
   Serial.println();
   printDateTime(utc, "UTC");
@@ -238,7 +239,11 @@ void setup()
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(WiFi.localIP());
 
-#if !(USING_INITIALIZED_TZ)
+#if (USING_INITIALIZED_TZ)
+
+  myTZ = new Timezone(myDST, mySTD);
+
+#else
 
   // Can read this info from EEPROM, storage, etc
   String tzName = "EDT/EST" ;
@@ -266,7 +271,8 @@ void setup()
     mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
   }
 
-  myTZ.init( myDST, mySTD ) ;
+  myTZ = new Timezone();
+  myTZ->init( myDST, mySTD );
   
 #endif
 

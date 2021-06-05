@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
  *****************************************************************************************************************************/
 
 #pragma once
@@ -44,28 +45,51 @@
   #define _TZ_LOGLEVEL_       0
 #endif
 
-#define TZ_LOGERROR(x)         if(_TZ_LOGLEVEL_>0) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.println(x); }
-#define TZ_LOGERROR0(x)        if(_TZ_LOGLEVEL_>0) { TZ_DBG_PORT.print(x); }
-#define TZ_LOGERROR1(x,y)      if(_TZ_LOGLEVEL_>0) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(y); }
-#define TZ_LOGERROR2(x,y,z)    if(_TZ_LOGLEVEL_>0) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(z); }
-#define TZ_LOGERROR3(x,y,z,w)  if(_TZ_LOGLEVEL_>0) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(z); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(w); }
+///////////////////////////////////////
 
-#define TZ_LOGWARN(x)          if(_TZ_LOGLEVEL_>1) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.println(x); }
-#define TZ_LOGWARN0(x)         if(_TZ_LOGLEVEL_>1) { TZ_DBG_PORT.print(x); }
-#define TZ_LOGWARN1(x,y)       if(_TZ_LOGLEVEL_>1) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(y); }
-#define TZ_LOGWARN2(x,y,z)     if(_TZ_LOGLEVEL_>1) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(z); }
-#define TZ_LOGWARN3(x,y,z,w)   if(_TZ_LOGLEVEL_>1) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(z); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(w); }
+const char TZ_MARK[]  = "[TZ] ";
+const char TZ_SPACE[] = " ";
 
-#define TZ_LOGINFO(x)          if(_TZ_LOGLEVEL_>2) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.println(x); }
-#define TZ_LOGINFO0(x)         if(_TZ_LOGLEVEL_>2) { TZ_DBG_PORT.print(x); }
-#define TZ_LOGINFO1(x,y)       if(_TZ_LOGLEVEL_>2) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(y); }
-#define TZ_LOGINFO2(x,y,z)     if(_TZ_LOGLEVEL_>2) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(z); }
-#define TZ_LOGINFO3(x,y,z,w)   if(_TZ_LOGLEVEL_>2) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(z); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(w); }
+#define TZ_PRINT        TZ_DBG_PORT.print
+#define TZ_PRINTLN      TZ_DBG_PORT.println
+#define TZ_FLUSH        TZ_DBG_PORT.flush()
 
-#define TZ_LOGDEBUG(x)         if(_TZ_LOGLEVEL_>3) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.println(x); }
-#define TZ_LOGDEBUG0(x)        if(_TZ_LOGLEVEL_>3) { TZ_DBG_PORT.print(x); }
-#define TZ_LOGDEBUG1(x,y)      if(_TZ_LOGLEVEL_>3) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(y); }
-#define TZ_LOGDEBUG2(x,y,z)    if(_TZ_LOGLEVEL_>3) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(z); }
-#define TZ_LOGDEBUG3(x,y,z,w)  if(_TZ_LOGLEVEL_>3) { TZ_DBG_PORT.print("[TZ] "); TZ_DBG_PORT.print(x); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(y); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.print(z); TZ_DBG_PORT.print(" "); TZ_DBG_PORT.println(w); }
+#define TZ_PRINT_MARK   TZ_PRINT(TZ_MARK)
+#define TZ_PRINT_SP     TZ_PRINT(TZ_SPACE)
+#define TZ_PRINT_LINE   TZ_PRINT(TZ_LINE)
+
+///////////////////////////////////////
+
+#define TZ_LOGERROR(x)         if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
+#define TZ_LOGERROR0(x)        if(_TZ_LOGLEVEL_>0) { TZ_PRINT(x); }
+#define TZ_LOGERROR1(x,y)      if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_LOGERROR2(x,y,z)    if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
+#define TZ_LOGERROR3(x,y,z,w)  if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
+
+///////////////////////////////////////
+
+#define TZ_LOGWARN(x)          if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
+#define TZ_LOGWARN0(x)         if(_TZ_LOGLEVEL_>1) { TZ_PRINT(x); }
+#define TZ_LOGWARN1(x,y)       if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_LOGWARN2(x,y,z)     if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
+#define TZ_LOGWARN3(x,y,z,w)   if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
+
+///////////////////////////////////////
+
+#define TZ_LOGINFO(x)          if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
+#define TZ_LOGINFO0(x)         if(_TZ_LOGLEVEL_>2) { TZ_PRINT(x); }
+#define TZ_LOGINFO1(x,y)       if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_LOGINFO2(x,y,z)     if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
+#define TZ_LOGINFO3(x,y,z,w)   if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
+
+///////////////////////////////////////
+
+#define TZ_LOGDEBUG(x)         if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
+#define TZ_LOGDEBUG0(x)        if(_TZ_LOGLEVEL_>3) { TZ_PRINT(x); }
+#define TZ_LOGDEBUG1(x,y)      if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_LOGDEBUG2(x,y,z)    if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
+#define TZ_LOGDEBUG3(x,y,z,w)  if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
+
+///////////////////////////////////////
 
 #endif    // TIMEZONE_GENERIC_DEBUG_H

@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core                       
  *****************************************************************************************************************************/
 
 #pragma once
@@ -35,7 +36,7 @@
 // For ESP8266, use LitteFS, SPIFFS or EEPROM.
 // For ESP32, use SPIFFS or EEPROM.
 
-#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.3.0"
+#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.4.0"
 
 #if defined(ARDUINO) && (ARDUINO >= 100)
   #include <Arduino.h>
@@ -69,13 +70,14 @@ typedef struct
 class Timezone
 {
   public:
-    Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart);
-    Timezone(TimeChangeRule stdTime);
-    Timezone(int address);
+    Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart, uint32_t address = 0);
+    Timezone(TimeChangeRule stdTime, uint32_t address = 0);
+    
     
     // Allow a "blank" TZ object then use begin() method to set the actual TZ.
     // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-    Timezone();
+    Timezone(uint32_t address = 0);
+    
 		void init(TimeChangeRule dstStart, TimeChangeRule stdStart);
 		//////
     
@@ -104,6 +106,9 @@ class Timezone
     void display_STD_Rule();
 
   private:
+  
+    void    initStorage(uint32_t address);
+    
     void    calcTimeChanges(int yr);
     void    initTimeChanges();
     time_t  toTime_t(TimeChangeRule r, int yr);

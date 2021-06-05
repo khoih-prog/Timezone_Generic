@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -20,6 +20,7 @@
   1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
+  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
  *****************************************************************************************************************************/
 
 #pragma once
@@ -141,7 +142,52 @@
   #define TZ_USE_EEPROM    true
   
   #warning Use STM32 and EEPROM
-         
+
+#elif ( defined(ARDUINO_ARCH_RP2040) && !defined(ARDUINO_ARCH_MBED) )
+
+  // For Earle' arduino-pico core
+  #if defined(TZ_USE_RP2040)
+    #undef TZ_USE_RP2040
+  #endif
+  #define TZ_USE_RP2040      true
+  
+  #if defined(TZ_USE_EEPROM)
+    #undef TZ_USE_EEPROM
+  #endif 
+  #define TZ_USE_EEPROM    false
+  
+  #warning Use RP2040 (such as RASPBERRY_PI_PICO) and LittleFS
+
+#elif ( defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_ARCH_MBED) )
+
+  // For Arduino' arduino-mbed core
+  // To check and determine if we need to init LittleFS here
+  #if MBED_RP2040_INITIALIZED
+    #define MBED_RP2040_TO_BE_INITIALIZED     false
+    #warning MBED_RP2040_INITIALIZED in another place
+  #else
+    // Better to delay until init done
+    #if defined(MBED_RP2040_INITIALIZED)
+      #undef MBED_RP2040_INITIALIZED
+    #endif
+    #define MBED_RP2040_INITIALIZED           true
+    
+    #define MBED_RP2040_TO_BE_INITIALIZED     true
+    //#warning MBED_RP2040_TO_BE_INITIALIZED here
+  #endif
+  
+  #if defined(TZ_USE_MBED_RP2040)
+    #undef TZ_USE_MBED_RP2040
+  #endif
+  #define TZ_USE_MBED_RP2040      true
+  
+  #if defined(TZ_USE_EEPROM)
+    #undef TZ_USE_EEPROM
+  #endif
+  #define TZ_USE_EEPROM    false
+  
+  #warning Use MBED RP2040 (such as NANO_RP2040_CONNECT, RASPBERRY_PI_PICO) and LittleFS
+           
 #else
   #if defined(CORE_TEENSY)
     #define TZ_USE_EENSY      true
@@ -171,14 +217,18 @@
     #define TZ_EEPROM_SIZE     (E2END + 1)
   #endif
 
+/////////////////////////////
 #elif TZ_USE_SAMD
   // Include EEPROM-like API for FlashStorage
   #include <FlashAsEEPROM_SAMD.h>             //https://github.com/khoih-prog/FlashStorage_SAMD
+  
+/////////////////////////////  
 #elif TZ_USE_SAM_DUE
   //Use DueFlashStorage to simulate EEPROM
   #include <DueFlashStorage.h>                 //https://github.com/sebnil/DueFlashStorage
   DueFlashStorage dueFlashStorage;
-  
+
+/////////////////////////////  
 #elif TZ_USE_NRF52
   // Include LittleFS similar to SPIFFS
   #include <Adafruit_LittleFS.h>
@@ -186,8 +236,67 @@
   using namespace Adafruit_LittleFS_Namespace;
   
   File TZ_file(InternalFS);
+
+/////////////////////////////
+#elif TZ_USE_RP2040
+
+  //Use LittleFS for RPI Pico
+  #include <FS.h>
+  #include <LittleFS.h>
+
+  FS* filesystem =      &LittleFS;
+  #define FileFS        LittleFS
+
+/////////////////////////////
+#elif (TZ_USE_MBED_RP2040 && MBED_RP2040_TO_BE_INITIALIZED)
+
+  //Use LittleFS for MBED RPI Pico
+  #include "FlashIAPBlockDevice.h"
+  #include "LittleFileSystem.h"
+  #include "mbed.h"
+
+  #include <stdio.h>
+  #include <errno.h>
+  #include <functional>
+
+  #include "BlockDevice.h"
+
+  #if !defined(RP2040_FLASH_SIZE)
+    #define RP2040_FLASH_SIZE         (2 * 1024 * 1024)
+  #endif
+
+  #if !defined(RP2040_FS_LOCATION_END)
+  #define RP2040_FS_LOCATION_END    RP2040_FLASH_SIZE
+  #endif
+
+  #if !defined(RP2040_FS_SIZE_KB)
+    // Using default 64KB for LittleFS
+    #define RP2040_FS_SIZE_KB       (64)
+  #endif
+
+  #if !defined(RP2040_FS_START)
+    #define RP2040_FS_START           (RP2040_FLASH_SIZE - (RP2040_FS_SIZE_KB * 1024))
+  #endif
+
+  #if !defined(FORCE_REFORMAT)
+    #define FORCE_REFORMAT            false
+  #endif
+
+  FlashIAPBlockDevice bd(XIP_BASE + RP2040_FS_START, (RP2040_FS_SIZE_KB * 1024));
+
+  mbed::LittleFileSystem fs("fs");
+  
+  #if defined(TZ_FILENAME)
+    #undef TZ_FILENAME
+  #endif
+  #define  TZ_FILENAME     "/fs/timezone.dat"
+  
+  #warning MBED_RP2040_TO_BE_INITIALIZED locally in Timezone_Generic
+  
+/////////////////////////////
   
 #endif    //#if TZ_USE_EEPROM
+/////////////////////////////
 
 #ifndef TZ_DEBUG
   #define TZ_DEBUG       false
@@ -197,11 +306,10 @@
 /*----------------------------------------------------------------------*
    Create a Timezone object from the given time change rules.
   ----------------------------------------------------------------------*/
-Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart)
-  : m_dst(dstStart), m_std(stdStart), TZ_DATA_START(0)
-{
-  this->TZ_DATA_START = 0;
-  
+Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart, uint32_t address)
+  : m_dst(dstStart), m_std(stdStart), TZ_DATA_START(address)
+{ 
+  initStorage(address);
   initTimeChanges();
 }
 
@@ -209,10 +317,24 @@ Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart)
    Create a Timezone object for a zone that does not observe
    daylight time.
   ----------------------------------------------------------------------*/
-Timezone::Timezone(TimeChangeRule stdTime)
-  : m_dst(stdTime), m_std(stdTime), TZ_DATA_START(0)
+Timezone::Timezone(TimeChangeRule stdTime, uint32_t address)
+  : m_dst(stdTime), m_std(stdTime), TZ_DATA_START(address)
 { 
+  initStorage(address);
   initTimeChanges();
+}
+
+//////
+
+/*----------------------------------------------------------------------*
+   initialise (used where void constructor is called)  6v6gt
+  ----------------------------------------------------------------------*/
+void Timezone::init(TimeChangeRule dstStart, TimeChangeRule stdStart)
+{
+  //m_dst = dstStart;
+  //m_std = stdStart;
+  memcpy(&m_dst, &dstStart, sizeof(m_dst));
+  memcpy(&m_std, &stdStart, sizeof(m_std));
 }
 
 //////
@@ -220,30 +342,19 @@ Timezone::Timezone(TimeChangeRule stdTime)
 // Allow a "blank" TZ object then use begin() method to set the actual TZ.
 // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
 /*----------------------------------------------------------------------*
-   Create a Timezone object for later initialisation 6v6gt 31.10.2020
-  ----------------------------------------------------------------------*/
-Timezone::Timezone()
-: TZ_DATA_START(0)
-{
-		initTimeChanges();
-}
-
-/*----------------------------------------------------------------------*
-   initialise (used where void constructor is called)  6v6gt
-  ----------------------------------------------------------------------*/
-void Timezone::init(TimeChangeRule dstStart, TimeChangeRule stdStart)
-{
-  m_dst = dstStart;
-  m_std = stdStart;
-}
-
-//////
-
-/*----------------------------------------------------------------------*
    Create a Timezone object from time change rules stored in EEPROM
    at the given address.
   ----------------------------------------------------------------------*/
-Timezone::Timezone(int address)
+Timezone::Timezone(uint32_t address)
+{
+  initStorage(address);
+  
+  initTimeChanges();
+
+  readRules();
+}
+
+void Timezone::initStorage(uint32_t address)
 {
   this->TZ_DATA_START = address;
   
@@ -251,30 +362,73 @@ Timezone::Timezone(int address)
   EEPROM.begin();
 
   TZ_LOGDEBUG3("Read from EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
-  
+
+/////////////////////////////    
 #elif TZ_USE_SAMD
   // Do something to init FlashStorage
-  
+
+/////////////////////////////    
 #elif TZ_USE_SAM_DUE
   // Do something to init DueFlashStorage
 
+/////////////////////////////  
 #elif TZ_USE_NRF52
   // Do something to init LittleFS / InternalFS
   // Initialize Internal File System
   InternalFS.begin();
+  
+/////////////////////////////    
 #elif TZ_USE_ESP32
   // Do something to init LittleFS / InternalFS
   // Initialize Internal File System
+  
+/////////////////////////////    
 #elif TZ_USE_ESP8266
   // Do something to init LittleFS / InternalFS
   // Initialize Internal File System
+  
+/////////////////////////////
+#elif TZ_USE_RP2040
+
+      bool beginOK = FileFS.begin();
+  
+      if (!beginOK)
+      {
+        TZ_LOGERROR("LittleFS error");
+      }
+  
+/////////////////////////////
+#elif TZ_USE_MBED_RP2040
+ 
+      TZ_LOGDEBUG1("LittleFS size (KB) = ", RP2040_FS_SIZE_KB);
+      
+      int err = fs.mount(&bd);
+      
+      if (err)
+      {       
+        // Reformat if we can't mount the filesystem
+        TZ_LOGERROR("LittleFS Mount Fail. Formatting... ");
+        TZ_FLUSH;
+ 
+        err = fs.reformat(&bd);
+      }
+      else
+      {
+        TZ_LOGDEBUG("LittleFS Mount OK");
+      }
+     
+      if (err)
+      {
+        TZ_LOGERROR("LittleFS error");
+      }
+  
+/////////////////////////////  
 #else
   #error Un-identifiable board selected. Please check your Tools->Board setting.
 #endif
+/////////////////////////////  
 
   storageSystemInit = true;
-
-  readRules();
 }
 
 /*----------------------------------------------------------------------*
@@ -503,6 +657,8 @@ void Timezone::writeRules(int address)
   initTimeChanges();  // force calcTimeChanges() at next conversion call
 }
 
+/////////////////////////////////////////////
+
 #if (TZ_USE_ESP32)
 
 #if USE_LITTLEFS
@@ -523,11 +679,11 @@ void Timezone::readTZData()
     // Format SPIFFS/LittleFS if not yet
     if (!FileFS.begin(true))
     {
-      TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Formatting."));
+      TZ_LOGERROR(F("SPIFFS/LittleFS failed! Formatting."));
       
       if (!FileFS.begin())
       {
-        TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Pls use EEPROM."));
+        TZ_LOGERROR(F("SPIFFS/LittleFS failed! Pls use EEPROM."));
         return;
       }
     }
@@ -553,13 +709,13 @@ void Timezone::readTZData()
     file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
     file.readBytes((char *) &m_std, TZ_DATA_SIZE);
 
-    TZ_LOGDEBUG(F("Reading from TZ_file OK"));
+    TZ_LOGDEBUG("Reading from TZ_file OK");(F("Reading from TZ_file OK"));
 
     file.close(); 
   }
   else
   {
-    TZ_LOGDEBUG(F("Reading from TZ_file failed"));
+    TZ_LOGERROR(F("Reading from TZ_file failed"));
   }
 }
 
@@ -576,11 +732,11 @@ void Timezone::writeTZData(int address)
     // Format SPIFFS/LittleFS if not yet
     if (!FileFS.begin(true))
     {
-      TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Formatting."));
+      TZ_LOGERROR(F("SPIFFS/LittleFS failed! Formatting."));
       
       if (!FileFS.begin())
       {
-        TZ_LOGDEBUG(F("SPIFFS/LittleFS failed!"));
+        TZ_LOGERROR(F("SPIFFS/LittleFS failed!"));
         return;
       }
     }
@@ -604,13 +760,15 @@ void Timezone::writeTZData(int address)
     
     file.close();
 
-    TZ_LOGDEBUG("Saving to TZ_file OK");
+    TZ_LOGDEBUG("Reading from TZ_file OK");("Saving to TZ_file OK");
   }
   else
   {
-    TZ_LOGDEBUG("Saving to TZ_file failed");
+    TZ_LOGERROR("Saving to TZ_file failed");
   }   
 }
+
+/////////////////////////////////////////////
 
 #elif (TZ_USE_ESP8266)
 
@@ -632,12 +790,12 @@ void Timezone::readTZData()
     // Format SPIFFS/LittleFS if not yet
     if (!FileFS.begin())
     {
-      TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Formatting."));
+      TZ_LOGERROR(F("SPIFFS/LittleFS failed! Formatting."));
       FileFS.format();
       
       if (!FileFS.begin())
       {
-        TZ_LOGDEBUG(F("SPIFFS/LittleFS failed"));
+        TZ_LOGERROR(F("SPIFFS/LittleFS failed"));
         return;
       }
     }
@@ -663,13 +821,13 @@ void Timezone::readTZData()
     file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
     file.readBytes((char *) &m_std, TZ_DATA_SIZE);
 
-    TZ_LOGDEBUG(F("Reading from TZ_file OK"));
+    TZ_LOGDEBUG("Reading from TZ_file OK");(F("Reading from TZ_file OK"));
 
     file.close(); 
   }
   else
   {
-    TZ_LOGDEBUG(F("Reading from TZ_file failed"));
+    TZ_LOGERROR(F("Reading from TZ_file failed"));
   }
 }
 
@@ -686,12 +844,12 @@ void Timezone::writeTZData(int address)
     // Format SPIFFS/LittleFS if not yet
     if (!FileFS.begin())
     {
-      TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Formatting."));
+      TZ_LOGERROR(F("SPIFFS/LittleFS failed! Formatting."));
       FileFS.format();
       
       if (!FileFS.begin())
       {
-        TZ_LOGDEBUG(F("SPIFFS/LittleFS failed! Pls use EEPROM."));
+        TZ_LOGERROR(F("SPIFFS/LittleFS failed! Pls use EEPROM."));
         return;
       }
     }
@@ -715,13 +873,15 @@ void Timezone::writeTZData(int address)
     
     file.close();
 
-    TZ_LOGDEBUG("Saving to TZ_file OK");
+    TZ_LOGDEBUG("Reading from TZ_file OK");("Saving to TZ_file OK");
   }
   else
   {
-    TZ_LOGDEBUG("Saving to TZ_file failed");
+    TZ_LOGERROR("Saving to TZ_file failed");
   }   
 }
+
+/////////////////////////////////////////////
 
 #elif (TZ_USE_SAMD)
 
@@ -794,6 +954,8 @@ void Timezone::writeTZData(int address)
 
   return;  
 }
+
+/////////////////////////////////////////////
          
 #elif (TZ_USE_SAM_DUE)
 
@@ -822,7 +984,7 @@ void Timezone::readTZData()
   
   memcpy(&m_std, dataPointer, TZ_DATA_SIZE); 
   
-  TZ_LOGDEBUG("Reading from dueFlashStorage OK");
+  TZ_LOGDEBUG("Reading from TZ_file OK");("Reading from dueFlashStorage OK");
 }
 
 /*----------------------------------------------------------------------*
@@ -842,8 +1004,10 @@ void Timezone::writeTZData(int address)
   dueFlashStorage.write(TZ_DATA_START, (byte *) &m_dst, TZ_DATA_SIZE);
   dueFlashStorage.write(TZ_DATA_START + TZ_DATA_SIZE, (byte *) &m_std, TZ_DATA_SIZE);
   
-  TZ_LOGDEBUG("Writing to dueFlashStorage OK");
+  TZ_LOGDEBUG("Reading from TZ_file OK");("Writing to dueFlashStorage OK");
 }
+
+/////////////////////////////////////////////
       
 #elif (TZ_USE_NRF52)
 
@@ -879,13 +1043,13 @@ void Timezone::readTZData()
     TZ_file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
     TZ_file.read((char *) &m_std, TZ_DATA_SIZE);
 
+    TZ_file.close();
+    
     TZ_LOGDEBUG("Reading from TZ_file OK");
-
-    TZ_file.close(); 
   }
   else
   {
-    TZ_LOGDEBUG("Reading from TZ_file failed");
+    TZ_LOGERROR("Reading from TZ_file failed");
   }
 }
 
@@ -922,9 +1086,11 @@ void Timezone::writeTZData(int address)
   }
   else
   {
-    TZ_LOGDEBUG("Saving to TZ_file failed");
+    TZ_LOGERROR("Saving to TZ_file failed");
   }   
 }
+
+/////////////////////////////////////////////
 
 #elif (TZ_USE_STM32)
 
@@ -965,29 +1131,194 @@ void Timezone::writeTZData(int address)
     storageSystemInit = true;
   }
   
-  TZ_LOGDEBUG3("Write to EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
+  TZ_LOGERROR3("Write to EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
    
   EEPROM.put(TZ_DATA_START, m_dst);
   EEPROM.put(TZ_DATA_START + TZ_DATA_SIZE, m_std);
-  //EEPROM.commit();
+}
+
+/////////////////////////////////////////////
+#elif (TZ_USE_RP2040)
+
+  #warning Using RP2040 LittleFS in Timezone_Generic
+  
+  // RP2040 code    
+/*----------------------------------------------------------------------*
+   Read the daylight and standard time rules from LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::readTZData()
+{
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // RP2040 code
+  File file = FileFS.open(TZ_FILENAME, "r");
+  
+  TZ_LOGDEBUG3("Reading m_dst & m_std from TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {
+    memset(&m_dst, 0, TZ_DATA_SIZE);
+    memset(&m_std, 0, TZ_DATA_SIZE);
+       
+    file.seek(TZ_DATA_OFFSET);
+    file.read((uint8_t *) &m_dst, TZ_DATA_SIZE);
+        
+    // Seek to be sure   
+    file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
+    file.read((uint8_t *) &m_std, TZ_DATA_SIZE);
+
+    TZ_LOGDEBUG("Reading from TZ_file OK");
+
+    file.close(); 
+  }
+  else
+  {
+    TZ_LOGERROR("Reading from TZ_file failed");
+  }
+}
+
+/*----------------------------------------------------------------------*
+   Write the daylight and standard time rules to LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::writeTZData(int address)
+{ 
+  (void) address;
+  
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // RP2040 code
+  File file = FileFS.open(TZ_FILENAME, "w");
+
+  TZ_LOGDEBUG3("Saving m_dst & m_std to TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {
+    file.seek(TZ_DATA_OFFSET);
+    file.write((uint8_t *) &m_dst, TZ_DATA_SIZE);
+        
+    // Seek to be sure
+    file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
+    file.write((uint8_t *) &m_std, TZ_DATA_SIZE);
+    
+    file.close();
+
+    TZ_LOGDEBUG("Saving to TZ_file OK");
+  }
+  else
+  {
+    TZ_LOGERROR("Saving to TZ_file failed");
+  }   
+}
+
+/////////////////////////////////////////////
+#elif (TZ_USE_MBED_RP2040)
+
+  #warning Using MBED RP2040 LittleFS in Timezone_Generic
+  
+  // MBED RP2040 code  
+/*----------------------------------------------------------------------*
+   Read the daylight and standard time rules from LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::readTZData()
+{
+  TZ_LOGDEBUG3("Start readTZData from ", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+  
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // MBED RP2040 code
+  FILE *file = fopen(TZ_FILENAME, "r");
+  
+  TZ_LOGDEBUG3("Reading m_dst & m_std from TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {
+    memset(&m_dst, 0, TZ_DATA_SIZE);
+    memset(&m_std, 0, TZ_DATA_SIZE);
+    
+    fseek(file, TZ_DATA_OFFSET, SEEK_SET);
+    fread((uint8_t *) &m_dst, 1, TZ_DATA_SIZE, file);
+        
+    // Seek to be sure
+    fseek(file, TZ_DATA_OFFSET + TZ_DATA_SIZE, SEEK_SET);
+    fread((uint8_t *) &m_std, 1, TZ_DATA_SIZE, file);
+
+    TZ_LOGDEBUG("Reading from TZ_file OK");
+
+    fclose(file);
+  }
+  else
+  {
+    TZ_LOGERROR("Reading from TZ_file failed");
+  }
+}
+
+/*----------------------------------------------------------------------*
+   Write the daylight and standard time rules to LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::writeTZData(int address)
+{ 
+
+  (void) address;
+  
+  TZ_LOGDEBUG3("Start writeTZData to ", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+  
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // MBED RP2040 code
+  FILE *file = fopen(TZ_FILENAME, "w");
+
+  TZ_LOGDEBUG3("Saving m_dst & m_std to TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {   
+    fseek(file, TZ_DATA_OFFSET, SEEK_SET);
+    fwrite((uint8_t *) &m_dst, 1, sizeof(m_dst) /*TZ_DATA_SIZE*/, file);
+    
+    // Seek to be sure
+    fseek(file, TZ_DATA_OFFSET + TZ_DATA_SIZE, SEEK_SET);
+    fwrite((uint8_t *) &m_std, 1, sizeof(m_std) /*TZ_DATA_SIZE*/, file);
+    
+    fclose(file);
+
+    TZ_LOGDEBUG("Saving to TZ_file OK");
+  }
+  else
+  {
+    TZ_LOGERROR("Saving to TZ_file failed");
+  }
 }
         
+/////////////////////////////////////////////        
 #elif TZ_USE_EEPROM
 /*----------------------------------------------------------------------*
    Read the daylight and standard time rules from EEPROM at
    the given address.
   ----------------------------------------------------------------------*/
 void Timezone::readTZData()
-{
-  //uint16_t address = TZ_DATA_START;
-  
+{ 
   if (!storageSystemInit)
   {
     EEPROM.begin();
     storageSystemInit = true;
   }
   
-  TZ_LOGDEBUG3("Read from EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
+  TZ_LOGERROR3("Read from EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
   
   memset(&m_dst, 0, TZ_DATA_SIZE);
   memset(&m_std, 0, TZ_DATA_SIZE);
@@ -1010,11 +1341,10 @@ void Timezone::writeTZData(int address)
     storageSystemInit = true;
   }
   
-  TZ_LOGDEBUG3("Write to EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
+  TZ_LOGERROR3("Write to EEPROM, size = ", TZ_EEPROM_SIZE, ", offset = ", TZ_DATA_START);
    
   EEPROM.put(TZ_DATA_START, m_dst);
   EEPROM.put(TZ_DATA_START + TZ_DATA_SIZE, m_std);
-  //EEPROM.commit();
 }
         
 #endif

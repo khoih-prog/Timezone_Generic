@@ -10,16 +10,6 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.3.0
-
-  Version Modified By  Date      Comments
-  ------- -----------  ---------- -----------
-  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
-                                  using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
-  1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
-  1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
-  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
-                                  Fix compiler warnings.
  *****************************************************************************************************************************/
 
 #ifndef defines_h
@@ -30,6 +20,7 @@
 // Debug Level from 0 to 4
 #define _WIFI_LOGLEVEL_             3
 #define _WIFININA_LOGLEVEL_         3
+#define _NTP_LOGLEVEL_              4
 
 #define USE_WIFI_NINA         true
 //#define USE_WIFI_NINA         false
@@ -303,6 +294,38 @@
     #define BOARD_TYPE  "STM32 Unknown"
   #endif
 
+#elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
+      defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) )
+    
+  #warning RASPBERRY_PI_PICO board selected
+
+  #if defined(ARDUINO_ARCH_MBED)
+
+    #warning Using ARDUINO_ARCH_MBED
+    
+    #if ( defined(ARDUINO_NANO_RP2040_CONNECT)    || defined(ARDUINO_RASPBERRY_PI_PICO) || \
+          defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) )
+      // Only undef known BOARD_NAME to use better one
+      #undef BOARD_NAME
+    #endif
+    
+    #if defined(ARDUINO_RASPBERRY_PI_PICO)
+      #define BOARD_NAME      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_NAME      "MBED ADAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_NAME      "MBED GENERIC_RP2040"
+    #elif defined(ARDUINO_NANO_RP2040_CONNECT) 
+      #define BOARD_NAME      "MBED NANO_RP2040_CONNECT"
+    #else
+      // Use default BOARD_NAME if exists
+      #if !defined(BOARD_NAME)
+        #define BOARD_NAME      "MBED Unknown RP2040"
+      #endif
+    #endif
+ 
+  #endif
+  
 #else
   #define BOARD_TYPE      "AVR Mega"
 #endif
@@ -313,7 +336,7 @@
 
 #include <WiFiWebServer.h>
 
-char ssid[] = "SSID";        // your network SSID (name)
-char pass[] = "12345678";        // your network password
+char ssid[] = "****";        // your network SSID (name)
+char pass[] = "****";        // your network password
 
 #endif    //defines_h
