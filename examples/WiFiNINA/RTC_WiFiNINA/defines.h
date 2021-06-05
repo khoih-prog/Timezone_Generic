@@ -20,6 +20,7 @@
 // Debug Level from 0 to 4
 #define _WIFI_LOGLEVEL_             3
 #define _WIFININA_LOGLEVEL_         3
+#define _NTP_LOGLEVEL_              1
 
 #define USE_WIFI_NINA         true
 //#define USE_WIFI_NINA         false
