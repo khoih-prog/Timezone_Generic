@@ -210,7 +210,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ### Major Releases v1.5.0
 
-1. Add support to ESP32-S2 amd ESP32-C3 boards
+1. Add support to ESP32-S2 and ESP32-C3 boards
 2. Verify OK with ESP32 core v1.0.6 and ESP8266 core v3.0.0
 3. Fix bug.
 
@@ -2881,7 +2881,7 @@ The UTC time is 19:25:07
 
 ### Major Releases v1.5.0
 
-1. Add support to ESP32-S2 amd ESP32-C3 boards
+1. Add support to ESP32-S2 and ESP32-C3 boards
 2. Verify OK with ESP32 core v1.0.6 and ESP8266 core v3.0.0
 3. Fix bug.
 
