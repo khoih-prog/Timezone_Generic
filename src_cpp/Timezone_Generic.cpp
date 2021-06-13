@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.4.0
+  Version: 1.5.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -21,6 +21,7 @@
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
   1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
+  1.5.0   K Hoang      13/06/2021 Add support to ESP32-S2 and ESP32-C3. Fix bug.
  *****************************************************************************************************************************/
 
 #include "Timezone_Generic.h"
@@ -32,6 +33,22 @@
 #define TZ_USE_EEPROM      true
 
 #if defined(ESP32)
+
+  #if ( ARDUINO_ESP32C3_DEV )
+    // https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-gpio.c
+    #warning ESP32-C3 boards not fully supported yet. Only SPIFFS and EEPROM OK. Tempo esp32_adc2gpio to be replaced
+    const int8_t esp32_adc2gpio[20] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    #warning Using ESP32-C3
+  #endif
+
+  #if ( ARDUINO_ESP32C3_DEV )
+    // Currently, ESP32-C3 only supporting SPIFFS and EEPROM. Will fix to support LittleFS
+    #ifdef USE_LITTLEFS
+      #undef USE_LITTLEFS
+    #endif
+    #define USE_LITTLEFS          false
+  #endif
+
   #if defined(TZ_USE_ESP32)
     #undef TZ_USE_ESP32
   #endif
@@ -41,6 +58,10 @@
     #undef TZ_USE_EEPROM
   #endif
   #define TZ_USE_EEPROM    false
+  
+  #ifndef USE_LITTLEFS
+    #define USE_LITTLEFS   true
+  #endif
   
   #if USE_LITTLEFS
     // Use LittleFS
@@ -69,6 +90,10 @@
     #undef TZ_USE_EEPROM
   #endif
   #define TZ_USE_EEPROM    false
+  
+  #ifndef USE_LITTLEFS
+    #define USE_LITTLEFS   true
+  #endif
   
   #include <FS.h>
   #include <LittleFS.h>
@@ -707,7 +732,7 @@ void Timezone::readTZData()
     file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
     file.readBytes((char *) &m_std, TZ_DATA_SIZE);
 
-    TZ_LOGDEBUG("Reading from TZ_file OK");(F("Reading from TZ_file OK"));
+    TZ_LOGDEBUG(F("Reading from TZ_file OK"));
 
     file.close(); 
   }
@@ -758,7 +783,7 @@ void Timezone::writeTZData(int address)
     
     file.close();
 
-    TZ_LOGDEBUG("Reading from TZ_file OK");("Saving to TZ_file OK");
+    TZ_LOGDEBUG("Saving to TZ_file OK");
   }
   else
   {
@@ -819,7 +844,7 @@ void Timezone::readTZData()
     file.seek(TZ_DATA_OFFSET + TZ_DATA_SIZE);
     file.readBytes((char *) &m_std, TZ_DATA_SIZE);
 
-    TZ_LOGDEBUG("Reading from TZ_file OK");(F("Reading from TZ_file OK"));
+    TZ_LOGDEBUG(F("Reading from TZ_file OK"));
 
     file.close(); 
   }
@@ -871,7 +896,7 @@ void Timezone::writeTZData(int address)
     
     file.close();
 
-    TZ_LOGDEBUG("Reading from TZ_file OK");("Saving to TZ_file OK");
+    TZ_LOGDEBUG("Saving to TZ_file OK");
   }
   else
   {
@@ -982,7 +1007,7 @@ void Timezone::readTZData()
   
   memcpy(&m_std, dataPointer, TZ_DATA_SIZE); 
   
-  TZ_LOGDEBUG("Reading from TZ_file OK");("Reading from dueFlashStorage OK");
+  TZ_LOGDEBUG("Reading from dueFlashStorage OK");
 }
 
 /*----------------------------------------------------------------------*
@@ -1002,7 +1027,7 @@ void Timezone::writeTZData(int address)
   dueFlashStorage.write(TZ_DATA_START, (byte *) &m_dst, TZ_DATA_SIZE);
   dueFlashStorage.write(TZ_DATA_START + TZ_DATA_SIZE, (byte *) &m_std, TZ_DATA_SIZE);
   
-  TZ_LOGDEBUG("Reading from TZ_file OK");("Writing to dueFlashStorage OK");
+  TZ_LOGDEBUG("Writing to dueFlashStorage OK");
 }
 
 /////////////////////////////////////////////

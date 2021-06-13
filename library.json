@@ -1,6 +1,6 @@
 {
   "name": "Timezone_Generic",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "keywords": "timing, device, control, ntp, rtc, wifi, ethernet, WiFiNINA, SAM DUE, SAMD, nRF52, STM32, rpi-pico, rp2040, nano-rp2040-connect, FlashStorage-SAMD, FlashStorage-STM32, DueFlashStorage, LittleFS, EEPROM",
   "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, RP2040-based (Nano_RP2040_Connect, RASPBERRY_PI_PICO) boards, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
   "authors": [
@@ -37,7 +37,7 @@
     {
       "owner": "khoih.prog",
       "name": "DS323x_Generic",
-      "version": ">=1.1.0",
+      "version": ">=1.2.0",
       "platforms": ["*"]
     },
     {

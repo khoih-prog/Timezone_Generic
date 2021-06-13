@@ -12,7 +12,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.4.0
+  Version: 1.5.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
                                   Fix compiler warnings.
   1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
+  1.5.0   K Hoang      13/06/2021 Add support to ESP32-S2 and ESP32-C3. Fix bug.
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
   STM32 has five clock sources: HSI, HSE, LSI, LSE, PLL.

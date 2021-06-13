@@ -2,7 +2,7 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Timezone_Generic.svg?)](https://www.ardu-badge.com/Timezone_Generic)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/Timezone_Generic.svg)](https://github.com/khoih-prog/Timezone_Generic/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/Timezone_Generic/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/Timezone_Generic/blob/main/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/Timezone_Generic.svg)](http://github.com/khoih-prog/Timezone_Generic/issues)
 
@@ -18,6 +18,7 @@
   * [Currently Supported Ethernet Modules and Shields](#currently-supported-ethernet-modules-and-shields)
   * [Currently Supported Storage](#currently-supported-storage)
 * [Changelog](#changelog)
+  * [Major Releases v1.5.0](#major-releases-v150)
   * [Major Releases v1.4.0](#major-releases-v140)
   * [Major Releases v1.3.0](#major-releases-v130)
   * [Releases v1.2.6](#releases-v126)
@@ -53,6 +54,22 @@
   * [7. For fixing ESP32 compile error](#7-for-fixing-esp32-compile-error)
   * [8. For fixing ESP8266 compile error](#8-for-fixing-esp8266-compile-error)
 * [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
+* [HOWTO Install esp32 core for ESP32-S2 (Saola, AI-Thinker ESP-12K) and ESP32-C3 boards into Arduino IDE](#howto-install-esp32-core-for-esp32-s2-saola-ai-thinker-esp-12k-and-esp32-c3-boards-into-arduino-ide)
+  * [1. Save the original esp32 core](#1-save-the-original-esp32-core)
+  * [2. Install esp32 core v1.0.6](#2-install-esp32-core-v106)
+    * [2.1 Install esp32 core](#21-install-esp32-core)
+    * [2.2 Download latest zip with esp32-s2 support](#22-download-latest-zip-with-esp32-s2-support)
+    * [2.3 Unzip](#23-unzip)
+    * [2.3 Update esp32 core directories](#24-update-esp32-core-directories)
+  * [3. Download tools for ESP32-S2](#3-download-tools-for-esp32-s2) 
+    * [3.1 Download Toolchain for Xtensa (ESP32-S2) based on GCC](#31-download-toolchain-for-xtensa-esp32-s2-based-on-gcc)
+    * [3.2 Download esptool](#32-download-esptool)
+    * [3.3 Unzip](#33-unzip)
+  * [4. Update tools](#4-update-tools)
+    * [4.1 Update Toolchain](#41-update-toolchain)
+    * [4.2 Update esptool](#42-update-esptool)
+  * [5. Download tools for ESP32-C3](#5-download-tools-for-esp32-c3)
+* [Note for Platform IO using ESP32 LittleFS](#note-for-platform-io-using-esp32-littlefs)
 * [HOWTO Use analogRead() with ESP32 running WiFi and/or BlueTooth (BT/BLE)](#howto-use-analogread-with-esp32-running-wifi-andor-bluetooth-btble)
   * [1. ESP32 has 2 ADCs, named ADC1 and ADC2](#1--esp32-has-2-adcs-named-adc1-and-adc2)
   * [2. ESP32 ADCs functions](#2-esp32-adcs-functions)
@@ -180,7 +197,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 ### Currently Supported Storage
 
   - **ESP8266 LittleFS, SPIFFS**.
-  - **ESP32 SPIFFS and LittleFS**.
+  - **ESP32, ESP32-S2 SPIFFS and LittleFS. ESP32-C3 SPIFFS**.
   - **SAM DUE DueFlashStorage**.
   - **SAMD FlashStorage_SAMD**.
   - **nRF52/RP2040 LittleFS**.
@@ -190,6 +207,13 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 ---
 
 ## Changelog
+
+### Major Releases v1.5.0
+
+1. Add support to ESP32-S2 amd ESP32-C3 boards
+2. Verify OK with ESP32 core v1.0.6 and ESP8266 core v3.0.0
+3. Fix bug.
+
 
 ### Major Releases v1.4.0
 
@@ -246,7 +270,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   
 12. [`Arduino Core for STM32 v2.0.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
 13. [`Arduino mbed_rp2040 core 2.1.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-14. [`Earle Philhower's arduino-pico core v1.7.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+14. [`Earle Philhower's arduino-pico core v1.8.2+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 
 15. [`Time v1.6+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 16. Depending on which board you're using:
@@ -268,7 +292,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 20. [`EthernetWebServer library v1.5.0+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
 21. [`EthernetWebServer_STM32 library v1.2.0+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
 22. [`ESP8266_AT_WebServer library v1.3.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
-23. [`DS323x_Generic library v1.1.0+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
+23. [`DS323x_Generic library v1.2.0+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
 24. [`STM32RTC library v1.1.0+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
 
 ---
@@ -305,7 +329,7 @@ Another way to install is to:
 
 #### 1. For Adafruit nRF52840 and nRF52832 boards
 
-**Don't use v0.22.0+ yet because of compiler error. To be fixed.**
+**Don't use v0.22.0+ yet because of compiler error. Wait until it's fixed if you have error.**
 
 **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
 
@@ -597,6 +621,179 @@ To re-use the **new h-only** way, just
 ---
 ---
 
+## HOWTO Install esp32 core for ESP32-S2 (Saola, AI-Thinker ESP-12K) and ESP32-C3 boards into Arduino IDE
+
+
+These are instructions demonstrating the steps to install esp32-s2/c3 core on Ubuntu machines. For Windows or other OS'es, just follow the the similar principles and steps.
+
+* Windows 10, follows these steps in [Steps to install Arduino ESP32 support on Windows](https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/windows.md) 
+
+* Mac OS, follows these steps in [Installation instructions for Mac OS](https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/mac.md)
+
+* Fedora, follows these steps in [Installation instructions for Fedora](https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/fedora.md)
+
+* openSUSE, follows these steps in [Installation instructions for openSUSE](https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/opensuse.md)
+
+* You can also try to add [package_esp32_dev_index.json](https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json) into Arduino IDE `File - Preferences - Additional Boards Manager URLs` 
+
+
+```
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json
+```
+
+and have Board Manager auto-install the **development** esp32 core. For example : esp32 core `v2.0.0-alpha1`
+
+
+---
+
+If you're already successful in testing the core, after installing by using the above procedures, you don't need to follows the hereafter manual steps.
+
+---
+
+Assuming you already installed Arduino IDE ESP32 core and the installed directory is
+
+`/home/your_account/.arduino15/packages/esp32`
+
+
+### 1. Save the original esp32 core
+
+First, copy the whole original esp32 core to another safe place. Then delete all the sub-directories of
+
+`/home/your_account/.arduino15/packages/esp32/hardware/esp32/1.0.4`
+
+---
+
+
+### 2. Install esp32 core v1.0.6
+
+#### 2.1 Install esp32 core
+
+Just use Arduino IDE Board Manager to install [ESP32 Arduino Release 1.0.6 based on ESP-IDF v3.3.5](https://github.com/espressif/arduino-esp32/releases/tag/1.0.6). This official v1.06 core doesn't have esp32-s2/s3 support. You have to download and use the latest master branch.
+
+
+#### 2.2 Download latest zip with esp32-s2 support
+
+As of **April 16th 2021**, the **esp32-s2/c3** board support has been included in master branch of esp32 core. Download [**esp32 core, master branch**](https://github.com/espressif/arduino-esp32) in the zip format.
+
+#### 2.3 Unzip
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Timezone_Generic/blob/main/pics/esp32_s2_Core_Unzipped.png">
+</p>
+
+#### 2.4 Update esp32 core directories
+
+Copy all subdirectories of esp32 core into `/home/your_account/.arduino15/packages/esp32/hardware/esp32/1.0.6`
+
+
+---
+
+### 3 Download tools for ESP32-S2
+
+
+#### 3.1 Download Toolchain for Xtensa (ESP32-S2) based on GCC
+
+Download [**esp32-s2 Toolchain**](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/api-guides/tools/idf-tools.html#xtensa-esp32s2-elf) corresponding to your environment (linux-amd64, win64, etc.).
+
+For example `xtensa-esp32s2-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz`, then un-archive.
+
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Timezone_Generic/blob/main/pics/esp32_s2_Toolchain.png">
+</p>
+
+#### 3.2 Download esptool
+
+
+Download [esptool](https://github.com/espressif/esptool/releases) int the `zip` format:
+
+`esptool-3.0.zip`
+
+#### 3.3 Unzip
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Timezone_Generic/blob/main/pics/esp32_s2_esptool.png">
+</p>
+
+---
+
+### 4. Update tools
+
+#### 4.1 Update Toolchain
+
+Copy whole `xtensa-esp32s2-elf` directory into `/home/your_account/.arduino15/packages/esp32/hardware/esp32/1.0.6/tools`
+
+
+#### 4.2 Update esptool
+
+Rename `esptool-3.0` directory to `esptool`
+
+
+Copy whole `esptool` directory into `/home/your_account/.arduino15/packages/esp32/hardware/esp32/1.0.6/tools`
+
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Timezone_Generic/blob/main/pics/esp32_s2_tools.png">
+</p>
+
+
+### 5 Download tools for ESP32-C3
+
+Download [**esp32-c3 Toolchain**](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/api-guides/tools/idf-tools.html#riscv32-esp-elf) corresponding to your environment (linux-amd64, win64, etc.).
+
+For example`riscv32-esp-elf-gcc8_4_0-crosstool-ng-1.24.0-123-g64eb9ff-linux-amd64.tar.gz`, then un-archive.
+
+Then using the similar steps as in
+
+* [3. Download tools for ESP32-S2](#3-download-tools-for-esp32-s2) 
+  * [3.1 Download Toolchain for Xtensa (ESP32-S2) based on GCC](#31-download-toolchain-for-xtensa-esp32-s2-based-on-gcc)
+  * [3.2 Download esptool](#32-download-esptool)
+  * [3.3 Unzip](#33-unzip)
+* [4. Update tools](#4-update-tools)
+  * [4.1 Update Toolchain](#41-update-toolchain)
+  * [4.2 Update esptool](#42-update-esptool)
+
+then copy whole `riscv32-esp-elf` directory into `/home/your_account/.arduino15/packages/esp32/hardware/esp32/1.0.6/tools`
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Timezone_Generic/blob/main/pics/TZ_ESP32_C3_Support.png">
+</p>
+
+
+---
+
+That's it. You're now ready to compile and test for **ESP32-S2 and ESP32-C3** now
+
+---
+---
+
+### Note for Platform IO using ESP32 LittleFS
+
+#### Necessary only for esp32 core v1.0.6-
+
+From esp32 core v1.0.6+, [`LittleFS_esp32 v1.0.6`](https://github.com/lorol/LITTLEFS) has been included and this step is not necessary anymore.
+
+In Platform IO, to fix the error when using [`LittleFS_esp32 v1.0`](https://github.com/lorol/LITTLEFS) for ESP32-based boards with ESP32 core v1.0.4- (ESP-IDF v3.2-), uncomment the following line
+
+from
+
+```
+//#define CONFIG_LITTLEFS_FOR_IDF_3_2   /* For old IDF - like in release 1.0.4 */
+```
+
+to
+
+```
+#define CONFIG_LITTLEFS_FOR_IDF_3_2   /* For old IDF - like in release 1.0.4 */
+```
+
+It's advisable to use the latest [`LittleFS_esp32 v1.0.5+`](https://github.com/lorol/LITTLEFS) to avoid the issue.
+
+Thanks to [Roshan](https://github.com/solroshan) to report the issue in [Error esp_littlefs.c 'utime_p'](https://github.com/khoih-prog/ESPAsync_WiFiManager/issues/28) 
+
+---
+---
+
 ### HOWTO Use analogRead() with ESP32 running WiFi and/or BlueTooth (BT/BLE)
 
 Please have a look at [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to have more detailed description and solution of the issue.
@@ -610,7 +807,7 @@ Please have a look at [**ESP_WiFiManager Issue 39: Not able to read analog port 
 
 #### 3.. ESP32 WiFi uses ADC2 for WiFi functions
 
-Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master/components/driver/adc_common.c#L61)
+Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/main/components/driver/adc_common.c#L61)
 
 > In ADC2, there're two locks used for different cases:
 > 1. lock shared with app and Wi-Fi:
@@ -1936,7 +2133,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -1990,7 +2187,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2047,7 +2244,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.128
 Listening on port 2390
@@ -2087,7 +2284,7 @@ The following is debug terminal output when running example [**RTC_STM32_Etherne
 
 ```
 Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2117,7 +2314,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2152,7 +2349,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2194,7 +2391,7 @@ The following is debug terminal output when running example [**tzTest**](example
 
 ```
 Starting TZTest on NRF52840_FEATHER
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 -------- Apr-2018 time change --------
 13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
 13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
@@ -2300,7 +2497,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NRF52840_FEATHER
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2325,7 +2522,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on SAMD_NANO_33_IOT
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 WriteRules done
 readRules done
 [TZ] DST rule
@@ -2346,7 +2543,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NUCLEO_F767ZI
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [TZ] Write to EEPROM, size =  16384 , offset =  0
 WriteRules done
 [TZ] Read from EEPROM, size =  16384 , offset =  0
@@ -2369,7 +2566,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [TZ] Writing to dueFlashStorage OK
 WriteRules done
 [TZ] Reading from dueFlashStorage OK
@@ -2392,7 +2589,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP32_DEV
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2417,7 +2614,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP8266_NODEMCU
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2442,7 +2639,7 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2483,7 +2680,7 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2529,7 +2726,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.153
 Listening on port 2390
@@ -2580,7 +2777,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2627,7 +2824,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.4.0
+Timezone_Generic v1.5.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2681,6 +2878,12 @@ The UTC time is 19:25:07
 ---
 
 ## Releases
+
+### Major Releases v1.5.0
+
+1. Add support to ESP32-S2 amd ESP32-C3 boards
+2. Verify OK with ESP32 core v1.0.6 and ESP8266 core v3.0.0
+3. Fix bug.
 
 ### Major Releases v1.4.0
 
@@ -2748,7 +2951,7 @@ The UTC time is 19:25:07
 ### Currently Supported Storage
 
   - **ESP8266 LittleFS, SPIFFS**.
-  - **ESP32 SPIFFS and LittleFS**.
+  - **ESP32, ESP32-S2 SPIFFS and LittleFS. ESP32-C3 SPIFFS**.
   - **SAM DUE DueFlashStorage**.
   - **SAMD FlashStorage_SAMD**.
   - **nRF52/RP2040 LittleFS**.
@@ -2788,6 +2991,7 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
 13. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
 14. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
 15. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+16. Add support to ESP32-S2 (using SPIFFS or LittleFS) and ESP32-C3 boards (using SPIFFS)
 
 ---
 ---
