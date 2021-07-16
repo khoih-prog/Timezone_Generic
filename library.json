@@ -152,5 +152,5 @@
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino",
-  "license": "MIT"
+  "license": "LGPL-3.0"
 }
