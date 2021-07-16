@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
 
-  For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32 boards
+  For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
 
   Based on and modified from Arduino Timezone Library (https://github.com/JChristensen/Timezone)
   to support other boards such as ESP8266/ESP32, SAMD21, SAMD51, Adafruit's nRF52 boards, etc.

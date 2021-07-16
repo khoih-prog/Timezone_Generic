@@ -1,8 +1,8 @@
 {
   "name": "Timezone_Generic",
-  "version": "1.5.0",
-  "keywords": "timing, device, control, ntp, rtc, wifi, ethernet, WiFiNINA, SAM DUE, SAMD, nRF52, STM32, rpi-pico, rp2040, nano-rp2040-connect, FlashStorage-SAMD, FlashStorage-STM32, DueFlashStorage, LittleFS, EEPROM",
-  "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, RP2040-based (Nano_RP2040_Connect, RASPBERRY_PI_PICO) boards, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
+  "version": "1.6.0",
+  "keywords": "timing, device, control, ntp, rtc, wifi, ethernet, WiFiNINA, SAM DUE, SAMD, nRF52, STM32, wt32-eth01, rp2040, nano-rp2040-connect, FlashStorage-SAMD, FlashStorage-STM32, DueFlashStorage, LittleFS, EEPROM, rpi-pico",
+  "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, WT32-ETH01 (ESP32 + LAN8720), SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, RP2040-based (Nano_RP2040_Connect, RASPBERRY_PI_PICO) boards, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
   "authors": [
     {
       "name": "Jack Christensen",
@@ -31,13 +31,13 @@
     {
       "owner": "paulstoffregen",
       "name": "Time",
-      "version": ">=1.6",
+      "version": ">=1.6.1",
       "platforms": ["*"]
     },
     {
       "owner": "khoih.prog",
       "name": "DS323x_Generic",
-      "version": ">=1.2.0",
+      "version": ">=1.2.1",
       "platforms": ["*"]
     },
     {
@@ -55,7 +55,7 @@
     {
       "owner": "khoih.prog",
       "name": "WiFiNINA_Generic",
-      "version": ">=1.8.10-1",
+      "version": ">=1.8.12",
       "platforms": ["*"]
     },
     {
@@ -73,6 +73,12 @@
     {
       "owner": "khoih-prog",
       "name": "WiFiWebServer",
+      "version": ">=1.2.0",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "khoih.prog",
+      "name": "WebServer_WT32_ETH01",
       "version": ">=1.2.0",
       "platforms": ["*"]
     },
@@ -103,7 +109,7 @@
     {
       "owner": "uipethernet",
       "name": "UIPEthernet",
-      "version": ">=2.0.9",
+      "version": ">=2.0.8",
       "platforms": ["*"]
     },
     {
