@@ -192,7 +192,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - RP2040-based boards, such as **Nano_RP2040_Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
   - RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
   - **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
-  - **RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards**
+  - **RTL8720DN, RTL8722DM, RTL8722CSM, etc. boards**
   
 ### Currently Supported WiFi Modules and Shields
 
@@ -200,7 +200,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - **ESP32 built-in WiFi**.
   - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
   - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
-  - **RTL8720DN, RTL8722DM, RTM8722CSM**
+  - **RTL8720DN, RTL8722DM, RTL8722CSM**
   
 ### Currently Supported Ethernet Modules and Shields
 
@@ -226,7 +226,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 
 ### Releases v1.7.0
 
-1. Add support to RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards
+1. Add support to RTL8720DN, RTL8722DM, RTL8722CSM, etc. boards
 2. Add examples with new features
 
 ### Releases v1.6.0
@@ -297,7 +297,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 12. [`Arduino Core for STM32 v2.0.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
 13. [`Arduino mbed_rp2040 core 2.3.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 14. [`Earle Philhower's arduino-pico core v1.9.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-15. [`Arduino AmebaD core 3.0.8+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTM8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
+15. [`Arduino AmebaD core 3.0.8+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 
 16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 17. Depending on which board you're using:
@@ -3016,7 +3016,7 @@ The UTC time is 2:46:32
 
 ### Releases v1.7.0
 
-1. Add support to RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards
+1. Add support to RTL8720DN, RTL8722DM, RTL8722CSM, etc. boards
 2. Add examples with new features
 
 ### Releases v1.6.0
@@ -3080,7 +3080,7 @@ The UTC time is 2:46:32
   - RP2040-based boards, such as **Nano_RP2040_Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
   - RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
   - **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
-  - **RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards**
+  - **RTL8720DN, RTL8722DM, RTL8722CSM, etc. boards**
   
 ### Currently Supported WiFi Modules and Shields
 
@@ -3088,7 +3088,7 @@ The UTC time is 2:46:32
   - **ESP32 built-in WiFi**.
   - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
   - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
-  - **RTL8720DN, RTL8722DM, RTM8722CSM**
+  - **RTL8720DN, RTL8722DM, RTL8722CSM**
   
 ### Currently Supported Ethernet Modules and Shields
 
@@ -3143,7 +3143,7 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
 15. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 16. Add support to ESP32-S2 (using SPIFFS or LittleFS) and ESP32-C3 boards (using SPIFFS)
 17. Add support to **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
-18. Add support to **RTL8720DN, RTL8722DM, RTM8722CSM, etc.** boards
+18. Add support to **RTL8720DN, RTL8722DM, RTL8722CSM, etc.** boards
 
 ---
 ---
