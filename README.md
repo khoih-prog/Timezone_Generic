@@ -18,6 +18,7 @@
   * [Currently Supported Ethernet Modules and Shields](#currently-supported-ethernet-modules-and-shields)
   * [Currently Supported Storage](#currently-supported-storage)
 * [Changelog](#changelog)
+  * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.0](#releases-v160)
   * [Major Releases v1.5.0](#major-releases-v150)
   * [Major Releases v1.4.0](#major-releases-v140)
@@ -45,6 +46,7 @@
   * [8. For RP2040-based boards using Earle Philhower arduino-pico core](#8-for-rp2040-based-boards-using-earle-philhower-arduino-pico-core)
     * [8.1. To use BOARD_NAME](#81-to-use-board_name)
     * [8.2. To avoid compile error relating to microsecondsToClockCycles](#82-to-avoid-compile-error-relating-to-microsecondstoclockcycles)
+  * [9. For RTL8720DN boards using AmebaD core](#9-for-rtl8720dn-boards-using-amebad-core)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -114,6 +116,9 @@
   * [WT32_ETH01 Boards](#wt32_eth01-boards)
     * [14. TZ_NTP_Clock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_Clock_WT32_ETH01)
     * [15. TZ_NTP_WorldClock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_WorldClock_WT32_ETH01)
+  * [RTL8720DN Boards](#rtl8720dn-boards)
+    * [16. TZ_NTP_Clock_RTL8720DN](examples/RTL8720DN/TZ_NTP_Clock_RTL8720DN)
+    * [17. TZ_NTP_WorldClock_RTL8720DN](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN)
 * [Example TZ_NTP_Clock_Ethernet](#example-tz_ntp_clock_ethernet)
   * [1. File TZ_NTP_Clock_Ethernet.ino](#1-file-tz_ntp_clock_ethernetino)
   * [2. File defines.h](#2-file-definesh) 
@@ -137,6 +142,7 @@
   * [17. TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00](#17-tz_ntp_worldclock_ethernet-on-mbed-raspberry_pi_pico-with-w5x00)
   * [18. TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00](#18-tz_ntp_worldclock_ethernet-on-raspberry_pi_pico-with-w5x00)
   * [19. TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720](#19-tz_ntp_worldclock_wt32_eth01-on-wt32-eth01-with-eth_phy_lan8720)
+  * [20. TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN](#20-tz_ntp_worldclock_rtl8720dn-on-rtlduino-rtl8720dn)
 * [Releases](#releases)
 * [Issues](#issues)
 * [TO DO](#to-do)
@@ -186,6 +192,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - RP2040-based boards, such as **Nano_RP2040_Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
   - RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
   - **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+  - **RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards**
   
 ### Currently Supported WiFi Modules and Shields
 
@@ -193,6 +200,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - **ESP32 built-in WiFi**.
   - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
   - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
+  - **RTL8720DN, RTL8722DM, RTM8722CSM**
   
 ### Currently Supported Ethernet Modules and Shields
 
@@ -209,11 +217,17 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   - **SAMD FlashStorage_SAMD**.
   - **nRF52/RP2040 LittleFS**.
   - **STM32, Teensy and AVR, MegaAVR EEPROM**.
+  - **RTL8720 FlashStorage_RTL8720**.
 
 ---
 ---
 
 ## Changelog
+
+### Releases v1.7.0
+
+1. Add support to RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards
+2. Add examples with new features
 
 ### Releases v1.6.0
 
@@ -269,7 +283,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  3. [`Arduino MegaAVR core v1.8.3+`](https://github.com/arduino/ArduinoCore-megaavr) for Arduino MegaAVR boards such as Arduino Uno WiFi Rev2. Use Arduino Board Manager to install. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-megaavr.svg)](https://github.com/arduino/ArduinoCore-megaavr/releases/latest)
  4. [`ESP32 Core 1.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
- 5. [`ESP8266 Core 3.0.1+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
+ 5. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
  6. [`Teensy core v1.54+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. **Ready** from v1.0.0.
  7. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  8. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
@@ -282,16 +296,18 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
   
 12. [`Arduino Core for STM32 v2.0.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
 13. [`Arduino mbed_rp2040 core 2.3.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-14. [`Earle Philhower's arduino-pico core v1.9.2+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+14. [`Earle Philhower's arduino-pico core v1.9.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+15. [`Arduino AmebaD core 3.0.8+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTM8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 
-15. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
-16. Depending on which board you're using:
+16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
+17. Depending on which board you're using:
    - [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
-   - [`FlashStorage_SAMD library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
-   - [`FlashStorage_STM32 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
+   - [`FlashStorage_SAMD library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_SAMD.svg?)](https://www.ardu-badge.com/FlashStorage_SAMD)
+   - [`FlashStorage_STM32 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
+   - [`FlashStorage_RTL8720 library v1.0.0+`](https://github.com/khoih-prog/FlashStorage_RTL8720) for RTL8720DN. etc. boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_RTL8720.svg?)](https://www.ardu-badge.com/FlashStorage_RTL8720)
    - [`LittleFS_esp32 v1.0.6+`](https://github.com/lorol/LITTLEFS) for ESP32-based boards using LittleFS. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_esp32.svg?)](https://www.ardu-badge.com/LittleFS_esp32). **Notice**: This [`LittleFS_esp32 library`](https://github.com/lorol/LITTLEFS) has been integrated to Arduino [esp32 core v1.0.6](https://github.com/espressif/arduino-esp32/tree/master/libraries/LITTLEFS).
 
-17. Depending on which Ethernet card/module/shield you're using:
+18. Depending on which Ethernet card/module/shield you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
@@ -299,14 +315,15 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest). To be used with [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest). 
-18. [`WiFiNINA_Generic library v1.8.12+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-19. [`WiFiWebServer library v1.2.0+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
-20. [`EthernetWebServer library v1.5.0+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
-21. [`EthernetWebServer_STM32 library v1.2.0+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
-22. [`ESP8266_AT_WebServer library v1.3.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
-23. [`DS323x_Generic library v1.2.1+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
-24. [`STM32RTC library v1.1.0+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
-25. [`WebServer_WT32_ETH01 library v1.2.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+19. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+20. [`WiFiWebServer library v1.2.0+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+21. [`EthernetWebServer library v1.5.0+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
+22. [`EthernetWebServer_STM32 library v1.2.0+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
+23. [`ESP8266_AT_WebServer library v1.3.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
+24. [`DS323x_Generic library v1.2.1+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
+25. [`STM32RTC library v1.1.0+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
+26. [`WebServer_WT32_ETH01 library v1.2.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+27. [`WiFiWebServer_RTL8720 library v1.0.1+`](https://github.com/khoih-prog/WiFiWebServer_RTL8720) to use Realtek RTL8720DN, etc. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer_RTL8720.svg?)](https://www.ardu-badge.com/WiFiWebServer_RTL8720).
 
 
 ---
@@ -401,7 +418,7 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.11](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
+ **To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards**, you have to copy the whole [Arduino SAMD cores 1.8.11](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
  
 #### For core version v1.8.10+
 
@@ -420,16 +437,16 @@ This file must be copied into the directory:
 Supposing the Arduino SAMD version is 1.8.9. These files must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/samd/1.8.9/platform.txt`
-- ***`~/.arduino15/packages/arduino/hardware/samd/1.8.9/cores/arduino/Arduino.h`***
+- **`~/.arduino15/packages/arduino/hardware/samd/1.8.9/cores/arduino/Arduino.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 
 These files must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/samd/x.yy.z/platform.txt`
-- ***`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`***
+- **`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`**
  
- This is mandatory to fix the ***notorious Arduino SAMD compiler error***. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
+ This is mandatory to fix the **notorious Arduino SAMD compiler error**. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
  
 ```
  ...\arm-none-eabi\include\c++\7.2.1\bits\stl_algobase.h:243:56: error: macro "min" passed 3 arguments, but takes just 2
@@ -440,7 +457,7 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.7.1) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.1). 
+ **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.7.1) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.1). 
 
 Supposing the Adafruit SAMD core version is 1.7.1. This file must be copied into the directory:
 
@@ -453,7 +470,7 @@ This file must be copied into the directory:
 
 #### 6. For Seeeduino SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
+ **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
 
 Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
 
@@ -535,6 +552,21 @@ This file must be copied to replace:
 
 With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add defs for compatibility #142](https://github.com/earlephilhower/arduino-pico/pull/142).
 
+
+#### 9. For RTL8720DN boards using AmebaD core
+ 
+ To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.0.8/cores/arduino/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.0.8/cores/arduino/avr/pgmspace.h). 
+
+Supposing the Realtek AmebaD core version is 3.0.8. This file must be copied into the directory:
+
+- `~/.arduino15/packages/realtek/hardware/AmebaD/3.0.8/cores/arduino/avr/pgmspace.h`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/realtek/hardware/AmebaD/x.yy.zz/cores/arduino/avr/pgmspace.h`
+
+
 ---
 ---
 
@@ -583,7 +615,7 @@ To add UDP Multicast support, necessary for the [**UPnP_Generic library**](https
 
 #### 6. For UIPEthernet library
 
-***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+**To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library**, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
 - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
 - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
@@ -1274,6 +1306,11 @@ tz.display_STD_Rule();
 14. [TZ_NTP_Clock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_Clock_WT32_ETH01)
 15. [TZ_NTP_WorldClock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_WorldClock_WT32_ETH01)
 
+### RTL8720DN Boards
+ 
+16. [TZ_NTP_Clock_RTL8720DN](examples/RTL8720DN/TZ_NTP_Clock_RTL8720DN)
+17. [TZ_NTP_WorldClock_RTL8720DN](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN)
+
 ---
 ---
 
@@ -1360,10 +1397,14 @@ void sendNTPpacket(char *ntpSrv)
 // format and print a time_t value, with a time zone appended.
 void printDateTime(time_t t, const char *tz)
 {
-    char buf[32];
+    char buf[48];
     char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+
+    memset(buf, 0, sizeof(buf));
+    memset(m, 0, sizeof(m));
+    
     strcpy(m, monthShortStr(month(t)));
-    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+    sprintf(buf, "%2d:%2d:%2d %s %2d %s %d %s",
         hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
     Serial.println(buf);
 }
@@ -2152,7 +2193,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2206,7 +2247,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2263,7 +2304,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.128
 Listening on port 2390
@@ -2303,7 +2344,7 @@ The following is debug terminal output when running example [**RTC_STM32_Etherne
 
 ```
 Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2333,7 +2374,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2368,7 +2409,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 DS323x_Generic v1.1.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2410,7 +2451,7 @@ The following is debug terminal output when running example [**tzTest**](example
 
 ```
 Starting TZTest on NRF52840_FEATHER
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 -------- Apr-2018 time change --------
 13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
 13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
@@ -2516,7 +2557,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NRF52840_FEATHER
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2541,7 +2582,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on SAMD_NANO_33_IOT
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 WriteRules done
 readRules done
 [TZ] DST rule
@@ -2562,7 +2603,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NUCLEO_F767ZI
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [TZ] Write to EEPROM, size =  16384 , offset =  0
 WriteRules done
 [TZ] Read from EEPROM, size =  16384 , offset =  0
@@ -2585,7 +2626,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [TZ] Writing to dueFlashStorage OK
 WriteRules done
 [TZ] Reading from dueFlashStorage OK
@@ -2608,7 +2649,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP32_DEV
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2633,7 +2674,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP8266_NODEMCU
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2658,7 +2699,7 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2699,7 +2740,7 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2745,7 +2786,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.153
 Listening on port 2390
@@ -2796,7 +2837,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2843,7 +2884,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2902,7 +2943,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.2.0
-Timezone_Generic v1.6.0
+Timezone_Generic v1.7.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232
 FULL_DUPLEX, 100Mbps
 TZ_NTP_WorldClock_WT32_ETH01 started @ IP address: 192.168.2.232
@@ -2924,11 +2965,59 @@ The UTC time is 18:25:17
 11:25:17 Fri 16 Jul 2021 PDT  Los Angeles
 ```
 
+---
+
+### 20. TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_RTL8720DN**](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN) on Rtlduino RTL8720DN
+
+
+```
+Start TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
+WiFiWebServer_RTL8720 v1.0.1
+Timezone_Generic v1.7.0
+Current Firmware Version = 1.0.0
+Attempting to connect to SSID: HueNet_5G
+TZ_NTP_Clock_RTL8720DN started @ IP address: 192.168.2.111
+Listening on port 2390
+Packet received
+Seconds since Jan 1 1900 = 3837552392
+Unix time = 1628563592
+The UTC time is 2:46:32
+
+12:46:32 Tue 10 Aug 2021 AEST Sydney
+05:46:32 Tue 10 Aug 2021 MSK  Moscow
+04:46:32 Tue 10 Aug 2021 CEST Paris
+03:46:32 Tue 10 Aug 2021 BST  London
+02:46:32 Tue 10 Aug 2021 UTC  Universal Coordinated Time
+22:46:32 Mon 09 Aug 2021 EDT  New York
+21:46:32 Mon 09 Aug 2021 CDT  Chicago
+20:46:32 Mon 09 Aug 2021 MDT  Denver
+19:46:32 Mon 09 Aug 2021 MST  Phoenix
+19:46:32 Mon 09 Aug 2021 PDT  Los Angeles
+
+12:46:42 Tue 10 Aug 2021 AEST Sydney
+05:46:42 Tue 10 Aug 2021 MSK  Moscow
+04:46:42 Tue 10 Aug 2021 CEST Paris
+03:46:42 Tue 10 Aug 2021 BST  London
+02:46:42 Tue 10 Aug 2021 UTC  Universal Coordinated Time
+22:46:42 Mon 09 Aug 2021 EDT  New York
+21:46:42 Mon 09 Aug 2021 CDT  Chicago
+20:46:42 Mon 09 Aug 2021 MDT  Denver
+19:46:42 Mon 09 Aug 2021 MST  Phoenix
+19:46:42 Mon 09 Aug 2021 PDT  Los Angeles
+```
+
 
 ---
 ---
 
 ## Releases
+
+### Releases v1.7.0
+
+1. Add support to RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards
+2. Add examples with new features
 
 ### Releases v1.6.0
 
@@ -2991,6 +3080,7 @@ The UTC time is 18:25:17
   - RP2040-based boards, such as **Nano_RP2040_Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
   - RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
   - **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+  - **RTL8720DN, RTL8722DM, RTM8722CSM, etc. boards**
   
 ### Currently Supported WiFi Modules and Shields
 
@@ -2998,6 +3088,7 @@ The UTC time is 18:25:17
   - **ESP32 built-in WiFi**.
   - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
   - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
+  - **RTL8720DN, RTL8722DM, RTM8722CSM**
   
 ### Currently Supported Ethernet Modules and Shields
 
@@ -3005,7 +3096,7 @@ The UTC time is 18:25:17
   - **ENC28J60 using EthernetENC or UIPEthernet library.**
   - **LAN8742A using STM32Ethernet / STM32 LwIP libraries.**
   - **LAN8720A in WT32-ETH01** using [`WebServer_WT32_ETH01`](https://github.com/khoih-prog/WebServer_WT32_ETH01).
-
+  
 ### Currently Supported Storage
 
   - **ESP8266 LittleFS, SPIFFS**.
@@ -3014,6 +3105,7 @@ The UTC time is 18:25:17
   - **SAMD FlashStorage_SAMD**.
   - **nRF52/RP2040 LittleFS**.
   - **STM32, Teensy and AVR, MegaAVR EEPROM**.
+  - **RTL8720 FlashStorage_RTL8720**.
   
 ---
 ---
@@ -3051,6 +3143,7 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
 15. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 16. Add support to ESP32-S2 (using SPIFFS or LittleFS) and ESP32-C3 boards (using SPIFFS)
 17. Add support to **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+18. Add support to **RTL8720DN, RTL8722DM, RTM8722CSM, etc.** boards
 
 ---
 ---

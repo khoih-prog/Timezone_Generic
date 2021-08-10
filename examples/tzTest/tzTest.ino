@@ -28,10 +28,10 @@
  *****************************************************************************************************************************/
 
 #if (ESP8266 || ESP32)
-  #define USE_LITTLEFS      true
-  #define USE_SPIFFS        false
+#define USE_LITTLEFS      true
+#define USE_SPIFFS        false
 #endif
-  
+
 #include <Timezone_Generic.h>   // https://github.com/khoih-prog/Timezone_Generic
 #include <TimeLib.h>            // https://github.com/PaulStoffregen/Time
 
@@ -48,7 +48,7 @@ TimeChangeRule etSTD = {"EST", First, Sun, Nov, 2, -300};   // Standard time = U
 Timezone *et;
 
 #ifndef LED_BUILTIN
-  #define LED_BUILTIN       13
+#define LED_BUILTIN       13
 #endif
 
 // format and print a time_t value, with a time zone appended.
@@ -56,9 +56,13 @@ void printDateTime(time_t t, const char *tz)
 {
   char buf[32];
   char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-  
+
+  memset(buf, 0, sizeof(buf));
+  memset(m, 0, sizeof(m));
+
   strcpy(m, monthShortStr(month(t)));
-  sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+
+  sprintf(buf, "%2d:%2d:%2d %s %2d %s %d %s",
           hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
   Serial.print(buf);
 }
@@ -104,7 +108,7 @@ void setup()
 
   delay(200);
 
-  Serial.print(F("\nStart TZTest on ")); 
+  Serial.print(F("\nStart TZTest on "));
 
 #if defined(ARDUINO_BOARD)
   Serial.println(ARDUINO_BOARD);
@@ -118,7 +122,9 @@ void setup()
 
   nz = new Timezone(nzDST, nzSTD);
   et = new Timezone(etDST, etSTD);
-  
+
+  printTimes( 1,  4, 2018, nzSTD.hour, nzDST.offset, nz); // day, month, year, hour, offset, tz
+
   // New Zealand
   printTimes( 1,  4, 2018, nzSTD.hour, nzDST.offset, nz); // day, month, year, hour, offset, tz
   printTimes(30,  9, 2018, nzDST.hour, nzSTD.offset, nz);
@@ -126,6 +132,7 @@ void setup()
   printTimes(29,  9, 2019, nzDST.hour, nzSTD.offset, nz);
   printTimes( 5,  4, 2020, nzSTD.hour, nzDST.offset, nz);
   printTimes(27,  9, 2020, nzDST.hour, nzSTD.offset, nz);
+
 
   // US Eastern
   printTimes(11,  3, 2018, etDST.hour, etSTD.offset, et); // day, month, year, hour, offset, tz

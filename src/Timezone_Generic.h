@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.6.0
+  Version: 1.7.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
   1.5.0   K Hoang      13/06/2021 Add support to ESP32-S2 and ESP32-C3. Fix bug
   1.6.0   K Hoang      16/07/2021 Add support to WT32_ETH01
+  1.7.0   K Hoang      10/08/2021 Add support to Ameba Realtek RTL8720DN, RTL8722DM and RTM8722CSM
  *****************************************************************************************************************************/
 
 #pragma once
@@ -38,7 +39,7 @@
 // For ESP8266, use LitteFS, SPIFFS or EEPROM.
 // For ESP32, use SPIFFS or EEPROM.
 
-#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.6.0"
+#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.7.0"
 
 #if defined(ARDUINO) && (ARDUINO >= 100)
   #include <Arduino.h>

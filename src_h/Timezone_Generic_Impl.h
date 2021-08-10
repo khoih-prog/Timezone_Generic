@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.6.0
+  Version: 1.7.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
   1.5.0   K Hoang      13/06/2021 Add support to ESP32-S2 and ESP32-C3. Fix bug
   1.6.0   K Hoang      16/07/2021 Add support to WT32_ETH01
+  1.7.0   K Hoang      10/08/2021 Add support to Ameba Realtek RTL8720DN, RTL8722DM and RTM8722CSM
  *****************************************************************************************************************************/
 
 #pragma once
@@ -34,6 +35,21 @@
 #define  TZ_DATA_OFFSET   0
 
 #define TZ_USE_EEPROM      true
+
+/////////////////////////////
+
+// To eliminate warnings with [-Wundef]
+#define TZ_USE_ESP32        false
+#define TZ_USE_ESP8266      false
+#define TZ_USE_SAMD         false
+#define TZ_USE_SAM_DUE      false
+#define TZ_USE_NRF52        false
+#define TZ_USE_STM32        false
+#define TZ_USE_RP2040       false
+#define TZ_USE_MBED_RP2040  false
+
+
+/////////////////////////////
 
 #if defined(ESP32)
 
@@ -213,7 +229,22 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use MBED RP2040 (such as NANO_RP2040_CONNECT, RASPBERRY_PI_PICO) and LittleFS
-           
+
+
+#elif ( defined(CONFIG_PLATFORM_8721D) || defined(BOARD_RTL8722D) || defined(BOARD_RTL8722DM_MINI) || defined(BOARD_RTL8720DN_BW16) )
+  #if defined(TZ_USE_RTL8720)
+    #undef TZ_USE_RTL8720
+  #endif
+  #define TZ_USE_RTL8720      true
+  
+  #if defined(TZ_USE_EEPROM)
+    #undef TZ_USE_EEPROM
+  #endif
+  #define TZ_USE_EEPROM    false
+  
+  #warning Use TZ_USE_RTL8720 and FlashStorage_TZ_USE_RTL8720
+  
+             
 #else
   #if defined(CORE_TEENSY)
     #define TZ_USE_EENSY      true
@@ -318,7 +349,12 @@
   #define  TZ_FILENAME     "/fs/timezone.dat"
   
   #warning MBED_RP2040_TO_BE_INITIALIZED locally in Timezone_Generic
-  
+
+/////////////////////////////
+#elif TZ_USE_RTL8720
+  // Include FlashStorage
+  #include <FlashStorage_RTL8720.h>             //https://github.com/khoih-prog/FlashStorage_RTL8720
+    
 /////////////////////////////
   
 #endif    //#if TZ_USE_EEPROM
@@ -447,7 +483,11 @@ void Timezone::initStorage(uint32_t address)
       {
         TZ_LOGERROR("LittleFS error");
       }
-  
+
+/////////////////////////////    
+#elif TZ_USE_RTL8720
+  // Do something to init FlashStorage_RTL8720
+    
 /////////////////////////////  
 #else
   #error Un-identifiable board selected. Please check your Tools->Board setting.
@@ -1329,6 +1369,56 @@ void Timezone::writeTZData(int address)
     TZ_LOGERROR("Saving to TZ_file failed");
   }
 }
+
+/////////////////////////////////////////////
+
+#elif (TZ_USE_RTL8720)
+
+  #warning Using RTL8720 FlashStorage in Timezone_Generic
+
+  // RTL8720 code    
+/*----------------------------------------------------------------------*
+   Read the daylight and standard time rules from FlashStorage at
+   the given address.
+  ----------------------------------------------------------------------*/
+void Timezone::readTZData()
+{ 
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  TZ_LOGDEBUG3("Read from FlashStorage, size = ", FlashStorage.length(), ", offset = ", TZ_DATA_START);
+  
+  memset(&m_dst, 0, TZ_DATA_SIZE);
+  memset(&m_std, 0, TZ_DATA_SIZE);
+  
+  FlashStorage.get(TZ_DATA_START, m_dst);
+  FlashStorage.get(TZ_DATA_START + TZ_DATA_SIZE, m_std);
+}
+
+/*----------------------------------------------------------------------*
+   Write the daylight and standard time rules to EEPROM at
+   the given address.
+  ----------------------------------------------------------------------*/
+void Timezone::writeTZData(int address)
+{
+  (void) address;
+  
+  if (!storageSystemInit)
+  {   
+    storageSystemInit = true;
+  }
+  
+  TZ_LOGDEBUG3("Read from FlashStorage, size = ", FlashStorage.length(), ", offset = ", TZ_DATA_START);
+   
+  FlashStorage.setCommitASAP(false); 
+  FlashStorage.put(TZ_DATA_START, m_dst);
+  FlashStorage.put(TZ_DATA_START + TZ_DATA_SIZE, m_std);
+  FlashStorage.commit();
+  FlashStorage.setCommitASAP(true); 
+}
+
         
 /////////////////////////////////////////////        
 #elif TZ_USE_EEPROM
