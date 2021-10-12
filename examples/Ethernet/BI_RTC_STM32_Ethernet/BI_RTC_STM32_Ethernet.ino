@@ -12,19 +12,6 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.6.0
-
-  Version Modified By  Date      Comments
-  ------- -----------  ---------- -----------
-  1.2.4   K Hoang      17/10/2020 Initial porting to support SAM DUE, SAMD21, SAMD51, nRF52, ESP32/ESP8266, STM32, etc. boards
-                                  using SPIFFS, LittleFS, EEPROM, FlashStorage, DueFlashStorage.
-  1.2.5   K Hoang      28/10/2020 Add examples to use STM32 Built-In RTC.
-  1.2.6   K Hoang      01/11/2020 Allow un-initialized TZ then use begin() method to set the actual TZ (Credit of 6v6gt)
-  1.3.0   K Hoang      09/01/2021 Add support to ESP32/ESP8266 using LittleFS/SPIFFS, and to AVR, UNO WiFi Rev2, etc.
-                                  Fix compiler warnings.
-  1.4.0   K Hoang      04/06/2021 Add support to RP2040-based boards using RP2040 Arduino-mbed or arduino-pico core
-  1.5.0   K Hoang      13/06/2021 Add support to ESP32-S2 and ESP32-C3. Fix bug
-  1.6.0   K Hoang      16/07/2021 Add support to WT32_ETH01
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
   STM32 has five clock sources: HSI, HSE, LSI, LSE, PLL.
