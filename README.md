@@ -216,8 +216,8 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 11. [`Adafruit nRF52 v1.1.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
 12. [`Arduino Core for STM32 v2.1.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
 13. [`Arduino mbed_rp2040 core 2.5.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-14. [`Earle Philhower's arduino-pico core v1.9.5+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-15. [`Arduino AmebaD core 3.0.10+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
+14. [`Earle Philhower's arduino-pico core v1.9.6+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+15. [`Arduino AmebaD core 3.0.11+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 
 16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 17. Depending on which board you're using:
@@ -236,13 +236,13 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest). To be used with [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest). 
 19. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-20. [`WiFiWebServer library v1.4.1+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+20. [`WiFiWebServer library v1.4.2+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
 21. [`EthernetWebServer library v1.7.1+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
 22. [`EthernetWebServer_STM32 library v1.2.1+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
 23. [`ESP8266_AT_WebServer library v1.4.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
 24. [`DS323x_Generic library v1.2.2+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
 25. [`STM32RTC library v1.1.1+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
-26. [`WebServer_WT32_ETH01 library v1.2.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+26. [`WebServer_WT32_ETH01 library v1.3.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
 27. [`WiFiWebServer_RTL8720 library v1.0.1+`](https://github.com/khoih-prog/WiFiWebServer_RTL8720) to use Realtek RTL8720DN, etc. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer_RTL8720.svg?)](https://www.ardu-badge.com/WiFiWebServer_RTL8720).
 
 
@@ -2014,7 +2014,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2068,7 +2068,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2125,7 +2125,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.128
 Listening on port 2390
@@ -2165,7 +2165,7 @@ The following is debug terminal output when running example [**RTC_STM32_Etherne
 
 ```
 Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2195,7 +2195,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2230,7 +2230,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2272,7 +2272,7 @@ The following is debug terminal output when running example [**tzTest**](example
 
 ```
 Starting TZTest on NRF52840_FEATHER
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 -------- Apr-2018 time change --------
 13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
 13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
@@ -2378,7 +2378,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NRF52840_FEATHER
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2403,7 +2403,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on SAMD_NANO_33_IOT
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 WriteRules done
 readRules done
 [TZ] DST rule
@@ -2424,7 +2424,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NUCLEO_F767ZI
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [TZ] Write to EEPROM, size =  16384 , offset =  0
 WriteRules done
 [TZ] Read from EEPROM, size =  16384 , offset =  0
@@ -2447,7 +2447,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [TZ] Writing to dueFlashStorage OK
 WriteRules done
 [TZ] Reading from dueFlashStorage OK
@@ -2470,7 +2470,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP32_DEV
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2495,7 +2495,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP8266_NODEMCU
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2520,7 +2520,7 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2561,7 +2561,7 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2607,7 +2607,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.153
 Listening on port 2390
@@ -2658,7 +2658,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2705,7 +2705,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2763,8 +2763,8 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
-WebServer_WT32_ETH01 v1.2.0
-Timezone_Generic v1.7.1
+WebServer_WT32_ETH01 v1.3.0
+Timezone_Generic v1.7.2
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232
 FULL_DUPLEX, 100Mbps
 TZ_NTP_WorldClock_WT32_ETH01 started @ IP address: 192.168.2.232
@@ -2796,7 +2796,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
 WiFiWebServer_RTL8720 v1.0.1
-Timezone_Generic v1.7.1
+Timezone_Generic v1.7.2
 Current Firmware Version = 1.0.0
 Attempting to connect to SSID: HueNet_5G
 TZ_NTP_Clock_RTL8720DN started @ IP address: 192.168.2.111
@@ -2878,12 +2878,14 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 1. Based on and modified from the [**Jack Christensen's Timezone Library**](https://github.com/JChristensen/Timezone).
 2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing.
 3. Thanks to **6v6gt** to contribute the new feature to allow un-initialized TZ. Check [**Timezone_Generic Library to convert UTC to local time**](https://forum.arduino.cc/index.php?topic=711259).
+4. Thanks to [Maximilian Gerhardt](https://github.com/maxgerhardt) to create bug report [RP2040_RTC_Time crashes Pico, does not work #3](https://github.com/khoih-prog/RP2040_RTC/issues/3) and help investigate and fix the bug, leading to v1.7.2
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/JChristensen"><img src="https://github.com/JChristensen.png" width="100px;" alt="JChristensen"/><br /><sub><b>⭐️ Jack Christensen</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b> Miguel Wisintainer</b></sub></a><br /></td>
     <td align="center"><a href="https://forum.arduino.cc/index.php?action=profile;u=454553"><img src="https://dcw9y8se13llu.cloudfront.net/avatars/6v6gt.jpg" width="100px;" alt="6v6gt"/><br /><sub><b> 6v6gt</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/maxgerhardt"><img src="https://github.com/maxgerhardt.png" width="100px;" alt="maxgerhardt"/><br /><sub><b>Maximilian Gerhardt</b></sub></a><br /></td>
   </tr> 
 </table>
 

@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.1
+  Version: 1.7.2
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -25,6 +25,7 @@
   1.6.0   K Hoang      16/07/2021 Add support to WT32_ETH01
   1.7.0   K Hoang      10/08/2021 Add support to Ameba Realtek RTL8720DN, RTL8722DM and RTM8722CSM
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
+  1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
  *****************************************************************************************************************************/
 
 #pragma once
@@ -56,7 +57,6 @@ const char TZ_SPACE[] = " ";
 
 #define TZ_PRINT        TZ_DBG_PORT.print
 #define TZ_PRINTLN      TZ_DBG_PORT.println
-#define TZ_FLUSH        TZ_DBG_PORT.flush()
 
 #define TZ_PRINT_MARK   TZ_PRINT(TZ_MARK)
 #define TZ_PRINT_SP     TZ_PRINT(TZ_SPACE)

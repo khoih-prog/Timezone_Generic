@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.7.2](#releases-v172)
   * [Releases v1.7.1](#releases-v171)
   * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.0](#releases-v160)
@@ -26,6 +27,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.7.2
+
+1. Fix crashing issue for new cleared flash. Check [RP2040_RTC_Time crashes Pico, does not work #3](https://github.com/khoih-prog/RP2040_RTC/issues/3)
 
 ### Releases v1.7.1
 
