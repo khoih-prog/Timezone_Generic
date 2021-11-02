@@ -470,7 +470,6 @@ void Timezone::initStorage(uint32_t address)
       {       
         // Reformat if we can't mount the filesystem
         TZ_LOGERROR("LittleFS Mount Fail. Formatting... ");
-        TZ_FLUSH;
  
         err = fs.reformat(&bd);
       }
