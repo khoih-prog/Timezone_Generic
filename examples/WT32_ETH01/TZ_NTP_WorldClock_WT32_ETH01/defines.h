@@ -21,6 +21,7 @@
 // Debug Level from 0 to 4
 #define _WIFI_LOGLEVEL_             3
 #define _NTP_LOGLEVEL_              0
+#define _TZ_LOGLEVEL_               3
 
 #include <WebServer_WT32_ETH01.h>
 

@@ -267,6 +267,8 @@ void setup()
   
 #endif
 
+  myTZ->writeRules();
+
   Udp.begin(localPort);
 
   Serial.print(F("Listening on port "));

@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.7.3](#releases-v173)
   * [Releases v1.7.2](#releases-v172)
   * [Releases v1.7.1](#releases-v171)
   * [Releases v1.7.0](#releases-v170)
@@ -27,6 +28,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.7.3
+
+1. Auto detect ESP32 core for LittleFS for WT32_ETH01
+2. Fix bug in examples.
 
 ### Releases v1.7.2
 

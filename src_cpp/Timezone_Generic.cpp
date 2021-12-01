@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.2
+  Version: 1.7.3
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   1.7.0   K Hoang      10/08/2021 Add support to Ameba Realtek RTL8720DN, RTL8722DM and RTM8722CSM
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
   1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
+  1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
  *****************************************************************************************************************************/
 
 #include "Timezone_Generic.h"
@@ -85,12 +86,29 @@
   #if USE_LITTLEFS
     // Use LittleFS
     #include "FS.h"
-
-    // The library will be depreciated after being merged to future major Arduino esp32 core release 2.x
-    // At that time, just remove this library inclusion
-    #include <LITTLEFS.h>             // https://github.com/lorol/LITTLEFS
     
-    #define FileFS        LITTLEFS 
+    // Check cores/esp32/esp_arduino_version.h and cores/esp32/core_version.h
+    //#if ( ESP_ARDUINO_VERSION >= ESP_ARDUINO_VERSION_VAL(2, 0, 0) )  //(ESP_ARDUINO_VERSION_MAJOR >= 2)
+    #if ( defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 2) )
+      #if (_TZ_LOGLEVEL_ > 2)
+        #warning Using ESP32 Core 1.0.6 or 2.0.0+
+      #endif
+      
+      // The library has been merged into esp32 core from release 1.0.6
+      #include <LittleFS.h>
+      
+      #define FileFS        LittleFS
+    #else
+      #if (_TZ_LOGLEVEL_ > 2)
+        #warning Using ESP32 Core 1.0.5-. You must install LITTLEFS library
+      #endif
+      
+      // The library has been merged into esp32 core from release 1.0.6
+      #include <LITTLEFS.h>             // https://github.com/lorol/LITTLEFS
+      
+      #define FileFS        LITTLEFS
+    #endif
+
   #else
     // Use SPIFFS
     #include "FS.h"
@@ -443,11 +461,39 @@ void Timezone::initStorage(uint32_t address)
 #elif TZ_USE_ESP32
   // Do something to init LittleFS / InternalFS
   // Initialize Internal File System
+  if (!FileFS.begin(true))
+  {
+    TZ_LOGDEBUG("SPIFFS/LittleFS failed! Already tried formatting.");
+  
+    if (!FileFS.begin())
+    {     
+      // prevents debug info from the library to hide err message.
+      delay(100);
+      
+      TZ_LOGERROR("LittleFS failed!");
+    }
+  }
   
 /////////////////////////////    
 #elif TZ_USE_ESP8266
   // Do something to init LittleFS / InternalFS
   // Initialize Internal File System
+  // Do something to init LittleFS / InternalFS
+  // Initialize Internal File System
+  FileFS.format();
+   
+  if (!FileFS.begin())
+  {
+    TZ_LOGDEBUG("SPIFFS/LittleFS failed! Already tried formatting.");
+  
+    if (!FileFS.begin())
+    {     
+      // prevents debug info from the library to hide err message.
+      delay(100);
+      
+      TZ_LOGERROR("LittleFS failed!");
+    }
+  }
   
 /////////////////////////////
 #elif TZ_USE_RP2040

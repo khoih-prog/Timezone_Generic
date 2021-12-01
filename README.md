@@ -205,19 +205,19 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
  1. [`Arduino IDE v1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  3. [`Arduino MegaAVR core v1.8.3+`](https://github.com/arduino/ArduinoCore-megaavr) for Arduino MegaAVR boards such as Arduino Uno WiFi Rev2. Use Arduino Board Manager to install. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-megaavr.svg)](https://github.com/arduino/ArduinoCore-megaavr/releases/latest)
- 4. [`ESP32 Core 2.0.0+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+ 4. [`ESP32 Core 2.0.1+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
  5. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
  6. [`Teensy core v1.55+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. **Ready** from v1.0.0.
  7. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
- 8. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
+ 8. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  9. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
-10. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+10. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
 
-11. [`Adafruit nRF52 v1.1.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
+11. [`Adafruit nRF52 v1.2.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
 12. [`Arduino Core for STM32 v2.1.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-13. [`Arduino mbed_rp2040 core 2.5.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-14. [`Earle Philhower's arduino-pico core v1.9.6+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-15. [`Arduino AmebaD core 3.0.11+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
+13. [`Arduino mbed_rp2040 core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+14. [`Earle Philhower's arduino-pico core v1.9.7+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+15. [`Arduino AmebaD core 3.1.0+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 
 16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 17. Depending on which board you're using:
@@ -235,14 +235,14 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest). To be used with [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest). 
-19. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+19. [`WiFiNINA_Generic library v1.8.14-1+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
 20. [`WiFiWebServer library v1.4.2+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
 21. [`EthernetWebServer library v1.7.1+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
 22. [`EthernetWebServer_STM32 library v1.2.1+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
 23. [`ESP8266_AT_WebServer library v1.4.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
 24. [`DS323x_Generic library v1.2.2+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
 25. [`STM32RTC library v1.1.1+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
-26. [`WebServer_WT32_ETH01 library v1.3.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+26. [`WebServer_WT32_ETH01 library v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
 27. [`WiFiWebServer_RTL8720 library v1.0.1+`](https://github.com/khoih-prog/WiFiWebServer_RTL8720) to use Realtek RTL8720DN, etc. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer_RTL8720.svg?)](https://www.ardu-badge.com/WiFiWebServer_RTL8720).
 
 
@@ -280,19 +280,19 @@ Another way to install is to:
 
 #### 1. For Adafruit nRF52840 and nRF52832 boards
 
-**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.1.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0). 
+**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.2.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0). 
 
-Supposing the Adafruit nRF52 version is 1.1.0. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Udp.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Print.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 1.2.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -310,14 +310,14 @@ These files must be copied into the directory:
 
 #### 2. For Teensy boards
  
- **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.15/hardware/teensy/avr/boards.txt). 
+ **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.16/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.15. These files must be copied into the directory:
+Supposing the Arduino version is 1.8.16. These files must be copied into the directory:
 
-- `./arduino-1.8.15/hardware/teensy/avr/boards.txt`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy/Stream.h`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy3/Stream.h`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy4/Stream.h`
+- `./arduino-1.8.16/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy/Stream.h`
+- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy3/Stream.h`
+- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy4/Stream.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 These files must be copied into the directory:
@@ -342,13 +342,13 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.12) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.12).
  
 #### For core version v1.8.10+
 
-Supposing the Arduino SAMD version is 1.8.11. Now only one file must be copied into the directory:
+Supposing the Arduino SAMD version is 1.8.12. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt`
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.12/platform.txt`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -489,12 +489,12 @@ With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add
 
 #### 9. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -507,9 +507,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -1218,14 +1218,10 @@ void sendNTPpacket(char *ntpSrv)
 // format and print a time_t value, with a time zone appended.
 void printDateTime(time_t t, const char *tz)
 {
-    char buf[48];
+    char buf[32];
     char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-
-    memset(buf, 0, sizeof(buf));
-    memset(m, 0, sizeof(m));
-    
     strcpy(m, monthShortStr(month(t)));
-    sprintf(buf, "%2d:%2d:%2d %s %2d %s %d %s",
+    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
         hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
     Serial.println(buf);
 }
@@ -1581,6 +1577,8 @@ void setup()
   
 #endif
 
+  myTZ->writeRules();
+
   Udp.begin(localPort);
 }
 
@@ -1604,6 +1602,7 @@ void loop()
 
 // Debug Level from 0 to 4
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       3
+#define _NTP_LOGLEVEL_                      0
 #define _TZ_LOGLEVEL_                       1
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
@@ -2014,7 +2013,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2033,31 +2032,31 @@ SS:5
 Using mac index = 9
 You're connected to the network, IP = 192.168.2.89
 Packet received
-Seconds since Jan 1 1900 = 3811983610
-Unix time = 1602994810
-The UTC time is 4:20:10
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
 
-15:20:10 Sun 18 Oct 2020 AEDT Sydney
-07:20:10 Sun 18 Oct 2020 MSK  Moscow
-06:20:10 Sun 18 Oct 2020 CEST Paris
-05:20:10 Sun 18 Oct 2020 BST  London
-04:20:10 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:20:10 Sun 18 Oct 2020 EDT  New York
-23:20:10 Sat 17 Oct 2020 CDT  Chicago
-22:20:10 Sat 17 Oct 2020 MDT  Denver
-21:20:10 Sat 17 Oct 2020 MST  Phoenix
-21:20:10 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
 
-15:20:20 Sun 18 Oct 2020 AEDT Sydney
-07:20:20 Sun 18 Oct 2020 MSK  Moscow
-06:20:20 Sun 18 Oct 2020 CEST Paris
-05:20:20 Sun 18 Oct 2020 BST  London
-04:20:20 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:20:20 Sun 18 Oct 2020 EDT  New York
-23:20:20 Sat 17 Oct 2020 CDT  Chicago
-22:20:20 Sat 17 Oct 2020 MDT  Denver
-21:20:20 Sat 17 Oct 2020 MST  Phoenix
-21:20:20 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
 ```
 
 ---
@@ -2068,7 +2067,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2090,31 +2089,31 @@ SS:5
 Using mac index = 0
 You're connected to the network, IP = 192.168.2.84
 Packet received
-Seconds since Jan 1 1900 = 3811984701
-Unix time = 1602995901
-The UTC time is 4:38:21
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
 
-15:38:21 Sun 18 Oct 2020 AEDT Sydney
-07:38:21 Sun 18 Oct 2020 MSK  Moscow
-06:38:21 Sun 18 Oct 2020 CEST Paris
-05:38:21 Sun 18 Oct 2020 BST  London
-04:38:21 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:38:21 Sun 18 Oct 2020 EDT  New York
-23:38:21 Sat 17 Oct 2020 CDT  Chicago
-22:38:21 Sat 17 Oct 2020 MDT  Denver
-21:38:21 Sat 17 Oct 2020 MST  Phoenix
-21:38:21 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
 
-15:38:31 Sun 18 Oct 2020 AEDT Sydney
-07:38:31 Sun 18 Oct 2020 MSK  Moscow
-06:38:31 Sun 18 Oct 2020 CEST Paris
-05:38:31 Sun 18 Oct 2020 BST  London
-04:38:31 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:38:31 Sun 18 Oct 2020 EDT  New York
-23:38:31 Sat 17 Oct 2020 CDT  Chicago
-22:38:31 Sat 17 Oct 2020 MDT  Denver
-21:38:31 Sat 17 Oct 2020 MST  Phoenix
-21:38:31 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
 ```
 
 ---
@@ -2125,36 +2124,36 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.128
 Listening on port 2390
 Packet received
-Seconds since Jan 1 1900 = 3811983792
-Unix time = 1602994992
-The UTC time is 4:23:12
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
 
-15:23:12 Sun 18 Oct 2020 AEDT Sydney
-07:23:12 Sun 18 Oct 2020 MSK  Moscow
-06:23:12 Sun 18 Oct 2020 CEST Paris
-05:23:12 Sun 18 Oct 2020 BST  London
-04:23:12 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:23:12 Sun 18 Oct 2020 EDT  New York
-23:23:12 Sat 17 Oct 2020 CDT  Chicago
-22:23:12 Sat 17 Oct 2020 MDT  Denver
-21:23:12 Sat 17 Oct 2020 MST  Phoenix
-21:23:12 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
 
-15:23:22 Sun 18 Oct 2020 AEDT Sydney
-07:23:22 Sun 18 Oct 2020 MSK  Moscow
-06:23:22 Sun 18 Oct 2020 CEST Paris
-05:23:22 Sun 18 Oct 2020 BST  London
-04:23:22 Sun 18 Oct 2020 UTC  Universal Coordinated Time
-00:23:22 Sun 18 Oct 2020 EDT  New York
-23:23:22 Sat 17 Oct 2020 CDT  Chicago
-22:23:22 Sat 17 Oct 2020 MDT  Denver
-21:23:22 Sat 17 Oct 2020 MST  Phoenix
-21:23:22 Sat 17 Oct 2020 PDT  Los Angeles
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
 ```
 
 ---
@@ -2165,7 +2164,7 @@ The following is debug terminal output when running example [**RTC_STM32_Etherne
 
 ```
 Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2176,15 +2175,15 @@ DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========================
 You're connected to the network, IP = 192.168.2.117
 Packet received
-Seconds since Jan 1 1900 = 3812054437
-Unix time = 1603065637
-The UTC time is 0:00:37
-============================
-00:00:37 Mon 19 Oct 2020 UTC
-20:00:37 Sun 18 Oct 2020 EDT
-============================
-00:00:46 Mon 19 Oct 2020 UTC
-20:00:46 Sun 18 Oct 2020 EDT
+Seconds since Jan 1 1900 = 3847367857
+Unix time = 1638379057
+The UTC time is 17:17:37
+
+17:17:37 Wed 01 Dec 2021 UTC
+12:17:37 Wed 01 Dec 2021 EST
+
+17:17:47 Wed 01 Dec 2021 UTC
+12:17:47 Wed 01 Dec 2021 EST
 ```
 
 ---
@@ -2195,7 +2194,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2218,8 +2217,14 @@ SS:10
 Using mac index = 5
 You're connected to the network, IP = 192.168.2.108
 ============================
-18:30:45 Sun 18 Oct 2020 UTC
-14:30:45 Sun 18 Oct 2020 EDT
+17:19:17 Wed 01 Dec 2021 UTC
+12:19:17 Wed 01 Dec 2021 EST
+
+17:19:27 Wed 01 Dec 2021 UTC
+12:19:27 Wed 01 Dec 2021 EST
+
+17:19:37 Wed 01 Dec 2021 UTC
+12:19:37 Wed 01 Dec 2021 EST
 ```
 
 ---
@@ -2230,7 +2235,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2253,15 +2258,15 @@ SS:5
 Using mac index = 3
 You're connected to the network, IP = 192.168.2.99
 Packet received
-Seconds since Jan 1 1900 = 3812052464
-Unix time = 1603063664
-The UTC time is 23:27:44
-============================
-23:27:44 Sun 18 Oct 2020 UTC
-19:27:44 Sun 18 Oct 2020 EDT
-============================
-23:27:53 Sun 18 Oct 2020 UTC
-19:27:53 Sun 18 Oct 2020 EDT
+Seconds since Jan 1 1900 = 3847367857
+Unix time = 1638379057
+The UTC time is 17:17:37
+
+17:17:37 Wed 01 Dec 2021 UTC
+12:17:37 Wed 01 Dec 2021 EST
+
+17:17:47 Wed 01 Dec 2021 UTC
+12:17:47 Wed 01 Dec 2021 EST
 ```
 
 ---
@@ -2272,7 +2277,7 @@ The following is debug terminal output when running example [**tzTest**](example
 
 ```
 Starting TZTest on NRF52840_FEATHER
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 -------- Apr-2018 time change --------
 13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
 13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
@@ -2378,7 +2383,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NRF52840_FEATHER
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2403,7 +2408,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on SAMD_NANO_33_IOT
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 WriteRules done
 readRules done
 [TZ] DST rule
@@ -2424,7 +2429,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NUCLEO_F767ZI
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [TZ] Write to EEPROM, size =  16384 , offset =  0
 WriteRules done
 [TZ] Read from EEPROM, size =  16384 , offset =  0
@@ -2447,7 +2452,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [TZ] Writing to dueFlashStorage OK
 WriteRules done
 [TZ] Reading from dueFlashStorage OK
@@ -2470,7 +2475,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP32_DEV
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2495,7 +2500,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP8266_NODEMCU
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2520,7 +2525,7 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2536,20 +2541,20 @@ Unix time = 1603909566
 Updating Time for STM32 RTC
 The UTC time is 18:26:06
 ============================
-18:26:06 Wed 28 Oct 2020 UTC
-14:26:06 Wed 28 Oct 2020 EDT
+18:26:06 Wed 01 Dec 2021 UTC
+14:26:06 Wed 01 Dec 2021 EDT
 ============================
-18:26:15 Wed 28 Oct 2020 UTC
-14:26:15 Wed 28 Oct 2020 EDT
+18:26:15 Wed 01 Dec 2021 UTC
+14:26:15 Wed 01 Dec 2021 EDT
 ============================
-18:26:24 Wed 28 Oct 2020 UTC
-14:26:24 Wed 28 Oct 2020 EDT
+18:26:24 Wed 01 Dec 2021 UTC
+14:26:24 Wed 01 Dec 2021 EDT
 ============================
-18:26:33 Wed 28 Oct 2020 UTC
-14:26:33 Wed 28 Oct 2020 EDT
+18:26:33 Wed 01 Dec 2021 UTC
+14:26:33 Wed 01 Dec 2021 EDT
 ============================
-18:26:43 Wed 28 Oct 2020 UTC
-14:26:43 Wed 28 Oct 2020 EDT
+18:26:43 Wed 01 Dec 2021 UTC
+14:26:43 Wed 01 Dec 2021 EDT
 ```
 
 
@@ -2561,7 +2566,7 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2576,27 +2581,27 @@ Unix time = 1603911398
 
 Updating Time for STM32 RTC
 =======RTC ALARM SET========
-18:57:08 Wed 28 Oct 2020 UTC
-14:57:08 Wed 28 Oct 2020 EDT
+18:57:08 Wed 01 Dec 2021 UTC
+14:57:08 Wed 01 Dec 2021 EDT
 ============================
 The UTC time is 18:56:38
 ============================
-18:56:38 Wed 28 Oct 2020 UTC
-14:56:38 Wed 28 Oct 2020 EDT
+18:56:38 Wed 01 Dec 2021 UTC
+14:56:38 Wed 01 Dec 2021 EDT
 ============================
-18:56:47 Wed 28 Oct 2020 UTC
-14:56:47 Wed 28 Oct 2020 EDT
+18:56:47 Wed 01 Dec 2021 UTC
+14:56:47 Wed 01 Dec 2021 EDT
 ============================
-18:56:56 Wed 28 Oct 2020 UTC
-14:56:56 Wed 28 Oct 2020 EDT
+18:56:56 Wed 01 Dec 2021 UTC
+14:56:56 Wed 01 Dec 2021 EDT
 ============================
-18:57:05 Wed 28 Oct 2020 UTC
-14:57:05 Wed 28 Oct 2020 EDT
+18:57:05 Wed 01 Dec 2021 UTC
+14:57:05 Wed 01 Dec 2021 EDT
 *****RTC ALARM ACTIVATED*****
 *****RTC ALARM ACTIVATED*****
 ============================
-18:57:15 Wed 28 Oct 2020 UTC
-14:57:15 Wed 28 Oct 2020 EDT
+18:57:15 Wed 01 Dec 2021 UTC
+14:57:15 Wed 01 Dec 2021 EDT
 ```
 
 ---
@@ -2607,7 +2612,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.153
 Listening on port 2390
@@ -2658,7 +2663,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2705,7 +2710,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2764,7 +2769,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.3.0
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232
 FULL_DUPLEX, 100Mbps
 TZ_NTP_WorldClock_WT32_ETH01 started @ IP address: 192.168.2.232
@@ -2796,7 +2801,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
 WiFiWebServer_RTL8720 v1.0.1
-Timezone_Generic v1.7.2
+Timezone_Generic v1.7.3
 Current Firmware Version = 1.0.0
 Attempting to connect to SSID: HueNet_5G
 TZ_NTP_Clock_RTL8720DN started @ IP address: 192.168.2.111

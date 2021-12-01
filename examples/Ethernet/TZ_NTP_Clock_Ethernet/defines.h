@@ -20,6 +20,7 @@
 
 // Debug Level from 0 to 4
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       3
+#define _NTP_LOGLEVEL_                      0
 #define _TZ_LOGLEVEL_                       1
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \

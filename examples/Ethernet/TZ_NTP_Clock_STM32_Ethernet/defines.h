@@ -27,6 +27,8 @@
 
 // Debug Level from 0 to 4
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       2
+#define _NTP_LOGLEVEL_                      0
+#define _TZ_LOGLEVEL_                       3
 
 // If USE_BUILTIN_ETHERNET == false and USE_UIP_ETHERNET == false => 
 // either use W5x00 with EthernetXYZ library

@@ -10,7 +10,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.2
+  Version: 1.7.3
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   1.7.0   K Hoang      10/08/2021 Add support to Ameba Realtek RTL8720DN, RTL8722DM and RTM8722CSM
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
   1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
+  1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
  *****************************************************************************************************************************/
 
 #pragma once
@@ -47,7 +48,7 @@
 // 4: DEBUG: errors, warnings, informational and debug
 
 #ifndef _TZ_LOGLEVEL_
-  #define _TZ_LOGLEVEL_       0
+  #define _TZ_LOGLEVEL_       1
 #endif
 
 ///////////////////////////////////////

@@ -449,6 +449,8 @@ void setup()
   
 #endif
 
+  myTZ->writeRules();
+
   Udp.begin(localPort);
 }
 
