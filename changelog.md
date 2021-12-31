@@ -35,6 +35,7 @@
 1. Fix `multiple-definitions` linker error and weird bug related to `src_cpp`. Check [Different behaviour using the src_cpp or src_h lib #80](https://github.com/khoih-prog/ESPAsync_WiFiManager/discussions/80)
 2. Optimize library code by using `reference-passing` instead of `value-passing`
 3. Update all examples
+4. Update `Packages_Patches`
 
 ### Releases v1.7.3
 
