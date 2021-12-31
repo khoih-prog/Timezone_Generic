@@ -10,7 +10,8 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.3
+  
+  Version: 1.8.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +28,7 @@
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
   1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
   1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
+  1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
  *****************************************************************************************************************************/
 
 #pragma once
@@ -388,7 +390,7 @@
 /*----------------------------------------------------------------------*
    Create a Timezone object from the given time change rules.
   ----------------------------------------------------------------------*/
-Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart, uint32_t address)
+Timezone::Timezone(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart, uint32_t address)
   : m_dst(dstStart), m_std(stdStart), TZ_DATA_START(address)
 { 
   initStorage(address);
@@ -399,7 +401,7 @@ Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart, uint32_t ad
    Create a Timezone object for a zone that does not observe
    daylight time.
   ----------------------------------------------------------------------*/
-Timezone::Timezone(TimeChangeRule stdTime, uint32_t address)
+Timezone::Timezone(const TimeChangeRule& stdTime, uint32_t address)
   : m_dst(stdTime), m_std(stdTime), TZ_DATA_START(address)
 { 
   initStorage(address);
@@ -411,7 +413,7 @@ Timezone::Timezone(TimeChangeRule stdTime, uint32_t address)
 /*----------------------------------------------------------------------*
    initialise (used where void constructor is called)  6v6gt
   ----------------------------------------------------------------------*/
-void Timezone::init(TimeChangeRule dstStart, TimeChangeRule stdStart)
+void Timezone::init(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart)
 {
   //m_dst = dstStart;
   //m_std = stdStart;
@@ -548,7 +550,7 @@ void Timezone::initStorage(uint32_t address)
    Convert the given UTC time to local time, standard or
    daylight time, as appropriate.
   ----------------------------------------------------------------------*/
-time_t Timezone::toLocal(time_t utc)
+time_t Timezone::toLocal(const time_t& utc)
 {
   // recalculate the time change points if needed
   if (year(utc) != year(m_dstUTC)) 
@@ -566,7 +568,7 @@ time_t Timezone::toLocal(time_t utc)
    change rule used to do the conversion. The caller must take care
    not to alter this rule.
   ----------------------------------------------------------------------*/
-time_t Timezone::toLocal(time_t utc, TimeChangeRule **tcr)
+time_t Timezone::toLocal(const time_t& utc, TimeChangeRule **tcr)
 {
   // recalculate the time change points if needed
   if (year(utc) != year(m_dstUTC)) 
@@ -609,7 +611,7 @@ time_t Timezone::toLocal(time_t utc, TimeChangeRule **tcr)
    Calling this function with local times during a transition interval
    should be avoided!
   ----------------------------------------------------------------------*/
-time_t Timezone::toUTC(time_t local)
+time_t Timezone::toUTC(const time_t& local)
 {
   // recalculate the time change points if needed
   if (year(local) != year(m_dstLoc)) 
@@ -625,7 +627,7 @@ time_t Timezone::toUTC(time_t local)
    Determine whether the given UTC time_t is within the DST interval
    or the Standard time interval.
   ----------------------------------------------------------------------*/
-bool Timezone::utcIsDST(time_t utc)
+bool Timezone::utcIsDST(const time_t& utc)
 {
   // recalculate the time change points if needed
   if (year(utc) != year(m_dstUTC)) 
@@ -643,7 +645,7 @@ bool Timezone::utcIsDST(time_t utc)
    Determine whether the given Local time_t is within the DST interval
    or the Standard time interval.
   ----------------------------------------------------------------------*/
-bool Timezone::locIsDST(time_t local)
+bool Timezone::locIsDST(const time_t& local)
 {
   // recalculate the time change points if needed
   if (year(local) != year(m_dstLoc)) 
@@ -684,7 +686,7 @@ void Timezone::initTimeChanges()
    Convert the given time change rule to a time_t value
    for the given year.
   ----------------------------------------------------------------------*/
-time_t Timezone::toTime_t(TimeChangeRule r, int yr)
+time_t Timezone::toTime_t(const TimeChangeRule& r, int yr)
 {
   uint8_t m = r.month;     // temp copies of r.month and r.week
   uint8_t w = r.week;
@@ -724,7 +726,7 @@ time_t Timezone::toTime_t(TimeChangeRule r, int yr)
 /*----------------------------------------------------------------------*
    Read or update the daylight and standard time rules from RAM.
   ----------------------------------------------------------------------*/
-void Timezone::setRules(TimeChangeRule dstStart, TimeChangeRule stdStart)
+void Timezone::setRules(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart)
 {
   m_dst = dstStart;
   m_std = stdStart;

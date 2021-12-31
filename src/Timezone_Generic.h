@@ -10,7 +10,8 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.3
+  
+  Version: 1.8.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +28,7 @@
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
   1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
   1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
+  1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
  *****************************************************************************************************************************/
 
 #pragma once
@@ -42,7 +44,14 @@
 // For ESP8266, use LitteFS, SPIFFS or EEPROM.
 // For ESP32, use SPIFFS or EEPROM.
 
-#define TIMEZONE_GENERIC_VERSION       "Timezone_Generic v1.7.3"
+#define TIMEZONE_GENERIC_VERSION            "Timezone_Generic v1.8.0"
+
+#define TIMEZONE_GENERIC_VERSION_MAJOR      1
+#define TIMEZONE_GENERIC_VERSION_MINOR      8
+#define TIMEZONE_GENERIC_VERSION_PATCH      0
+
+#define TIMEZONE_GENERIC_VERSION_INT        1008000
+
 
 #if defined(ARDUINO) && (ARDUINO >= 100)
   #include <Arduino.h>
@@ -76,23 +85,23 @@ typedef struct
 class Timezone
 {
   public:
-    Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart, uint32_t address = 0);
-    Timezone(TimeChangeRule stdTime, uint32_t address = 0);
+    Timezone(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart, uint32_t address = 0);
+    Timezone(const TimeChangeRule& stdTime, uint32_t address = 0);
     
     
     // Allow a "blank" TZ object then use begin() method to set the actual TZ.
     // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
     Timezone(uint32_t address = 0);
     
-		void init(TimeChangeRule dstStart, TimeChangeRule stdStart);
+		void init(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart);
 		//////
     
-    time_t  toLocal(time_t utc);
-    time_t  toLocal(time_t utc, TimeChangeRule **tcr);
-    time_t  toUTC(time_t local);
-    bool    utcIsDST(time_t utc);
-    bool    locIsDST(time_t local);
-    void    setRules(TimeChangeRule dstStart, TimeChangeRule stdStart);
+    time_t  toLocal(const time_t& utc);
+    time_t  toLocal(const time_t& utc, TimeChangeRule **tcr);
+    time_t  toUTC(const time_t& local);
+    bool    utcIsDST(const time_t& utc);
+    bool    locIsDST(const time_t& local);
+    void    setRules(const TimeChangeRule& dstStart, const TimeChangeRule& stdStart);
     
     //void    readRules(int address);
     void    readRules();
@@ -117,7 +126,7 @@ class Timezone
     
     void    calcTimeChanges(int yr);
     void    initTimeChanges();
-    time_t  toTime_t(TimeChangeRule r, int yr);
+    time_t  toTime_t(const TimeChangeRule& r, int yr);
     
     TimeChangeRule m_dst;   // rule for start of dst or summer time for any year
     TimeChangeRule m_std;   // rule for start of standard time for any year
@@ -134,7 +143,5 @@ class Timezone
     
     bool      storageSystemInit = false;
 };
-
-#include "Timezone_Generic_Impl.h"
 
 #endif    // TIMEZONE_GENERIC_H

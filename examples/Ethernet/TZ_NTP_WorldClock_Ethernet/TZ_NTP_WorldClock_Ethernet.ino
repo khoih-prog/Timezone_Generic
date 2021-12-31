@@ -22,7 +22,15 @@
 
 //////////////////////////////////////////
 
-#include <Timezone_Generic.h>    // https://github.com/khoih-prog/Timezone_Generic
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.8.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1008000
+
+//////////////////////////////////////////
+
+#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "Timezone_Generic_Impl.h"      // https://github.com/khoih-prog/Timezone_Generic
 
 // Australia Eastern Time Zone (Sydney, Melbourne)
 TimeChangeRule aEDT = {"AEDT", First, Sun, Oct, 2, 660};    // UTC + 11 hours
@@ -237,6 +245,14 @@ void setup()
   Serial.print(F("\nStart TZ_NTP_WorldClock_Ethernet on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
   Serial.println(TIMEZONE_GENERIC_VERSION);
+  
+#if defined(TIMEZONE_GENERIC_VERSION_MIN)
+  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
 
 #if USE_ETHERNET_WRAPPER
 

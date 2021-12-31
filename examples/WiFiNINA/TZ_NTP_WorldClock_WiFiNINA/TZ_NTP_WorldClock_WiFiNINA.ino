@@ -2,12 +2,9 @@
   TZ_NTP_WorldClock_WiFiNINA.ino
   
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
-
   Based on and modified from Arduino Timezone Library (https://github.com/JChristensen/Timezone)
   to support other boards such as ESP8266/ESP32, SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
-
   Copyright (C) 2018 by Jack Christensen and licensed under GNU GPL v3.0, https://www.gnu.org/licenses/gpl.html
-
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
  *****************************************************************************************************************************/
@@ -16,7 +13,15 @@
 
 //////////////////////////////////////////
 
-#include <Timezone_Generic.h>    // https://github.com/khoih-prog/Timezone_Generic
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.8.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1008000
+
+//////////////////////////////////////////
+
+#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "Timezone_Generic_Impl.h"      // https://github.com/khoih-prog/Timezone_Generic
 
 // Australia Eastern Time Zone (Sydney, Melbourne)
 TimeChangeRule aEDT = {"AEDT", First, Sun, Oct, 2, 660};    // UTC + 11 hours
@@ -227,6 +232,14 @@ void setup()
   Serial.print(F("\nStart TZ_NTP_WorldClock_WiFiNINA on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
   Serial.println(TIMEZONE_GENERIC_VERSION);
+
+#if defined(TIMEZONE_GENERIC_VERSION_MIN)
+  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
 
   // check for the presence of the shield
 #if USE_WIFI_NINA

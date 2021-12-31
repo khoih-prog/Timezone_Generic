@@ -10,7 +10,8 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
-  Version: 1.7.3
+  
+  Version: 1.8.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +28,7 @@
   1.7.1   K Hoang      10/10/2021 Update `platform.ini` and `library.json`
   1.7.2   K Hoang      02/11/2021 Fix crashing issue for new cleared flash
   1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
+  1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
  *****************************************************************************************************************************/
 
 #pragma once

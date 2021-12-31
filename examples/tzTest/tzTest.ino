@@ -19,7 +19,16 @@
 #define USE_SPIFFS        false
 #endif
 
-#include <Timezone_Generic.h>   // https://github.com/khoih-prog/Timezone_Generic
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.8.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1008000
+
+//////////////////////////////////////////
+
+#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "Timezone_Generic_Impl.h"      // https://github.com/khoih-prog/Timezone_Generic
+
 #include <TimeLib.h>            // https://github.com/PaulStoffregen/Time
 
 // New Zealand Time Zone
@@ -106,6 +115,14 @@ void setup()
 #endif
 
   Serial.println(TIMEZONE_GENERIC_VERSION);
+  
+#if defined(TIMEZONE_GENERIC_VERSION_MIN)
+  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
 
   nz = new Timezone(nzDST, nzSTD);
   et = new Timezone(etDST, etSTD);
