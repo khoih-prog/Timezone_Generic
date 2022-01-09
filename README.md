@@ -11,6 +11,7 @@
 
 ## Table of Contents
 
+* [Important Breaking Change from v1.8.0](#Important-Breaking-Change-from-v180)
 * [Why do we need this Timezone_Generic library](#why-do-we-need-this-timezone_generic-library)
   * [Features](#features)
   * [Currently Supported Boards](#currently-supported-boards)
@@ -131,6 +132,27 @@
 
 ---
 ---
+
+### Important Breaking Change from v1.8.0
+
+Please have a look at [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
+
+From v1.8.0, you must use
+
+```
+#include <Timezone_Generic.h>             // https://github.com/khoih-prog/Timezone_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include <Timezone_Generic_Impl.h>        // https://github.com/khoih-prog/Timezone_Generic
+```
+
+instead of only
+
+```
+#include <Timezone_Generic.h>             // https://github.com/khoih-prog/Timezone_Generic
+```
+
+
 
 ### Why do we need this [Timezone_Generic library](https://github.com/khoih-prog/Timezone_Generic)
 
