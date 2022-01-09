@@ -1,23 +1,22 @@
-# TimerInterrupt_Generic Library
+## Timezone_Generic Library
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/TimerInterrupt_Generic.svg?)](https://www.ardu-badge.com/TimerInterrupt_Generic)
-[![GitHub release](https://img.shields.io/github/release/khoih-prog/TimerInterrupt_Generic.svg)](https://github.com/khoih-prog/TimerInterrupt_Generic/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/TimerInterrupt_Generic/blob/main/LICENSE)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/Timezone_Generic.svg?)](https://www.ardu-badge.com/Timezone_Generic)
+[![GitHub release](https://img.shields.io/github/release/khoih-prog/Timezone_Generic.svg)](https://github.com/khoih-prog/Timezone_Generic/releases)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/Timezone_Generic/blob/main/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
-[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/TimerInterrupt_Generic.svg)](http://github.com/khoih-prog/TimerInterrupt_Generic/issues)
+[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/Timezone_Generic.svg)](http://github.com/khoih-prog/Timezone_Generic/issues)
 
 ---
 ---
 
 ## Table of Contents
 
-* [Important Breaking Change from v1.8.0](#Important-Breaking-Change-from-v180)
-* [Why do we need this TimerInterrupt_Generic library](#why-do-we-need-this-timerinterrupt_generic-library)
+* [Why do we need this Timezone_Generic library](#why-do-we-need-this-timezone_generic-library)
   * [Features](#features)
-  * [Why using ISR-based Hardware Timer Interrupt is better](#why-using-isr-based-hardware-timer-interrupt-is-better)
-  * [Notes for Teensy boards](#notes-for-teensy-boards)
   * [Currently Supported Boards](#currently-supported-boards)
-  * [Important Notes about ISR](#important-notes-about-isr)
+  * [Currently Supported WiFi Modules and Shields](#currently-supported-wifi-modules-and-shields)
+  * [Currently Supported Ethernet Modules and Shields](#currently-supported-ethernet-modules-and-shields)
+  * [Currently Supported Storage](#currently-supported-storage)
 * [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
@@ -40,6 +39,7 @@
     * [8.1. To use BOARD_NAME](#81-to-use-board_name)
     * [8.2. To avoid compile error relating to microsecondsToClockCycles](#82-to-avoid-compile-error-relating-to-microsecondstoclockcycles)
   * [9. For Portenta_H7 boards using Arduino IDE in Linux](#9-for-portenta_h7-boards-using-arduino-ide-in-linux)
+  * [10. For RTL8720DN boards using AmebaD core](#10-for-rtl8720dn-boards-using-amebad-core)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -49,110 +49,78 @@
   * [6. For UIPEthernet library](#6-for-uipethernet-library)
   * [7. For fixing ESP32 compile error](#7-for-fixing-esp32-compile-error)
   * [8. For fixing ESP8266 compile error](#8-for-fixing-esp8266-compile-error)
-  * [9. For STM32 core F3 and F4 using UIPEthernet library](#9-for-stm32-core-f3-and-f4-using-uipethernet-library)
 * [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
+* [Note for Platform IO using ESP32 LittleFS](#note-for-platform-io-using-esp32-littlefs)
 * [HOWTO Use analogRead() with ESP32 running WiFi and/or BlueTooth (BT/BLE)](#howto-use-analogread-with-esp32-running-wifi-andor-bluetooth-btble)
   * [1. ESP32 has 2 ADCs, named ADC1 and ADC2](#1--esp32-has-2-adcs-named-adc1-and-adc2)
   * [2. ESP32 ADCs functions](#2-esp32-adcs-functions)
   * [3. ESP32 WiFi uses ADC2 for WiFi functions](#3-esp32-wifi-uses-adc2-for-wifi-functions)
-* [HOWTO Use PWM analogWrite() with ESP8266 running Timer1 Interrupt](#howto-use-pwm-analogwrite-with-esp8266-running-timer1-interrupt)
-  * [1. ESP8266 has only 2 hardware timers, named Timer0 and Timer1](#1-esp8266-has-only-2-hardware-timers-named-timer0-and-timer1)
-  * [2. ESP8266 hardware timers' functions](#2-esp8266-hardware-timers-functions)
-  * [3. How to use PWM analogWrite() functions while using this library](#3-how-to-use-pwm-analogwrite-functions-while-using-this-library)
-* [More useful Information](#more-useful-information)
-  * [1. For ESP32](#1-for-esp32)
-  * [2. Notes for ESP8266](#2-notes-for-esp8266)
-  * [3. For Arduino AVR](#3-for-arduino-avr)
-    * [3.1. Timer0](#31-timer0)
-    * [3.2. Timer1](#32-timer1)
-    * [3.3. Timer2](#33-timer2)
-    * [3.4. Timer3, Timer4, Timer5](#34-timer3-timer4-timer5)
-  * [4. For STM32F/L/H/G/WB/MP1](#4-for-stm32flhgwbmp1)
-  * [5. For Arduino megaAVR](#5-for-arduino-megaavr)
-    * [5.1. Documents](#51-documents)
-    * [5.2. Timer TCB0-TCB3](#52-timer-tcb0-tcb3)
-* [New from v1.1.0](#new-from-v110)
-* [Usage for ESP32](#usage-for-esp32)
-* [Usage for NRF52](#usage-for-nrf52)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions)
-* [Usage for SAMD](#usage-for-samd)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-1)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-1)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-1)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-1)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-1)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-1)
-* [Usage for SAM DUE](#usage-for-sam-due)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-2)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-2)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-2)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-2)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-2)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-2)
-* [Usage for Teensy](#usage-for-teensy)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-3)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-3)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-3)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-3)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-3)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-3)
-* [Usage for STM32F/L/H/G/WB/MP1](#usage-for-stm32flhgwbmp1)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-4)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-4)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-4)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-4)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-4)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-4)
-* [Usage for NRF52840-based board using mbed-RTOS such as Nano-33-BLE.](#usage-for-nrf52840-based-board-using-mbed-rtos-such-as-nano-33-ble)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-5)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-5)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-5)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-5)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-5)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-5)
-* [Usage for Arduino AVR](#usage-for-arduino-avr)
-* [Usage for Arduino megaAVR](#usage-for-arduino-megaavr)
-  * [1. Using only Hardware Timer directly](#1-using-only-hardware-timer-directly-6)
-    * [1.1 Init Hardware Timer](#11-init-hardware-timer-6)
-    * [1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function](#12-set-hardware-timer-interval-and-attach-timer-interrupt-handler-function-6)
-  * [2. Using 16 ISR_based Timers from 1 Hardware Timers](#2-using-16-isr_based-timers-from-1-hardware-timers-6)
-    * [2.1 Init Hardware Timer and ISR-based Timer](#21-init-hardware-timer-and-isr-based-timer-6)
-    * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions-6)
+* [Usage](#usage)
+  * [TimeChangeRules struct](#timechangerules-struct)
+  * [Timezone class](#timezone-class)
+    * [1. Using initialzed Timezone](#1-using-initialzed-timezone)
+    * [2. Using un-initialzed Timezone (from v1.2.6)](#2-using-un-initialzed-timezone-from-v126)
+  * [Timezone_Generic library methods](#timezone_generic-library-methods)
+    * [time_t toLocal(time_t utc);](#time_t-tolocaltime_t-utc)
+    * [time_t toLocal(time_t utc, TimeChangeRule **tcr);](#time_t-tolocaltime_t-utc-timechangerule-tcr)
+    * [bool utcIsDST(time_t utc);](#bool-utcisdsttime_t-utc)
+    * [bool locIsDST(time_t local);](#bool-locisdsttime_t-local)
+    * [void readRules(int address);](#void-readrulesint-address)
+    * [void writeRules(int address);](#void-writerulesint-address)
+    * [void setRules(TimeChangeRule dstStart, TimeChangeRule stdStart);](#void-setrulestimechangerule-dststart-timechangerule-stdstart)
+    * [time_t toUTC(time_t local);](#time_t-toutctime_t-local)
+    * [TimeChangeRule* read_DST_Rule(void);](#timechangerule-read_dst_rulevoid)
+    * [TimeChangeRule* read_STD_Rule(void);](#timechangerule-read_std_rulevoid)
+    * [void display_DST_Rule(void);](#void-display_dst_rulevoid)
+    * [void display_STD_Rule(void);](#void-display_std_rulevoid)
 * [Examples](#examples)
-  * [ 1. ESP32](#1-esp32) 
-  * [ 2. ESP8266](#2-esp8266)
-  * [ 3. NRF52](#3-nrf52)
-  * [ 4. SAMD21/SAMD51](#4-samd21samd51)
-  * [ 5. SAM DUE](#5-sam-due)
-  * [ 6. STM32F/L/H/G/WB/MP1](#6-stm32flhgwbmp1)
-  * [ 7. Teensy](#7-teensy)
-  * [ 8. Arduino AVR](#8-arduino-avr)
-  * [ 9. Nano-33-BLE.](#9-nano-33-ble)
-  * [10. Arduino megaAVR.](#10-arduino-megaavr)
-  * [11. RP2040](#11-rp2040) **New**
-  * [12. MBED RP2040](#12-mbed-rp2040) **New**
-* [Example ISR_16_Timers_Array_Complex for MBED RP2040 boards](#example-isr_16_timers_array_complex-for-mbed-rp2040-boards)
+  * [Generic Boards](#generic-boards) 
+    * [ 1. tzTest](examples/tzTest)
+    * [ 2. WriteRules](examples/WriteRules)
+  * [Generic Boards with Ethernet](#generic-boards-with-ethernet)
+    * [ 3. RTC_Ethernet](examples/Ethernet/RTC_Ethernet)
+    * [ 4. TZ_NTP_Clock_Ethernet](examples/Ethernet/TZ_NTP_Clock_Ethernet)
+    * [ 5. TZ_NTP_WorldClock_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_Ethernet)
+  * [STM32F/L/H/G/WB/MP1 Boards with Ethernet](#stm32flhgwbmp1-boards-with-ethernet)
+    * [ 6. BI_RTC_Alarm_STM32_Ethernet](examples/Ethernet/BI_RTC_Alarm_STM32_Ethernet)
+    * [ 7. BI_RTC_STM32_Ethernet](examples/Ethernet/BI_RTC_STM32_Ethernet)
+    * [ 8. RTC_STM32_Ethernet](examples/Ethernet/RTC_STM32_Ethernet)
+    * [ 9. TZ_NTP_Clock_STM32_Ethernet](examples/Ethernet/TZ_NTP_Clock_STM32_Ethernet)
+    * [10. TZ_NTP_WorldClock_STM32_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_STM32_Ethernet)
+  * [Generic Boards with WiFiNINA ](#generic-boards-with-wifinina)
+    * [11. RTC_WiFiNINA](examples/WiFiNINA/RTC_WiFiNINA)
+    * [12. TZ_NTP_Clock_WiFiNINA](examples/WiFiNINA/TZ_NTP_Clock_WiFiNINA)
+    * [13. TZ_NTP_WorldClock_WiFiNINA](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA)
+  * [WT32_ETH01 Boards](#wt32_eth01-boards)
+    * [14. TZ_NTP_Clock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_Clock_WT32_ETH01)
+    * [15. TZ_NTP_WorldClock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_WorldClock_WT32_ETH01)
+  * [RTL8720DN Boards](#rtl8720dn-boards)
+    * [16. TZ_NTP_Clock_RTL8720DN](examples/RTL8720DN/TZ_NTP_Clock_RTL8720DN)
+    * [17. TZ_NTP_WorldClock_RTL8720DN](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN)
+* [Example TZ_NTP_Clock_Ethernet](#example-tz_ntp_clock_ethernet)
+  * [1. File TZ_NTP_Clock_Ethernet.ino](#1-file-tz_ntp_clock_ethernetino)
+  * [2. File defines.h](#2-file-definesh) 
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
-  * [ 1. ISR_Timer_Complex_Ethernet on Arduino SAM DUE](#1-isr_timer_complex_ethernet-on-arduino-sam-due)
-  * [ 2. ISR_Timer_Complex_Ethernet on Adafruit NRF52840_FEATHER EXPRESS](#2-isr_timer_complex_ethernet-on-adafruit-nrf52840_feather-express)
-  * [ 3. ISR_16_Timers_Array_Complex on Arduino SAMD21 SAMD_NANO_33_IOT](#3-ISR_16_Timers_Array_Complex-on-arduino-samd21-samd_nano_33_iot)
-  * [ 4. TimerInterruptTest on Teensy 4.1](#4-timerinterrupttest-on-teensy-41)
-  * [ 5. ISR_16_Timers_Array_Complex on ESP32_DEV](#5-ISR_16_Timers_Array_Complex-on-esp32_dev)
-  * [ 6. ISR_16_Timers_Array_Complex on ESP8266_NODEMCU_ESP12E](#6-ISR_16_Timers_Array_Complex-on-ESP8266_NODEMCU_ESP12E)
-  * [ 7. ISR_16_Timers_Array_Complex on STM32F7 Nucleo-144 F767ZI](#7-ISR_16_Timers_Array_Complex-on-stm32f7-nucleo-144-f767zi)
-  * [ 8. TimerInterruptTest on STM32F7 Nucleo-144 F767ZI](#8-timerinterrupttest-on-stm32f7-nucleo-144-f767zi)
-  * [ 9. ISR_16_Timers_Array_Complex on Nano 33 BLE](#9-isr_16_timers_array_complex-on-nano-33-ble)
-  * [10. ISR_16_Timers_Array_Complex on Arduino megaAVR Nano Every to show accuracy difference](#10-isr_16_timers_array_complex-on-arduino-megaavr-nano-every-to-show-accuracy-difference)
-    * [10.1 TCB Clock Frequency 16MHz for highest accuracy](#101-tcb-clock-frequency-16mhz-for-highest-accuracy)
-    * [10.2 TCB Clock Frequency 8MHz for very high accuracy](#102-tcb-clock-frequency-8mhz-for-very-high-accuracy)
-    * [10.3 TCB Clock Frequency 250KHz for lower accuracy but longer time](#103-tcb-clock-frequency-250khz-for-lower-accuracy-but-longer-time)
-* [Debug](#debug)
-* [Troubleshooting](#troubleshooting)
+  * [ 1. TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60](#1-tz_ntp_worldclock_ethernet-on-nrf52840_feather-with-enc28j60)
+  * [ 2. TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5500](#2-tz_ntp_worldclock_ethernet-on-nrf52840_feather-with-w5500)
+  * [ 3. TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA](#3-tz_ntp_worldclock_wifinina-on-samd_nano_33_iot-with-wifinina)
+  * [ 4. RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500](#4-rtc_stm32_ethernet-on-stm32f7-nucleo-144-nucleo_f767zi-with-w5500)
+  * [ 5. RTC_Ethernet on Arduino SAM DUE with W5100](#5-rtc_ethernet-on-arduino-sam-due-with-w5100)
+  * [ 6. RTC_Ethernet on Adafruit NRF52840_FEATHER with W5500](#6-rtc_ethernet-on-adafruit-nrf52840_feather-with-w5500)
+  * [ 7. tzTest on Adafruit NRF52840_FEATHER](#7-tztest-on-adafruit-nrf52840_feather)
+  * [ 8. WriteRules on Adafruit NRF52840_FEATHER using LittleFS](#8-writerules-on-adafruit-nrf52840_feather-using-littlefs)
+  * [ 9. WriteRules on SAMD_NANO_33_IOT using FlashStorage_SAMD](#9-writerules-on-samd_nano_33_iot-using-flashstorage_samd)
+  * [10. WriteRules on STM32F7 Nucleo-144 NUCLEO_F767ZI using EEPROM](#10-writerules-on-stm32f7-nucleo-144-nucleo_f767zi-using-eeprom)
+  * [11. WriteRules on Arduino SAM DUE using dueFlashStorage](#11-writerules-on-arduino-sam-due-using-dueflashstorage)
+  * [12. WriteRules on ESP32_DEV using new ESP32 LittleFS](#12-writerules-on-esp32_dev-using-new-esp32-littlefs)
+  * [13. WriteRules on ESP8266_NODEMCU using LittleFS](#13-writerules-on-esp8266_nodemcu-using-littlefs)
+  * [14. BI_RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A](#14-bi_rtc_stm32_ethernet-on-stm32f7-nucleo-144-nucleo_f767zi-with-lan8742a)
+  * [15. BI_RTC_Alarm_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A](#15-bi_rtc_alarm_stm32_ethernet-on-stm32f7-nucleo-144-nucleo_f767zi-with-lan8742a)
+  * [16. TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA](#16-tz_ntp_worldclock_wifinina-on-mbed-nano_rp2040_connect-with-wifinina)
+  * [17. TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00](#17-tz_ntp_worldclock_ethernet-on-mbed-raspberry_pi_pico-with-w5x00)
+  * [18. TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00](#18-tz_ntp_worldclock_ethernet-on-raspberry_pi_pico-with-w5x00)
+  * [19. TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720](#19-tz_ntp_worldclock_wt32_eth01-on-wt32-eth01-with-eth_phy_lan8720)
+  * [20. TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN](#20-tz_ntp_worldclock_rtl8720dn-on-rtlduino-rtl8720dn)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -164,170 +132,120 @@
 ---
 ---
 
-### Important Breaking Change from v1.8.0
-
-Please have a look at [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
-
-From v1.8.0, you must use
-
-```
-#include <Timezone_Generic.h>             // https://github.com/khoih-prog/Timezone_Generic
-
-// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <Timezone_Generic_Impl.h>        // https://github.com/khoih-prog/Timezone_Generic
-```
-
-instead of only
-
-```
-#include <Timezone_Generic.h>             // https://github.com/khoih-prog/Timezone_Generic
-```
-
-
----
----
-
-### Why do we need this [TimerInterrupt_Generic library](https://github.com/khoih-prog/TimerInterrupt_Generic)
+### Why do we need this [Timezone_Generic library](https://github.com/khoih-prog/Timezone_Generic)
 
 ### Features
 
-This library enables you to use Interrupt from Hardware Timers on supported Arduino boards such as AVR, Mega-AVR, ESP8266, ESP32, SAMD, SAM DUE, nRF52, STM32F/L/H/G/WB/MP1, Teensy, Nano-33-BLE, etc.
+The [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Generic) is designed to work in conjunction with the [**Arduino Time library**](https://github.com/PaulStoffregen/Time), which must also be installed on your system. This documentation assumes some familiarity with the Time library.
 
-As **Hardware Timers are rare, and very precious assets** of any board, this library now enables you to use up to **16 ISR-based Timers, while consuming only 1 Hardware Timer**. Timers' interval is very long (**ulong millisecs**).
+The primary goal of the [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Generic) is to convert Universal Coordinated Time (UTC) to the correct local time, whether it is Daylight Saving Time (a.k.a. summer time, DST) or standard time. The time source could be a GPS receiver, an **NTP server**, or a **Real-Time Clock (RTC)** set to UTC.  But whether a hardware RTC or other time source is even present is immaterial, since the Time library can function as a software RTC without additional hardware (although its accuracy is dependent on the accuracy of the microcontroller's system clock.)
 
+The [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Generic) implements two objects to facilitate time zone conversions:
 
-### Why using ISR-based Hardware Timer Interrupt is better
+- A **TimeChangeRule** object describes when local time changes to daylight (summer) time, or to standard time, for a particular locale.
 
-Imagine you have a system with a **mission-critical** function, measuring water level and control the sump pump or doing something much more important. You normally use a software timer to poll, or even place the function in loop(). But what if another function is **blocking** the loop() or setup().
+- A **Timezone** object uses **TimeChangeRule**s to perform conversions and related functions. It can also write its **TimeChangeRule**s to or read them from EEPROM/DueFlashStorage/FlashStorage/LittleFS/SPIFFS. Multiple time zones can be represented by defining multiple **Timezone** objects.
 
-So your function **might not be executed on-time or not at all, and the result would be disastrous.**
+The examples will demonstrate how to get the UTC time from NTP server, then update the DS3231 RTC to make sure the time is perfectly correct.
+You can also modify the examples to read the NTP and update RTC once per every pre-determined period to ensure the RTC accuracy.
 
-You'd prefer to have your function called, no matter what happening with other functions (busy loop, bug, etc.).
-
-The correct choice is to use a Hardware Timer with **Interrupt** to call your function.
-
-These hardware timers, using interrupt, still work even if other functions are blocking. Moreover, they are much more **precise** (certainly depending on clock frequency accuracy) than other software timers using millis() or micros(). That's necessary if you need to measure some data requiring better accuracy.
-
-Functions using normal software timers, relying on loop() and calling millis(), won't work if the loop() or setup() is blocked by certain operation. For example, certain function is blocking while it's connecting to WiFi or some services.
-
-The catch is **your function is now part of an ISR (Interrupt Service Routine), and must be lean / mean, and follow certain rules.** More to read on:
-
-[**HOWTO Attach Interrupt**](https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/)
-
-#### Notes for Teensy boards
-
-You'd certainly experienced that if using other Hardware Timer Libraries, such as [**TimerOne**](https://github.com/PaulStoffregen/TimerOne) or [**TimerThree**](https://github.com/PaulStoffregen/TimerThree), the interval is short, in milliseconds range.
-
-For example, Teensy 4.x, with **super-high clock frequency of 600MHz and Timer1 and Timer3 clock of 150MHz, the maximum interval / frequency is only 55922.3467 us / 17.881939 Hz**. This [**Teensy_TimerInterrupt library**](https://github.com/khoih-prog/Teensy_TimerInterrupt) will provide you up to 16 super-long (**ulong millisecs**) ISR Timers for each used Timer1 or Timer3.
-
-For Teensy 4.x, this library will be expanded to use other available hardware timers, such as **FTM, GPT, QUAD, PIT**, in addition to current **Timer1 and Timer3**.
+This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Generic) is based on and modified from [**Jack Christensen's Timezone Library**](https://github.com/JChristensen/Timezone) to add functions and support to many boards and shields.
 
 ---
 
-#### Currently Supported Boards
+### Currently Supported Boards
 
-  - **ESP8266**
-  
-  - **ESP32, ESP32-S2**
-  
+  - **ESP8266**.
+  - **ESP32**.
   - **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox etc.**.
-  
   - **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)**.
   - **Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)**.
   - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
   - **Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)**
-  - **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
-  - **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
-  
   - **STM32 (Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.)**.
   - **STM32F/L/H/G/WB/MP1 (Nucleo-64 L053R8,Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32Fx, STM32H7, STM32Lx, STM32Gx, STM32WB, STM32MP1, etc.) having 64K+ Flash program memory.**
+  - **Arduino AVR boards (UNO, Nano, Mega, etc.)**
+  - **Arduino MegaAVR boards (UNO WiFi Rev 2, Nano Every, etc.)**
+  - RP2040-based boards, such as **Nano_RP2040_Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
+  - RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
+  - **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+  - **RTL8720DN, RTL8722DM, RTL8722CSM, etc. boards**
   
-  - **Teensy boards** such as :
-    - **Teensy 4.1, 4.0**
-    - **Teensy 3.6, 3.5, 3.2/3.1, 3.0**
-    - **Teensy LC**
-    - **Teensy++ 2.0 and Teensy 2.0**
+### Currently Supported WiFi Modules and Shields
 
-  - **Arduino, Adafruit, Sparkfun, Generic AVR boards** such as :
-    - Arduino Uno / Mega / Duemilanove / Diecimila / LilyPad / Mini / Fio / Nano, etc.
-    - **Arduino ATMega 16U4, 32U4** such as AVR Leonardo, Leonardo ETH, YUN, Esplora, LILYPAD_USB, AVR_ROBOT_CONTROL, AVR_ROBOT_MOTOR, AVR_INDUSTRIAL101, etc.
-    - **Adafruit ATMega 32U4** such as AVR_FLORA8, AVR_FEATHER32U4, AVR_CIRCUITPLAY, AVR_ITSYBITSY32U4_5V, AVR_ITSYBITSY32U4_3V, AVR_BLUEFRUITMICRO, AVR_ADAFRUIT32U4, etc.
-    - **Adafruit ATMega 328(P)** such as AVR_METRO, AVR_FEATHER328P, AVR_PROTRINKET5, AVR_PROTRINKET3, AVR_PROTRINKET5FTDI, AVR_PROTRINKET3FTDI, etc.
-    - **Generic or Sparkfun AVR ATmega_32U4** such as **AVR_MAKEYMAKEY, AVR_PROMICRO, etc.**
-    - **Generic or Sparkfun AVR ATmega_328(P)** such as **ARDUINO_REDBOT, ARDUINO_AVR_DIGITAL_SANDBOX, etc.**
-    - **Generic or Sparkfun AVR ATmega128RFA1** such as **ATMEGA128RFA1_DEV_BOARD, etc.**
-    
-  - **Arduino Nano-33-BLE**
+  - **ESP8266 built-in WiFi**.
+  - **ESP32 built-in WiFi**.
+  - **WiFiNINA using WiFiNINA or WiFiNINA_Generic library**.
+  - **ESP8266-AT, ESP32-AT WiFi shields using WiFiEspAT or [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer) library**.
+  - **RTL8720DN, RTL8722DM, RTL8722CSM**
   
-  - **Arduino SAM DUE**.
+### Currently Supported Ethernet Modules and Shields
+
+  - **W5x00's using Ethernet, EthernetLarge, Ethernet2 or Ethernet3 Library.**
+  - **ENC28J60 using EthernetENC or UIPEthernet library.**
+  - **LAN8742A using STM32Ethernet / STM32 LwIP libraries.**
+  - **LAN8720A in WT32-ETH01** using [`WebServer_WT32_ETH01`](https://github.com/khoih-prog/WebServer_WT32_ETH01).
   
-  - **ATmega4809-based boards** such as :
-    - **Arduino UNO WiFi Rev2, AVR_NANO_EVERY, etc.**
+### Currently Supported Storage
 
-  - RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. using [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico)
-
-  - RP2040-based boards such as **Nano_RP2040_Connect, RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
-
-#### Important Notes about ISR
-
-1. Inside the attached function, **delay() won’t work and the value returned by millis() will not increment.** Serial data received while in the function may be lost. You should declare as **volatile any variables that you modify within the attached function.**
-
-2. Typically global variables are used to pass data between an ISR and the main program. To make sure variables shared between an ISR and the main program are updated correctly, declare them as volatile.
+  - **ESP8266 LittleFS, SPIFFS**.
+  - **ESP32, ESP32-S2 SPIFFS and LittleFS. ESP32-C3 SPIFFS**.
+  - **SAM DUE DueFlashStorage**.
+  - **SAMD FlashStorage_SAMD**.
+  - **nRF52/RP2040 LittleFS**.
+  - **STM32, Teensy and AVR, MegaAVR EEPROM**.
+  - **RTL8720 FlashStorage_RTL8720**.
 
 ---
 ---
+
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 
- ---
- 
- 2. [`ESP32 Core 2.0.1+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
- 3. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
- 4. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 5. [`Adafruit AVR core 1.4.13+`](https://github.com/adafruit/Adafruit_Arduino_Boards) for Adafruit AVR boards. Use Arduino Board Manager to install. 
- 6. [`Sparkfun AVR core 1.1.13+`](https://github.com/sparkfun/Arduino_Boards) for Sparkfun AVR boards. Use Arduino Board Manager to install. 
- 7. [`Teensy core v1.55+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
- 8. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
- 9. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
-10. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
-11. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
-12. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
-13. [`Adafruit nRF52 v1.1.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
-14. [`Arduino Core for STM32 v2.1.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-15. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards. Use Arduino Board Manager to install.
-16. [`Arduino mbed_rp2040 core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-17. [`Earle Philhower's arduino-pico core v1.9.6+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+ 1. [`Arduino IDE v1.8.19+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
+ 3. [`Arduino MegaAVR core v1.8.3+`](https://github.com/arduino/ArduinoCore-megaavr) for Arduino MegaAVR boards such as Arduino Uno WiFi Rev2. Use Arduino Board Manager to install. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-megaavr.svg)](https://github.com/arduino/ArduinoCore-megaavr/releases/latest)
+ 4. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+ 5. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
+ 6. [`Teensy core v1.55+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. **Ready** from v1.0.0.
+ 7. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
+ 8. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
+ 9. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+10. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
 
----
+11. [`Adafruit nRF52 v1.2.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
+12. [`Arduino Core for STM32 v2.2.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
+13. [`Arduino mbed_rp2040 core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+14. [`Earle Philhower's arduino-pico core v1.9.11+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+15. [`Arduino AmebaD core 3.1.1+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 
-18. [`Blynk library 1.0.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain examples.
+16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
+17. Depending on which board you're using:
+   - [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
+   - [`FlashStorage_SAMD library v1.2.1+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_SAMD.svg?)](https://www.ardu-badge.com/FlashStorage_SAMD)
+   - [`FlashStorage_STM32 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
+   - [`FlashStorage_RTL8720 library v1.0.0+`](https://github.com/khoih-prog/FlashStorage_RTL8720) for RTL8720DN. etc. boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_RTL8720.svg?)](https://www.ardu-badge.com/FlashStorage_RTL8720)
+   - [`LittleFS_esp32 v1.0.6+`](https://github.com/lorol/LITTLEFS) for ESP32-based boards using LittleFS. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_esp32.svg?)](https://www.ardu-badge.com/LittleFS_esp32). **Notice**: This [`LittleFS_esp32 library`](https://github.com/lorol/LITTLEFS) has been integrated to Arduino [esp32 core v1.0.6](https://github.com/espressif/arduino-esp32/tree/master/libraries/LITTLEFS).
 
----
-
-19. For built-in LAN8742A Ethernet:
-   - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
-   - [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest)
-   
-20. For W5x00 Ethernet:
+18. Depending on which Ethernet card/module/shield you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
-   
-21. For ENC28J60 Ethernet:
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
-   
----
+   - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest). To be used with [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest). 
+19. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+20. [`WiFiWebServer library v1.5.3+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+21. [`EthernetWebServer library v1.8.3+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
+22. [`EthernetWebServer_STM32 library v1.3.2+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
+23. [`ESP8266_AT_WebServer library v1.5.2+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
+24. [`DS323x_Generic library v1.2.2+`](https://github.com/khoih-prog/DS323x_Generic) to use examples using DS323x RTC modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DS323x_Generic.svg?)](https://www.ardu-badge.com/DS323x_Generic)
+25. [`STM32RTC library v1.2.0+`](https://github.com/stm32duino/STM32RTC) to use STM32 examples using built-in STM32 RTC. [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32RTC.svg)](https://github.com/stm32duino/STM32RTC/releases/latest).
+26. [`WebServer_WT32_ETH01 library v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+27. [`WiFiWebServer_RTL8720 library v1.1.0+`](https://github.com/khoih-prog/WiFiWebServer_RTL8720) to use Realtek RTL8720DN, etc. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer_RTL8720.svg?)](https://www.ardu-badge.com/WiFiWebServer_RTL8720).
 
-22. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-23. [`Blynk_WiFiNINA_WM library 1.1.2+`](https://github.com/khoih-prog/Blynk_WiFiNINA_WM) to use with Blynk-WiFiNINA-related example. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_WiFiNINA_WM.svg?)](https://www.ardu-badge.com/Blynk_WiFiNINA_WM)
 
-24. To use with certain examples
-   - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for `ISR_16_Timers_Array examples`
-   
 ---
 ---
 
@@ -335,24 +253,25 @@ For Teensy 4.x, this library will be expanded to use other available hardware ti
 
 ### Use Arduino Library Manager
 
-The best and easiest way is to use `Arduino Library Manager`. Search for [**TimerInterrupt_Generic**](https://github.com/khoih-prog/TimerInterrupt_Generic), then select / install the latest version.
-You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/TimerInterrupt_Generic.svg?)](https://www.ardu-badge.com/TimerInterrupt_Generic) for more detailed instructions.
+The best and easiest way is to use `Arduino Library Manager`. Search for [**Timezone_Generic**](https://github.com/khoih-prog/Timezone_Generic), then select / install the latest version.
+You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/Timezone_Generic.svg?)](https://www.ardu-badge.com/Timezone_Generic) for more detailed instructions.
 
 ### Manual Install
 
 Another way to install is to:
 
-1. Navigate to [**TimerInterrupt_Generic**](https://github.com/khoih-prog/TimerInterrupt_Generic) page.
-2. Download the latest release `TimerInterrupt_Generic-master.zip`.
-3. Extract the zip file to `TimerInterrupt_Generic-master` directory 
-4. Copy whole `TimerInterrupt_Generic-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+1. Navigate to [**Timezone_Generic**](https://github.com/khoih-prog/Timezone_Generic) page.
+2. Download the latest release `Timezone_Generic-master.zip`.
+3. Extract the zip file to `Timezone_Generic-master` directory 
+4. Copy whole `Timezone_Generic-master/src` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**TimerInterrupt_Generic** library](https://platformio.org/lib/show/11437/TimerInterrupt_Generic) or [**TimerInterrupt_Generic** library](https://platformio.org/lib/show/11463/TimerInterrupt_Generic) by using [Library Manager](https://platformio.org/lib/show/11437/TimerInterrupt_Generic/installation). Search for **TimerInterrupt_Generic** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**Timezone_Generic** library](https://platformio.org/lib/show/11329/Timezone_Generic) by using [Library Manager](https://platformio.org/lib/show/11329/Timezone_Generic/installation). Search for **Timezone_Generic** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
+
 
 ---
 ---
@@ -361,19 +280,19 @@ Another way to install is to:
 
 #### 1. For Adafruit nRF52840 and nRF52832 boards
 
-**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.1.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0). 
+**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.2.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0). 
 
-Supposing the Adafruit nRF52 version is 1.1.0. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Udp.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Print.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.1.0/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 1.2.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -391,14 +310,14 @@ These files must be copied into the directory:
 
 #### 2. For Teensy boards
  
- **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.15/hardware/teensy/avr/boards.txt). 
+ **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.19/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.15. These files must be copied into the directory:
+Supposing the Arduino version is 1.8.19. These files must be copied into the directory:
 
-- `./arduino-1.8.15/hardware/teensy/avr/boards.txt`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy/Stream.h`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy3/Stream.h`
-- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy4/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy3/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy4/Stream.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 These files must be copied into the directory:
@@ -423,13 +342,13 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.12) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.12).
  
 #### For core version v1.8.10+
 
-Supposing the Arduino SAMD version is 1.8.11. Now only one file must be copied into the directory:
+Supposing the Arduino SAMD version is 1.8.12. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt`
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.12/platform.txt`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -506,12 +425,12 @@ To use LAN8720 on some STM32 boards
 - **Discovery (DISCO_F746NG)**
 - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
-you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system) to overwrite the old files.
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system) to overwrite the old files.
 
-Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
@@ -522,12 +441,12 @@ theses files must be copied into the corresponding directory:
 
 #### 7.2 For STM32 boards to use Serial1
 
-**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.1.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.2.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
-Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
@@ -570,12 +489,12 @@ With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add
 
 #### 9. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -588,15 +507,30 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/x.yy.zz/portenta_post_install.sh`
+
+
+
+#### 10. For RTL8720DN boards using AmebaD core
+ 
+ To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.1.1/cores/arduino/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.1.1/cores/arduino/avr/pgmspace.h). 
+
+Supposing the Realtek AmebaD core version is 3.1.1. This file must be copied into the directory:
+
+- `~/.arduino15/packages/realtek/hardware/AmebaD/3.1.1/cores/arduino/avr/pgmspace.h`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/realtek/hardware/AmebaD/x.yy.zz/cores/arduino/avr/pgmspace.h`
 
 
 ---
@@ -647,7 +581,7 @@ To add UDP Multicast support, necessary for the [**UPnP_Generic library**](https
 
 #### 6. For UIPEthernet library
 
-***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+**To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library**, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
 - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
 - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
@@ -668,39 +602,61 @@ error: 'class EthernetClass' has no member named 'init'
 Ethernet.init (USE_THIS_SS_PIN);
 ```
 
-just rename the following file in ./arduino-1.8.16/hardware/esp8266com/esp8266/libraries/Ethernet directory
+just rename the following file in ./arduino-1.8.13/hardware/esp8266com/esp8266/libraries/Ethernet directory
 
 - From `Ethernet.h` to `Ethernet_ESP8266.h`
-
-#### 9. For STM32 core F3 and F4 using UIPEthernet library
-
-Check if you need to install the UIPEthernet patch [new STM32 core F3/F4 compatibility](https://github.com/UIPEthernet/UIPEthernet/commit/c6d6519a260166b722b9cee5dd1f0fb2682e6782) to avoid errors `#include HardwareSPI.h` on some STM32 boards (Nucleo-32 F303K8, etc.)
-
 
 ---
 ---
 
 ### HOWTO Fix `Multiple Definitions` Linker Error
 
-The current library implementation, using **xyz-Impl.h instead of standard xyz.cpp**, possibly creates certain `Multiple Definitions` Linker error in certain use cases. Although it's simple to just modify several lines of code, either in the library or in the application, the library is adding 2 more source directories
+The current library implementation, using `xyz-Impl.h` instead of standard `xyz.cpp`, possibly creates certain `Multiple Definitions` Linker error in certain use cases.
 
-1. **scr_h** for new h-only files
-2. **src_cpp** for standard h/cpp files
+You can use
 
-besides the standard **src** directory.
+```
+#include <Timezone_Generic.h>           //https://github.com/khoih-prog/Timezone_Generic
+```
 
-To use the **old standard cpp** way, locate this library' directory, then just 
+in many files. But be sure to use the following `#include <Timezone_Generic_Impl.h>` **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
-1. **Delete the all the files in src directory.**
-2. **Copy all the files in src_cpp directory into src.**
-3. Close then reopen the application code in Arduino IDE, etc. to recompile from scratch.
+```
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include <Timezone_Generic_Impl.h>      // https://github.com/khoih-prog/Timezone_Generic
+```
 
-To re-use the **new h-only** way, just 
+Have a look at the discussion in [Different behaviour using the src_cpp or src_h lib #80](https://github.com/khoih-prog/ESPAsync_WiFiManager/discussions/80)
 
-1. **Delete the all the files in src directory.**
-2. **Copy the files in src_h directory into src.**
-3. Close then reopen the application code in Arduino IDE, etc. to recompile from scratch.
+---
+---
 
+
+### Note for Platform IO using ESP32 LittleFS
+
+#### Necessary only for esp32 core v1.0.6-
+
+From esp32 core v1.0.6+, [`LittleFS_esp32 v1.0.6`](https://github.com/lorol/LITTLEFS) has been included and this step is not necessary anymore.
+
+In Platform IO, to fix the error when using [`LittleFS_esp32 v1.0`](https://github.com/lorol/LITTLEFS) for ESP32-based boards with ESP32 core v1.0.4- (ESP-IDF v3.2-), uncomment the following line
+
+from
+
+```
+//#define CONFIG_LITTLEFS_FOR_IDF_3_2   /* For old IDF - like in release 1.0.4 */
+```
+
+to
+
+```
+#define CONFIG_LITTLEFS_FOR_IDF_3_2   /* For old IDF - like in release 1.0.4 */
+```
+
+It's advisable to use the latest [`LittleFS_esp32 v1.0.5+`](https://github.com/lorol/LITTLEFS) to avoid the issue.
+
+Thanks to [Roshan](https://github.com/solroshan) to report the issue in [Error esp_littlefs.c 'utime_p'](https://github.com/khoih-prog/ESPAsync_WiFiManager/issues/28) 
+
+---
 ---
 
 ### HOWTO Use analogRead() with ESP32 running WiFi and/or BlueTooth (BT/BLE)
@@ -740,3258 +696,2159 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/main/c
 - If somehow it's a must to use those pins serviced by ADC2 (**GPIO0, 2, 4, 12, 13, 14, 15, 25, 26 and 27**), use the **fix mentioned at the end** of [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to work with ESP32 WiFi/BlueTooth (BT/BLE).
 
 ---
-
-### HOWTO Use PWM analogWrite() with ESP8266 running Timer1 Interrupt
-
-Please have a look at [ESP8266TimerInterrupt Issue 8: **ESP8266Timer and PWM --> wdt reset**](https://github.com/khoih-prog/ESP8266TimerInterrupt/issues/8) to have more detailed description and solution of the issue.
-
-#### 1. ESP8266 has only 2 hardware timers, named Timer0 and Timer1
-
-#### 2. ESP8266 hardware timers' functions
-
-- Timer0 has been used for WiFi and it's not advisable to use while using WiFi (if not using WiFi, why select ESP8266 ??)
-- Timer1 is used by this [**ESP8266TimerInterrupt Library**](https://github.com/khoih-prog/ESP8266TimerInterrupt)
-
-#### 3. How to use PWM analogWrite() functions while using this library
-
-  1. If possible, use software timer instead of [**ESP8266TimerInterrupt Hardware Timer1**](https://github.com/khoih-prog/ESP8266TimerInterrupt) 
-  2. If using [**ESP8266TimerInterrupt Hardware Timer1**](https://github.com/khoih-prog/ESP8266TimerInterrupt) is a must, you can either
-  - use external DAC such as AD5662, AD5667, AD5696.
-  - use software PWM such as mentioned in [ESP8266 PWM REVISITED (AND REIMPLEMENTED)](https://lurchi.wordpress.com/2016/06/29/esp8266-pwm-revisited-and-reimplemented/)
-  
-
----
 ---
 
-## More useful Information
+## Usage
 
+### TimeChangeRules struct
 
-### 1. For ESP32
+Normally these will be coded in pairs for a given time zone: One rule to describe when daylight (summer, DST) time starts, and one to describe when standard time starts.
 
-The ESP32 has two timer groups, each one with two general purpose hardware timers.  All the timers are based on 64 bits counters and 16 bit prescalers. 
+As an example, here in the Eastern US time zone, Eastern Daylight Time (EDT) starts on the 2nd Sunday in March at 02:00 local time. Eastern Standard Time (EST) starts on the 1st Sunday in November at 02:00 local time.
 
-The timer counters can be configured to count up or down and support automatic reload and software reload.
+Define a **TimeChangeRule** as follows:
 
-They can also generate alarms when they reach a specific value, defined by the software. The value of the counter can be read by 
-the software program.
+`TimeChangeRule myRule = {abbrev, week, dow, month, hour, offset};`
 
----
+Where:
 
-### 2. Notes for ESP8266
+**abbrev** is a character string abbreviation for the time zone; it must be no longer than five characters.
 
-The ESP8266 timers are **badly designed**, using only 23-bit counter along with maximum 256 prescaler. They're only better than UNO / Mega.
+**week** is the week of the month that the rule starts.
 
-The ESP8266 has two hardware timers, but timer0 has been used for WiFi and it's not advisable to use. Only timer1 is available.
+**dow** is the day of the week that the rule starts.
 
-The timer1's 23-bit counter terribly can count only up to 8,388,607. So the timer1 maximum interval is very short. Using 256 prescaler, maximum timer1 interval is only **26.843542 seconds !!!**
+**hour** is the hour in local time that the rule starts (0-23).
 
-The timer1 counters can be configured to support automatic reload.
+**offset** is the UTC offset _in minutes_ for the time zone being defined.
 
----
+For convenience, the following symbolic names can be used:
 
-### 3. For Arduino AVR
+**week:** First, Second, Third, Fourth, Last
+**dow:** Sun, Mon, Tue, Wed, Thu, Fri, Sat
+**month:** Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
 
-From [Arduino 101: Timers and Interrupts](https://www.robotshop.com/community/forum/t/arduino-101-timers-and-interrupts/13072)
+For the Eastern US time zone, the **TimeChangeRule**s could be defined as follows:
 
-#### 3.1. Timer0:
-
-Timer0 is a 8-bit timer.
-
-In the Arduino world timer0 is been used for the timer functions, like delay(), millis() and micros(). If you change Timer0 registers, this may influence the Arduino timer function. So you should know what you are doing.
-
-#### 3.2. Timer1:
-
-Timer1 is a 16-bit timer.
-In the Arduino world the Servo library uses timer1 on Arduino Uno (Timer5 on Arduino Mega).
-
-#### 3.3. Timer2:
-
-Timer2 is a 8-bit timer like Timer0.
-In the Arduino work the tone() function uses Timer2.
-
-#### 3.4. Timer3, Timer4, Timer5:
-
-Timer 3,4,5 are only available on Arduino Mega boards. These timers are all 16-bit timers.
-
----
-
-### 4. For STM32F/L/H/G/WB/MP1
-
-The Timers of STM32s are numerous, yet very sophisticated and powerful.
-
-In general, across the STM32 microcontrollers families, the timer peripherals that have the same name also have the same features set, but there are a few exceptions. 
-
-For example, the **TIM1** timer peripheral is shared across the STM32F1 Series, STM32F2 Series and STM32F4 Series, but for the specific case of STM32F30x microcontrollers family, the TIM1 timer peripheral features a bit richer features set than the TIM1 present in the other families.
-
-The general purpose timers embedded by the STM32 microcontrollers share the same backbone structure; they differ only on the level of features embedded by a given timer peripheral. 
-
-The level of features integration for a given timer peripheral is decided based on the applications field that it targets.
-
-The timer peripherals can be classified as:
-• Advanced-configuration timers like TIM1 and TIM8 among others.
-• General-purpose configuration timers like TIM2 and TIM3 among others
-• Lite-configuration timers like TIM9, TIM10, TIM12 and TIM16 among others
-• Basic-configuration timers like TIM6 and TIM7 among others.
-
-For example, **STM32F103C8T6** has one advance timer, while **STM32F103VET6** has two advanced timers. **Nucleo-144 STM32F767ZI boards have 14 Timers, TIM1-TIM14**.
-
-
-<p align="center">
-    <img src="https://github.com/khoih-prog/STM32_TimerInterrupt/blob/main/pics/STM32Timers.png">
-</p>
-
-
-More information can be found at [**Embedded-Lab STM32 TIMERS**](http://embedded-lab.com/blog/stm32-timers/)
-
-To be sure which Timer is available for the board you're using, check the Core Package's related files. For example, for **Nucleo-144 STM32F767ZI**, check these files:
-1. `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h`
-2. `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h`
-
-The information will be as follows:
-
-```
-typedef struct
-{
-  __IO uint32_t CR1;         /*!< TIM control register 1,              Address offset: 0x00 */
-  __IO uint32_t CR2;         /*!< TIM control register 2,              Address offset: 0x04 */
-  __IO uint32_t SMCR;        /*!< TIM slave mode control register,     Address offset: 0x08 */
-  __IO uint32_t DIER;        /*!< TIM DMA/interrupt enable register,   Address offset: 0x0C */
-  __IO uint32_t SR;          /*!< TIM status register,                 Address offset: 0x10 */
-  __IO uint32_t EGR;         /*!< TIM event generation register,       Address offset: 0x14 */
-  __IO uint32_t CCMR1;       /*!< TIM capture/compare mode register 1, Address offset: 0x18 */
-  __IO uint32_t CCMR2;       /*!< TIM capture/compare mode register 2, Address offset: 0x1C */
-  __IO uint32_t CCER;        /*!< TIM capture/compare enable register, Address offset: 0x20 */
-  __IO uint32_t CNT;         /*!< TIM counter register,                Address offset: 0x24 */
-  __IO uint32_t PSC;         /*!< TIM prescaler,                       Address offset: 0x28 */
-  __IO uint32_t ARR;         /*!< TIM auto-reload register,            Address offset: 0x2C */
-  __IO uint32_t RCR;         /*!< TIM repetition counter register,     Address offset: 0x30 */
-  __IO uint32_t CCR1;        /*!< TIM capture/compare register 1,      Address offset: 0x34 */
-  __IO uint32_t CCR2;        /*!< TIM capture/compare register 2,      Address offset: 0x38 */
-  __IO uint32_t CCR3;        /*!< TIM capture/compare register 3,      Address offset: 0x3C */
-  __IO uint32_t CCR4;        /*!< TIM capture/compare register 4,      Address offset: 0x40 */
-  __IO uint32_t BDTR;        /*!< TIM break and dead-time register,    Address offset: 0x44 */
-  __IO uint32_t DCR;         /*!< TIM DMA control register,            Address offset: 0x48 */
-  __IO uint32_t DMAR;        /*!< TIM DMA address for full transfer,   Address offset: 0x4C */
-  __IO uint32_t OR;          /*!< TIM option register,                 Address offset: 0x50 */
-  __IO uint32_t CCMR3;       /*!< TIM capture/compare mode register 3,      Address offset: 0x54 */
-  __IO uint32_t CCR5;        /*!< TIM capture/compare mode register5,       Address offset: 0x58 */
-  __IO uint32_t CCR6;        /*!< TIM capture/compare mode register6,       Address offset: 0x5C */
-  __IO uint32_t AF1;         /*!< TIM Alternate function option register 1, Address offset: 0x60 */
-  __IO uint32_t AF2;         /*!< TIM Alternate function option register 2, Address offset: 0x64 */
-
-} TIM_TypeDef;
+```c++
+TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  //UTC - 4 hours
+TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
 ```
 
-and
+---
+
+### Timezone class
+
+There are several ways to define **Timezone** objects.
+
+#### 1. Using initialzed Timezone
+
+By first defining **TimeChangeRule**s and giving the daylight time rule and the standard time rule (assuming usEDT and usEST defined as above):
+
+`Timezone usEastern(usEDT, usEST);`
+
+or
 
 ```
-#define PERIPH_BASE            0x40000000UL /*!< Base address of : AHB/ABP Peripherals   
-/*!< Peripheral memory map */
-#define APB1PERIPH_BASE        PERIPH_BASE
+Timezone *usEastern;
 
-/*!< APB1 peripherals */
-#define TIM2_BASE             (APB1PERIPH_BASE + 0x0000UL)
-#define TIM3_BASE             (APB1PERIPH_BASE + 0x0400UL)
-#define TIM4_BASE             (APB1PERIPH_BASE + 0x0800UL)
-#define TIM5_BASE             (APB1PERIPH_BASE + 0x0C00UL)
-#define TIM6_BASE             (APB1PERIPH_BASE + 0x1000UL)
-#define TIM7_BASE             (APB1PERIPH_BASE + 0x1400UL)
-#define TIM12_BASE            (APB1PERIPH_BASE + 0x1800UL)
-#define TIM13_BASE            (APB1PERIPH_BASE + 0x1C00UL)
-#define TIM14_BASE            (APB1PERIPH_BASE + 0x2000UL)
+usEastern = new Timezone(usEDT, usEST);
+```
 
-/*!< APB2 peripherals */
-#define TIM1_BASE             (APB2PERIPH_BASE + 0x0000UL)
-#define TIM8_BASE             (APB2PERIPH_BASE + 0x0400UL)
-#define TIM9_BASE             (APB2PERIPH_BASE + 0x4000UL)
-#define TIM10_BASE            (APB2PERIPH_BASE + 0x4400UL)
-#define TIM11_BASE            (APB2PERIPH_BASE + 0x4800UL)
+For a time zone that does not change to daylight/summer time, pass a single rule to the constructor. For example:
 
+`Timezone usAZ(usMST, usMST);`
+
+By reading rules previously stored in **EEPROM/DueFlashStorage/FlashStorage/LittleFS/SPIFFS**. This reads both the daylight and standard time rules previously stored at EEPROM/DueFlashStorage/FlashStorage **address 0** or LittleFS/SPIFFS file `timezone.dat` **offset 0** :
+
+`Timezone usPacific(0);`
+
+Note that **TimeChangeRule**s require TZ_DATA_SIZE (12) bytes of storage each, so the pair of rules associated with a Timezone object requires 24 bytes total.  This could possibly change in future versions of the library.  The size of a **TimeChangeRule** can be checked with `TZ_DATA_SIZE` or `sizeof(TimeChangeRule)`.
+
+#### 2. Using un-initialzed Timezone (from v1.2.6)
+
+Just initialize the Timezone object without any TimeChangeRule.
+
+```
+#define USING_INITIALIZED_TZ      false   //true
+
+#if USING_INITIALIZED_TZ
+  // US Eastern Time Zone (New York, Detroit,Toronto)
+  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+  Timezone *myTZ;
+#else
+  // Allow a "blank" TZ object pointer then use init() method to set the actual TZ.
+  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+  Timezone *myTZ ;
+  TimeChangeRule myDST;
+  TimeChangeRule mySTD;
+#endif
+```
+
+then in setup(), get the correct TimeChangeRule (from SAM DUE DueFlashStorage, SAMD FlashStorage, nRF52 LittleFS, STM32 and AVR EEPROM, etc. or from any input), and initialzed the Timezone.
+
+```
+#if (USING_INITIALIZED_TZ)
+
+  myTZ = new Timezone(myDST, mySTD);
+
+#else
+
+  // Can read this info from EEPROM, storage, etc
+  String tzName = "EDT/EST" ;
+
+  // Time zone rules can be set as below or dynamically built, say through a configuration
+  // interface, or fetched from eeprom, flash etc.
+
+  if ( tzName == "EDT/EST" )
+  {
+    // America Eastern Time
+    myDST = (TimeChangeRule) {
+      "EDT",  Second, Sun, Mar, 2, -240
+    };     // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {
+      "EST",  First,  Sun, Nov, 2, -300
+    };     // Standard time = UTC - 5 hours
+  }
+  else if ( tzName == "CET/CEST" )
+  {
+    // central Europe
+    myDST = (TimeChangeRule) {
+      "CEST", Last, Sun, Mar, 2, 120
+    };
+    mySTD = (TimeChangeRule) {
+      "CET",  Last, Sun, Oct, 3, 60
+    };
+  }
+
+  else if ( tzName == "GMT/BST" )
+  {
+    // UK
+    myDST = (TimeChangeRule) {
+      "BST",  Last, Sun, Mar, 1, 60
+    };
+    mySTD = (TimeChangeRule) {
+      "GMT",  Last, Sun, Oct, 2, 0
+    };
+  }
+
+  myTZ = new Timezone();
+  myTZ->init( myDST, mySTD );
+
+#endif
+```
+
+---
+---
+
+### Timezone_Generic library methods
+
+Note that the `time_t` data type is defined by the [Arduino Time library's](https://github.com/PaulStoffregen/Time) <TimeLib.h>. See the Time library documentation [here](https://playground.arduino.cc/Code/Time) and [here](https://www.pjrc.com/teensy/td_libs_Time.html) for additional details.
+
+---
+
+### time_t toLocal(time_t utc);
+
+#### Description
+
+Converts the given UTC time to local time, standard or daylight as appropriate.
+
+#### Syntax
+
+`myTZ.toLocal(utc);`
+
+#### Parameters
+
+**utc:** Universal Coordinated Time *(time_t)*
+
+#### Returns 
+
+Local time *(time_t)*
+
+#### Example
+
+```c++
+time_t eastern, utc;
+TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  //UTC - 4 hours
+TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
+Timezone usEastern(usEDT, usEST);
+
+utc = now();	//current time from the Time Library
+eastern = usEastern.toLocal(utc);
+```
+
+---
+
+### time_t toLocal(time_t utc, TimeChangeRule **tcr);
+
+#### Description
+
+As above, converts the given UTC time to local time, and also returns a pointer to the **TimeChangeRule** that was applied to do the conversion. This could then be used, for example, to include the time zone abbreviation as part of a time display.  The caller must take care not to alter the pointed **TimeChangeRule**, as this will then result in incorrect conversions.
+
+#### Syntax
+
+`myTZ.toLocal(utc, &tcr);`
+
+#### Parameters
+
+**utc:** Universal Coordinated Time *(time_t)*
+**tcr:** Address of a pointer to a **TimeChangeRule** _(\*\*TimeChangeRule)_ 
+
+#### Returns
+
+Local time *(time_t)*
+Pointer to pointer **TimeChangeRule**  _(\*\*TimeChangeRule)_
+
+#### Example
+
+```c++
+time_t eastern, utc;
+TimeChangeRule *tcr;
+TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  //UTC - 4 hours
+TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
+Timezone usEastern(usEDT, usEST);
+
+utc = now();	//current time from the Time Library
+eastern = usEastern.toLocal(utc, &tcr);
+
+Serial.print("The time zone is: ");
+Serial.println(tcr -> abbrev);
+```
+
+---
+
+### bool utcIsDST(time_t utc);
+### bool locIsDST(time_t local);
+
+#### Description
+
+These functions determine whether a given UTC time or a given local time is within the daylight saving (summer) time interval, and return true or false accordingly.
+
+#### Syntax
+
+`utcIsDST(utc);`
+`locIsDST(local);`
+
+#### Parameters
+
+**utc:** Universal Coordinated Time *(time_t)*
+**local:** Local Time *(time_t)*
+
+#### Returns
+
+true or false *(bool)*
+
+#### Example
+
+`if (usEastern.utcIsDST(utc)) { /*do something*/ }`
+
+---
+
+### void readRules(int address);
+### void writeRules(int address);
+
+#### Description
+
+These functions read or write a **Timezone** object's two **TimeChangeRule**s from or to EEPROM.
+
+#### Syntax
+
+`myTZ.readRules(address);`
+`myTZ.writeRules(address);`
+
+#### Parameters
+
+**address:** The beginning EEPROM address to write to or read from *(int)*
+
+#### Returns
+
+None.
+
+#### Example
+
+`usEastern.writeRules(0);  //write rules beginning at EEPROM address 0 or file offset 0`
+
+---
+
+### void setRules(TimeChangeRule dstStart, TimeChangeRule stdStart);
+
+#### Description
+
+This function reads or updates the daylight and standard time rules from RAM. Can be used to change TimeChangeRules dynamically while a sketch runs.
+
+#### Syntax
+
+`myTZ.setRules(dstStart, stdStart);`
+
+#### Parameters
+
+**dstStart:** A TimeChangeRule denoting the start of daylight saving (summer) time.
+**stdStart:** A TimeChangeRule denoting the start of standard time.
+
+#### Returns
+
+None.
+
+#### Example
+
+```c++
+TimeChangeRule EDT = {"EDT", Second, Sun, Mar, 2, -240};
+TimeChangeRule EST = {"EST", First, Sun, Nov, 2, -300};
+Timezone tz(EDT, EST);
 ...
+tz.setRules(EDT, EST);
 
-#define TIM2                ((TIM_TypeDef *) TIM2_BASE)
-#define TIM3                ((TIM_TypeDef *) TIM3_BASE)
-#define TIM4                ((TIM_TypeDef *) TIM4_BASE)
-#define TIM5                ((TIM_TypeDef *) TIM5_BASE)
-#define TIM6                ((TIM_TypeDef *) TIM6_BASE)
-#define TIM7                ((TIM_TypeDef *) TIM7_BASE)
-#define TIM12               ((TIM_TypeDef *) TIM12_BASE)
-#define TIM13               ((TIM_TypeDef *) TIM13_BASE)
-#define TIM14               ((TIM_TypeDef *) TIM14_BASE)
+```
+
+---
+
+### time_t toUTC(time_t local);
+
+#### Description
+
+Converts the given local time to UTC time.
+
+**WARNING:** This function is provided for completeness, but should seldom be needed and should be used sparingly and carefully.
+
+Ambiguous situations occur after the Standard-to-DST and the DST-to-Standard time transitions. When changing to DST, there is one hour of local time that does not exist, since the clock moves forward one hour. Similarly, when changing to standard time, there is one hour of local time that occurs twice since the clock moves back one hour.
+
+This function does not test whether it is passed an erroneous time value during the Local-to-DST transition that does not exist. If passed such a time, an incorrect UTC time value will be returned.
+
+If passed a local time value during the DST-to-Local transition that occurs twice, it will be treated as the earlier time, i.e. the time that occurs before the transition.
+
+Calling this function with local times during a transition interval should be avoided!
+
+#### Syntax
+
+`myTZ.toUTC(local);`
+
+#### Parameters
+
+**local:** Local Time *(time_t)*
+
+#### Returns
+
+UTC *(time_t)*
+
+---
+
+### TimeChangeRule* read_DST_Rule(void);
+### TimeChangeRule* read_STD_Rule(void);
+
+#### Description
+
+Read the corresponding **TimeChangeRule**.
+
+#### Syntax
+
+`TimeChangeRule* myDSTptr = myTZ.read_DST_Rule();`
+`TimeChangeRule* mySTDptr = myTZ.read_STD_Rule();`
+
+#### Parameters
+
+None
+
+#### Returns
+
+Pointer to **TimeChangeRule**  _(TimeChangeRule*)_
+
+---
+
+### void display_DST_Rule(void);
+### void display_STD_Rule(void);
+
+#### Description
+Display the corresponding **TimeChangeRule**.
+
+#### Syntax
+
+`myTZ.display_DST_Rule();`
+`myTZ.display_STD_Rule();`
+
+
+#### Parameters
+
+None
+
+#### Returns
+
+None
+
+#### Example
+
+```c++
+#define TZ_DBG_PORT         Serial
+#define _TZ_LOGLEVEL_       1
+
+TimeChangeRule EDT = {"EDT", Second, Sun, Mar, 2, -240};
+TimeChangeRule EST = {"EST", First, Sun, Nov, 2, -300};
+Timezone tz(EDT, EST);
 ...
-#define TIM1                ((TIM_TypeDef *) TIM1_BASE)
-#define TIM8                ((TIM_TypeDef *) TIM8_BASE)
-...
-#define TIM9                ((TIM_TypeDef *) TIM9_BASE)
-#define TIM10               ((TIM_TypeDef *) TIM10_BASE)
-#define TIM11               ((TIM_TypeDef *) TIM11_BASE)
+tz.display_DST_Rule();
+tz.display_STD_Rule();
 
-```
-
----
-
-### 5. For Arduino megaAVR
-
-#### 5.1. Documents
-
-1. [Arduino 101: Timers and Interrupts](https://www.robotshop.com/community/forum/t/arduino-101-timers-and-interrupts/13072)
-2. [megaAVR0-series-Family-Data-Sheet](http://ww1.microchip.com/downloads/en/DeviceDoc/megaAVR0-series-Family-Data-Sheet-DS40002015B.pdf)
-
-### 5.2 Timer TCB0-TCB3
-
-TCB0-TCB3 are 16-bit timers.
-
----
----
-
-## New from v1.1.0
-
-Now with these new `16 ISR-based timers` (while consuming only **1 hardware timer**), the maximum interval is practically unlimited (limited only by unsigned long miliseconds). The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers Therefore, their executions are not blocked by bad-behaving functions / tasks.
-This important feature is absolutely necessary for mission-critical tasks. 
-
-The [**ISR_16_Timers_Array_Complex**](examples/SAMD/ISR_16_Timers_Array_Complex) and [**ISR_16_Timers_Array_Complex**](examples/SAMDUE/ISR_16_Timers_Array_Complex) examples will demonstrate the nearly perfect accuracy compared to software timers by printing the actual elapsed millisecs of each type of timers.
-Being ISR-based timers, their executions are not blocked by bad-behaving functions / tasks, such as connecting to WiFi, Internet and Blynk services. You can also have many `(up to 16)` timers to use.
-This non-being-blocked important feature is absolutely necessary for mission-critical tasks. 
-You'll see blynkTimer Software is blocked while system is connecting to WiFi / Internet / Blynk, as well as by blocking task 
-in loop(), using delay() function as an example. The elapsed time then is very unaccurate
-
-
----
----
-
-## Usage for ESP32
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-`Timer0, Timer1, Timer2 and Timer3` are supported for ESP32.
-
----
-
-## Usage for NRF52
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_1-NRF_TIMER_4 (1 to 4)
-// If you select the already-used NRF_TIMER_0, it'll be auto modified to use NRF_TIMER_1
-
-// Init NRF52 timer NRF_TIMER1
-NRF52Timer ITimer(NRF_TIMER_1);
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER_INTERVAL_MS        1000      // 1s = 1000ms
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(TIMER_INTERVAL_MS * 1000, TimerHandler0))
-    Serial.println("Starting  ITimer OK, millis() = " + String(millis()));
-  else
-    Serial.println("Can't set ITimer. Select another freq. or timer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-/// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_1-NRF_TIMER_4 (1 to 4)
-// If you select the already-used NRF_TIMER_0, it'll be auto modified to use NRF_TIMER_1
-
-// Init NRF52 timer NRF_TIMER2
-NRF52Timer ITimer(NRF_TIMER_2);
-
-// Init NRF52_ISR_Timer
-// Each NRF52_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer NRF52_ISR_Timer;
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-void TimerHandler(void)
-{
-  NRF52_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          50L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In NRF52, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
-  {
-    lastMillis = millis();
-    Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
-  }
-  else
-    Serial.println("Can't set ITimer correctly. Select another freq. or interval");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for SAMD
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
-// SAMD51 Hardware Timer only TC3
-SAMDTimer ITimer0(TIMER_TC3);
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler0(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER0_INTERVAL_MS        1000      // 1s = 1000ms
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer0.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler0))
-    Serial.println("Starting  ITimer0 OK, millis() = " + String(millis()));
-  else
-    Serial.println("Can't set ITimer0. Select another freq. or timer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
-// SAMD51 Hardware Timer only TC3
-SAMDTimer ITimer0(TIMER_TC3);
-
-// Init SAMD_ISR_Timer
-// Each SAMD_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer SAMD_ISR_Timer;
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-void TimerHandler(void)
-{
-  SAMD_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          50L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In SAMD, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
-  {
-    lastMillis = millis();
-    Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
-  }
-  else
-    Serial.println("Can't set ITimer correctly. Select another freq. or interval");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for SAM DUE
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// Interval in microsecs
-attachDueInterrupt(TIMER1_INTERVAL_MS * 1000, TimerHandler1, "ITimer1");
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER_INTERVAL_MS        1000      // 1s = 1000ms
-
-uint16_t attachDueInterrupt(double microseconds, timerCallback callback, const char* TimerName)
-{
-  DueTimerInterrupt dueTimerInterrupt = DueTimer.getAvailable();
-  
-  dueTimerInterrupt.attachInterruptInterval(microseconds, callback);
-
-  uint16_t timerNumber = dueTimerInterrupt.getTimerNumber();
-  
-  Serial.print(TimerName);
-  Serial.print(" attached to Timer(");
-  Serial.print(timerNumber);
-  Serial.println(")");
-
-  return timerNumber;
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  attachDueInterrupt(TIMER_INTERVAL_MS * 1000, TimerHandler, "ITimer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-// Interval in microsecs
-attachDueInterrupt(TIMER1_INTERVAL_MS * 1000, TimerHandler1, "ITimer1");
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-// Init SAMDUE_ISR_Timer
-// Each SAMDUE_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer SAMDUE_ISR_Timer;
-
-void TimerHandler(void)
-{
-  SAMDUE_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          1L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In SAM DUE, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-uint16_t attachDueInterrupt(double microseconds, timerCallback callback, const char* TimerName)
-{
-  DueTimerInterrupt dueTimerInterrupt = DueTimer.getAvailable();
-  
-  dueTimerInterrupt.attachInterruptInterval(microseconds, callback);
-
-  uint16_t timerNumber = dueTimerInterrupt.getTimerNumber();
-  
-  Serial.print(TimerName);
-  Serial.print(" attached to Timer(");
-  Serial.print(timerNumber);
-  Serial.println(")");
-
-  return timerNumber;
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  attachDueInterrupt(HW_TIMER_INTERVAL_MS * 1000, TimerHandler, "ITimer");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  SAMDUE_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  SAMDUE_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  SAMDUE_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  SAMDUE_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for Teensy
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// You can select Teensy Hardware Timer  from TEENSY_TIMER_1 or TEENSY_TIMER_3
-
-// Init Teensy timer TEENSY_TIMER_1
-TeensyTimer ITimer0(TEENSY_TIMER_1);
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler0(void)
-{
-  // Doing something here inside ISR
-}
-
-// For Teensy 4.0/4.1, F_BUS_ACTUAL = 150 MHz => max period is only 55922 us (~17.9 Hz)
-#define TIMER0_INTERVAL_MS        50L
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer0.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler0))
-    Serial.println("Starting  ITimer0 OK, millis() = " + String(millis()));
-  else
-    Serial.println("Can't set ITimer0. Select another freq. or timer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-// You can select Teensy Hardware Timer  from TEENSY_TIMER_1 or TEENSY_TIMER_3
-
-// Init Teensy timer TEENSY_TIMER_1
-TeensyTimer ITimer(TEENSY_TIMER_1);
-
-// Init Teensy_ISR_Timer
-// Each Teensy_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer Teensy_ISR_Timer;
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-void TimerHandler(void)
-{
-  Teensy_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          50L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In Teensy, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR every 2 seconds
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR every 5 seconds
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR  every 11 seconds
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR every 101 seconds
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
-  {
-    lastMillis = millis();
-    Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
-  }
-  else
-    Serial.println("Can't set ITimer correctly. Select another freq. or interval");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  Teensy_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  Teensy_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  Teensy_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  Teensy_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for STM32F/L/H/G/WB/MP1
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// Init STM32 timer TIM1
-STM32Timer ITimer0(TIM1);
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler0(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER0_INTERVAL_MS        1000      // 1s = 1000ms
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer0.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler0))
-    Serial.println("Starting  ITimer0 OK, millis() = " + String(millis()));
-  else
-    Serial.println("Can't set ITimer0. Select another freq. or timer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-// Init STM32 timer TIM1
-STM32Timer ITimer(TIM1);
-
-// Init STM32_ISR_Timer
-// Each STM32_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer STM32_ISR_Timer;
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-void TimerHandler(void)
-{
-  STM32_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_US          100L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In STM32, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_US, TimerHandler))
-  {
-    lastMillis = millis();
-    Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
-  }
-  else
-    Serial.println("Can't set ITimer correctly. Select another freq. or interval");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  STM32_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  STM32_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  STM32_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  STM32_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for NRF52840-based board using mbed-RTOS such as Nano-33-BLE.
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-// For core mbed core 1.3.2-
-// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_1,NRF_TIMER_3,NRF_TIMER_4 (1,3 and 4)
-// If you select the already-used NRF_TIMER_0 or NRF_TIMER_2, it'll be auto modified to use NRF_TIMER_1
-
-// For core mbed core 2.0.0-
-// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_3,NRF_TIMER_4 (3 and 4)
-// If you select the already-used NRF_TIMER_0, NRF_TIMER_1 or NRF_TIMER_2, it'll be auto modified to use NRF_TIMER_3
-
-// Init NRF52 timer NRF_TIMER4
-NRF52_MBED_Timer ITimer0(NRF_TIMER_4);
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER_INTERVAL_MS        1000      // 1s = 1000ms
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(TIMER_INTERVAL_MS * 1000, TimerHandler0))
-    Serial.println("Starting  ITimer OK, millis() = " + String(millis()));
-  else
-    Serial.println("Can't set ITimer. Select another freq. or timer");
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-/// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_1-NRF_TIMER_4 (1 to 4)
-// If you select the already-used NRF_TIMER_0, it'll be auto modified to use NRF_TIMER_1
-
-// Init NRF52 timer NRF_TIMER2
-NRF52_MBED_Timer ITimer(NRF_TIMER_2);
-
-// Init NRF52_ISR_Timer
-// Each NRF52_ISR_Timer can service 16 different ISR-based timers
-ISR_Timer NRF52_ISR_Timer;
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-void TimerHandler(void)
-{
-  NRF52_ISR_Timer.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          50L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// In NRF52, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-void setup()
-{
-  ....
-  
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
-  {
-    lastMillis = millis();
-    Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
-  }
-  else
-    Serial.println("Can't set ITimer correctly. Select another freq. or interval");
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  NRF52_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
-```
-
----
-
-## Usage for Arduino AVR
-
-Before using any Timer, you have to make sure the **Timer has not been used by any other purpose.**
-
-Only **Timer1 and Timer2** are supported for Nano, UNO, etc. boards possessing 3 timers.
-
-**Timer3, Timer4 and Timer5** are only available for Arduino Mega boards.
-
-
----
-
-## Usage for Arduino megaAVR
-
-Before using any Timer, you have to make sure the **Timer has not been used by any other purpose.**
-
-**Timer0, Timer1, Timer2 and Timer3 (TCB0-TCB3)** are supported for Nano Every, UNO WiFi Rev2, etc. boards.
-
-Before using any Timer, you have to make sure the Timer has not been used by any other purpose.
-
-### 1. Using only Hardware Timer directly
-
-#### 1.1 Init Hardware Timer
-
-```
-
-#define USE_TIMER_0     false
-#define USE_TIMER_1     true       // <======== This will enable ITimer1
-#define USE_TIMER_2     false
-#define USE_TIMER_3     false
-
-```
-
-#### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
-
-```
-void TimerHandler1(void)
-{
-  // Doing something here inside ISR
-}
-
-#define TIMER_INTERVAL_MS        1000      // 1s = 1000ms
-void setup()
-{
-  ....
-  
-  // ITimer1 is initialized here
-  ITimer1.init();
-
-  // Interval in millisecs
-  if (ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS, TimerHandler1))
-  {
-    Serial.print(F("Starting  ITimer1 OK, millis() = ")); Serial.println(millis());
-  }
-  else
-    Serial.println(F("Can't set ITimer1. Select another freq. or timer"));
-
-  ...
-}  
-```
-
-### 2. Using 16 ISR_based Timers from 1 Hardware Timers
-
-
-#### 2.1 Init Hardware Timer and ISR-based Timer
-
-```
-
-// Init ISR_Timer ISR_Timer1 to permit using 16 ISR_based Timers from 1 Hardware Timers (ITimer1)
-ISR_Timer ISR_Timer1;
-
-```
-
-#### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
-
-```
-#define USE_TIMER_0     false
-#define USE_TIMER_1     true       // <======== This will enable ITimer1
-#define USE_TIMER_2     false
-#define USE_TIMER_3     false
-
-void TimerHandler1(void)
-{
-  ISR_Timer1.run();
-}
-
-#define HW_TIMER_INTERVAL_MS          50L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
-
-// Avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething2s()
-{
-  // Doing something here inside ISR
-}
-  
-void doingSomething5s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething11s()
-{
-  // Doing something here inside ISR
-}
-
-void doingSomething101s()
-{
-  // Doing something here inside ISR
-}
-
-void setup()
-{
-  ....
-  
-  // ITimer1 is initialized here
-  ITimer1.init();
-
-  // Interval in millisecs
-  if (ITimer1.attachInterruptInterval(HW_TIMER_INTERVAL_MS, TimerHandler1))
-  {
-    Serial.print(F("Starting  ITimer1 OK, millis() = ")); Serial.println(millis());
-  }
-  else
-    Serial.println(F("Can't set ITimer1. Select another freq. or timer"));
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each ISR_Timer
-  ISR_Timer1.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  ISR_Timer1.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  ISR_Timer1.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  ISR_Timer1.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-}  
 ```
 
 ---
 ---
 
-## Examples: 
+## Examples
 
+### Generic Boards
 
-### 1. ESP32
-
- 1. [Argument_None](examples/ESP32/Argument_None)
- 2. [RPM_Measure](examples/ESP32/RPM_Measure)
- 3. [SwitchDebounce](examples/ESP32/SwitchDebounce)
- 4. [TimerInterruptTest](examples/ESP32/TimerInterruptTest)
- 5. [**Change_Interval**](examples/ESP32/Change_Interval).
- 6. [**ISR_16_Timers_Array**](examples/ESP32/ISR_16_Timers_Array)
- 7. [**ISR_16_Timers_Array_Complex**](examples/ESP32/ISR_16_Timers_Array_Complex).
-
-### 2. ESP8266
-
- 1. [Argument_None](examples/ESP8266/Argument_None)
- 2. [ISR_RPM_Measure](examples/ESP8266/ISR_RPM_Measure)
- 3. [RPM_Measure](examples/ESP8266/RPM_Measure)
- 4. [SwitchDebounce](examples/ESP8266/SwitchDebounce)
- 5. [TimerInterruptTest](examples/ESP8266/TimerInterruptTest)
- 6. [Change_Interval](examples/ESP8266/Change_Interval).
- 7. [**ISR_16_Timers_Array**](examples/ESP8266/ISR_16_Timers_Array) **New**
- 8. [**ISR_16_Timers_Array_Complex**](examples/ESP8266/ISR_16_Timers_Array_Complex) **New**
-
-
-### 3. NRF52
-
- 1. [Argument_None](examples/NRF52/Argument_None)
- 2. [ISR_16_Timers_Array](examples/NRF52/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/NRF52/ISR_RPM_Measure)
- 4. [ISR_Timer_Complex_Ethernet](examples/NRF52/ISR_Timer_Complex_Ethernet)
- 5. [ISR_Timer_Complex_WiFiNINA](examples/NRF52/ISR_Timer_Complex_WiFiNINA)
- 6. [RPM_Measure](examples/NRF52/RPM_Measure)
- 7. [SwitchDebounce](examples/NRF52/SwitchDebounce)
- 8. [TimerInterruptLEDDemo](examples/NRF52/TimerInterruptLEDDemo). 
- 9. [TimerInterruptTest](examples/NRF52/TimerInterruptTest)
-10. [**ISR_16_Timers_Array_Complex**](examples/NRF52/ISR_16_Timers_Array_Complex).
-11. [**Change_Interval**](examples/NRF52/Change_Interval).
-12. [**FakeAnalogWrite**](examples/NRF52/FakeAnalogWrite).
+ 1. [tzTest](examples/tzTest)
+ 2. [WriteRules](examples/WriteRules)
  
+### Generic Boards with Ethernet
+
+ 3. [RTC_Ethernet](examples/Ethernet/RTC_Ethernet) 
+ 4. [TZ_NTP_Clock_Ethernet](examples/Ethernet/TZ_NTP_Clock_Ethernet)
+ 5. [TZ_NTP_WorldClock_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_Ethernet)
  
-### 4. SAMD21/SAMD51
-
- 1. [Argument_None](examples/SAMD/Argument_None)
- 2. [ISR_16_Timers_Array](examples/SAMD/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/SAMD/ISR_RPM_Measure)
- 4. [ISR_Timer_Complex_Ethernet](examples/SAMD/ISR_Timer_Complex_Ethernet)
- 5. [ISR_Timer_Complex_WiFiNINA](examples/SAMD/ISR_Timer_Complex_WiFiNINA)
- 6. [RPM_Measure](examples/SAMD/RPM_Measure)
- 7. [SwitchDebounce](examples/SAMD/SwitchDebounce)
- 8. [TimerInterruptTest](examples/SAMD/TimerInterruptTest)
- 9. [TimerInterruptLEDDemo](examples/SAMD/TimerInterruptLEDDemo)
-10. [**ISR_16_Timers_Array_Complex**](examples/SAMD/ISR_16_Timers_Array_Complex).
-11. [**Change_Interval**](examples/SAMD/Change_Interval).
-
-### 5. SAM DUE
-
- 1. [Argument_None](examples/SAMDUE/Argument_None)
- 2. [ISR_16_Timers_Array](examples/SAMDUE/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/SAMDUE/ISR_RPM_Measure)
- 4. [ISR_Timer_Complex_Ethernet](examples/SAMDUE/ISR_Timer_Complex_Ethernet)
- 5. [RPM_Measure](examples/SAMDUE/RPM_Measure)
- 6. [SwitchDebounce](examples/SAMDUE/SwitchDebounce)
- 7. [TimerInterruptTest](examples/SAMDUE/TimerInterruptTest)
- 8. [TimerInterruptLEDDemo](examples/SAMDUE/TimerInterruptLEDDemo)
- 9. [**ISR_16_Timers_Array_Complex**](examples/SAMDUE/ISR_16_Timers_Array_Complex).
-10. [**Change_Interval**](examples/SAMDUE/Change_Interval).
-
-### 6. STM32F/L/H/G/WB/MP1
-
- 1. [Argument_None](examples/STM32/Argument_None)
- 2. [ISR_16_Timers_Array](examples/STM32/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/STM32/ISR_RPM_Measure)
- 4. [RPM_Measure](examples/STM32/RPM_Measure)
- 5. [SwitchDebounce](examples/STM32/SwitchDebounce)
- 6. [TimerInterruptTest](examples/STM32/TimerInterruptTest)
- 7. [TimerInterruptLEDDemo](examples/STM32/TimerInterruptLEDDemo)
- 8. [**ISR_16_Timers_Array_Complex**](examples/STM32/ISR_16_Timers_Array_Complex).
- 9. [**Change_Interval**](examples/STM32/Change_Interval).
+### STM32F/L/H/G/WB/MP1 Boards with Ethernet
  
-### 7. Teensy
+ 6. [BI_RTC_Alarm_STM32_Ethernet](examples/Ethernet/BI_RTC_Alarm_STM32_Ethernet)
+ 7. [BI_RTC_STM32_Ethernet](examples/Ethernet/BI_RTC_STM32_Ethernet)
+ 8. [RTC_STM32_Ethernet](examples/Ethernet/RTC_STM32_Ethernet)
+ 9. [TZ_NTP_Clock_STM32_Ethernet](examples/Ethernet/TZ_NTP_Clock_STM32_Ethernet)
+10. [TZ_NTP_WorldClock_STM32_Ethernet](examples/Ethernet/TZ_NTP_WorldClock_STM32_Ethernet)
+ 
+### Generic Boards with WiFiNINA 
+ 
+11. [RTC_WiFiNINA](examples/WiFiNINA/RTC_WiFiNINA) 
+12. [TZ_NTP_Clock_WiFiNINA](examples/WiFiNINA/TZ_NTP_Clock_WiFiNINA)
+13. [TZ_NTP_WorldClock_WiFiNINA](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA)
 
- 1. [Argument_None](examples/TEENSY/Argument_None)
- 2. [ISR_16_Timers_Array](examples/TEENSY/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/TEENSY/ISR_RPM_Measure)
- 4. [ISR_Timer_Complex](examples/TEENSY/ISR_Timer_Complex)
- 5. [RPM_Measure](examples/TEENSY/RPM_Measure)
- 6. [SwitchDebounce](examples/TEENSY/SwitchDebounce)
- 7. [TimerInterruptTest](examples/TEENSY/TimerInterruptTest)
- 8. [TimerInterruptLEDDemo](examples/TEENSY/TimerInterruptLEDDemo)
- 9. [**ISR_16_Timers_Array_Complex**](examples/TEENSY/ISR_16_Timers_Array_Complex).
-10. [**Change_Interval**](examples/TEENSY/Change_Interval).
+### WT32_ETH01 Boards
+ 
+14. [TZ_NTP_Clock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_Clock_WT32_ETH01)
+15. [TZ_NTP_WorldClock_WT32_ETH01](examples/WT32_ETH01/TZ_NTP_WorldClock_WT32_ETH01)
 
-### 8. Arduino AVR
-
- 1. [Argument_Complex](examples/AVR/Argument_Complex)
- 2. [Argument_None](examples/AVR/Argument_None)
- 3. [Argument_Simple](examples/AVR/Argument_Simple)
- 4. [Change_Interval](examples/AVR/Change_Interval)
- 5. [FakeAnalogWrite](examples/AVR/FakeAnalogWrite)
- 6. [ISR_16_Timers_Array_Complex](examples/AVR/ISR_16_Timers_Array_Complex)
- 7. [ISR_RPM_Measure](examples/AVR/ISR_RPM_Measure)
- 8. [ISR_Timers_Array_Simple](examples/AVR/ISR_Timers_Array_Simple)
- 9. [RPM_Measure](examples/AVR/RPM_Measure)
-10. [SwitchDebounce](examples/AVR/SwitchDebounce)
-11. [TimerDuration](examples/AVR/TimerDuration)
-12. [TimerInterruptTest](examples/AVR/TimerInterruptTest)
-13. [**Change_Interval_HF**](examples/AVR/Change_Interval_HF). New.
-
-### 9. Nano-33-BLE
-
- 1. [Argument_None](examples/NANO33BLE/Argument_None)
- 2. [ISR_16_Timers_Array](examples/NANO33BLE/ISR_16_Timers_Array) 
- 3. [ISR_16_Timers_Array_Complex](examples/NANO33BLE/ISR_16_Timers_Array_Complex) 
- 4. [SwitchDebounce](examples/NANO33BLE/SwitchDebounce)
- 5. [TimerInterruptLEDDemo](examples/NANO33BLE/TimerInterruptLEDDemo)
- 6. [TimerInterruptTest](examples/NANO33BLE/TimerInterruptTest)
- 7. [**FakeAnalogWrite**](examples/NANO33BLE/FakeAnalogWrite).
- 8. [**Change_Interval**](examples/NANO33BLE/Change_Interval).
-
-### 10. Arduino megaAVR
-
- 1. [Argument_Complex](examples/MEGA_AVR/Argument_Complex)
- 2. [Argument_None](examples/MEGA_AVR/Argument_None)
- 3. [Argument_Simple](examples/MEGA_AVR/Argument_Simple)
- 4. [Change_Interval](examples/MEGA_AVR/Change_Interval).
- 5. [FakeAnalogWrite](examples/MEGA_AVR/FakeAnalogWrite).
- 6. [**ISR_16_Timers_Array_Complex**](examples/MEGA_AVR/ISR_16_Timers_Array_Complex).
- 7. [ISR_RPM_Measure](examples/MEGA_AVR/ISR_RPM_Measure)
- 8. [**Change_Interval_HF**](examples/MEGA_AVR/Change_Interval_HF)
- 9. [**ISR_Timers_Array_Simple**](examples/MEGA_AVR/ISR_Timers_Array_Simple).
-10. [RPM_Measure](examples/MEGA_AVR/RPM_Measure)
-11. [SwitchDebounce](examples/MEGA_AVR/SwitchDebounce)
-12. [TimerDuration](examples/MEGA_AVR/TimerDuration)
-13. [TimerInterruptTest](examples/MEGA_AVR/TimerInterruptTest)
-
-### 11. RP2040
-
- 1. [Argument_Complex](examples/RP2040/Argument_Complex)
- 2. [Argument_None](examples/RP2040/Argument_None)
- 3. [Argument_Simple](examples/RP2040/Argument_Simple) 
- 4. [Change_Interval](examples/RP2040/Change_Interval) 
- 5. [**ISR_16_Timers_Array_Complex**](examples/RP2040/ISR_16_Timers_Array_Complex)
- 6. [**ISR_Timers_Array_Simple**](examples/RP2040/ISR_Timers_Array_Simple)
- 7. [RPM_Measure](examples/RP2040/RPM_Measure) 
- 8. [SwitchDebounce](examples/RP2040/RPM_Measure)
- 9. [TimerInterruptTest](examples/RP2040/TimerInterruptTest)
-
-### 12. MBED RP2040
-
- 1. [Argument_Complex](examples/MBED_RP2040/Argument_Complex)
- 2. [Argument_None](examples/MBED_RP2040/Argument_None)
- 3. [Argument_Simple](examples/MBED_RP2040/Argument_Simple) 
- 4. [Change_Interval](examples/MBED_RP2040/Change_Interval) 
- 5. [**ISR_16_Timers_Array_Complex**](examples/MBED_RP2040/ISR_16_Timers_Array_Complex)
- 6. [**ISR_Timers_Array_Simple**](examples/MBED_RP2040/ISR_Timers_Array_Simple)
- 7. [SwitchDebounce](examples/MBED_RP2040/SwitchDebounce)
- 8. [TimerInterruptTest](examples/MBED_RP2040/TimerInterruptTest)
+### RTL8720DN Boards
+ 
+16. [TZ_NTP_Clock_RTL8720DN](examples/RTL8720DN/TZ_NTP_Clock_RTL8720DN)
+17. [TZ_NTP_WorldClock_RTL8720DN](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN)
 
 ---
 ---
 
-### Example [**ISR_16_Timers_Array_Complex**](examples/MBED_RP2040/ISR_16_Timers_Array_Complex) for MBED RP2040 boards
+### Example [TZ_NTP_Clock_Ethernet](examples/Ethernet/TZ_NTP_Clock_Ethernet)
 
-```
-#if ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || \
-      defined(ARDUINO_GENERIC_RP2040) ) && defined(ARDUINO_ARCH_MBED)
-  #define USING_MBED_RPI_PICO_TIMER_INTERRUPT        true
+#### 1. File [TZ_NTP_Clock_Ethernet.ino](examples/Ethernet/TZ_NTP_Clock_Ethernet/TZ_NTP_Clock_Ethernet.ino)
+
+```cpp
+/*
+   The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
+   and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53,
+   is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
+*/
+
+#include "defines.h"
+
+//////////////////////////////////////////
+
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.8.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1008000
+
+//////////////////////////////////////////
+
+#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "Timezone_Generic_Impl.h"      // https://github.com/khoih-prog/Timezone_Generic
+
+#define USING_INITIALIZED_TZ      false   //true
+
+#if USING_INITIALIZED_TZ
+  // US Eastern Time Zone (New York, Detroit,Toronto)
+  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+  Timezone *myTZ;
 #else
-  #error This code is intended to run on the MBED RASPBERRY_PI_PICO platform! Please check your Tools->Board setting.
+  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
+  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+  Timezone *myTZ;
+  TimeChangeRule myDST;
+  TimeChangeRule mySTD;
 #endif
 
-// These define's must be placed at the beginning before #include "TimerInterrupt_Generic.h"
-// _TIMERINTERRUPT_LOGLEVEL_ from 0 to 4
-#define _TIMERINTERRUPT_LOGLEVEL_     4
+// If TimeChangeRules are already stored in EEPROM, comment out the three
+// lines above and uncomment the line below.
+//Timezone myTZ(100);       // assumes rules stored at EEPROM address 100
 
-#include "TimerInterrupt_Generic.h"
-#include "ISR_Timer_Generic.h"
+TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ abbrev
 
-#include <SimpleTimer.h>              // https://github.com/jfturcot/SimpleTimer
+//////////////////////////////////////////
 
-#ifndef LED_BUILTIN
-  #define LED_BUILTIN       25
-#endif
+char timeServer[]         = "time.nist.gov";  // NTP server
+unsigned int localPort    = 2390;             // local port to listen for UDP packets
 
-#ifndef LED_BLUE
-  #define LED_BLUE          10
-#endif
+const int NTP_PACKET_SIZE = 48;       // NTP timestamp is in the first 48 bytes of the message
+const int UDP_TIMEOUT     = 2000;     // timeout in miliseconds to wait for an UDP packet to arrive
 
-#ifndef LED_RED
-  #define LED_RED           11
-#endif
+byte packetBuffer[NTP_PACKET_SIZE];   // buffer to hold incoming and outgoing packets
 
-#define HW_TIMER_INTERVAL_US      10000L
+// A UDP instance to let us send and receive packets over UDP
+EthernetUDP Udp;
 
-volatile uint32_t startMillis = 0;
-
-// You can select MBED_RPI_PICO_Timer from 0 to 3
-
-// Init MBED_RPI_PICO_Timer
-MBED_RPI_PICO_Timer ITimer(0);
-
-// Init MBED_RPI_PICO_ISRTimer
-// Each MBED_RPI_PICO_ISRTimer can service 16 different ISR-based timers
-ISR_Timer MBED_RPI_PICO_ISRTimer;
-
-#define LED_TOGGLE_INTERVAL_MS        2000L
-
-// Never use Serial.print inside this mbed ISR. Will hang the system
-void TimerHandler(uint alarm_num)
+// send an NTP request to the time server at the given address
+void sendNTPpacket(char *ntpSrv)
 {
-  static bool toggle  = false;
-  static int timeRun  = 0;
+  // set all bytes in the buffer to 0
+  memset(packetBuffer, 0, NTP_PACKET_SIZE);
+  // Initialize values needed to form NTP request
+  // (see URL above for details on the packets)
 
-  //////////////////////////////////////////////////////////
-  // Always call this for MBED RP2040 before processing ISR
-  TIMER_ISR_START(alarm_num);
-  ///////////////////////////////////////////////////////////
+  packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+  packetBuffer[1] = 0;     // Stratum, or type of clock
+  packetBuffer[2] = 6;     // Polling Interval
+  packetBuffer[3] = 0xEC;  // Peer Clock Precision
+  // 8 bytes of zero for Root Delay & Root Dispersion
+  packetBuffer[12]  = 49;
+  packetBuffer[13]  = 0x4E;
+  packetBuffer[14]  = 49;
+  packetBuffer[15]  = 52;
 
-  MBED_RPI_PICO_ISRTimer.run();
+  // all NTP fields have been given values, now
+  // you can send a packet requesting a timestamp:
+  Udp.beginPacket(ntpSrv, 123); //NTP requests are to port 123
 
-  // Toggle LED every LED_TOGGLE_INTERVAL_MS = 2000ms = 2s
-  if (++timeRun == ((LED_TOGGLE_INTERVAL_MS * 1000) / HW_TIMER_INTERVAL_US) )
+  Udp.write(packetBuffer, NTP_PACKET_SIZE);
+
+  Udp.endPacket();
+}
+
+//////////////////////////////////////////
+
+// format and print a time_t value, with a time zone appended.
+void printDateTime(time_t t, const char *tz)
+{
+    char buf[32];
+    char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+    strcpy(m, monthShortStr(month(t)));
+    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+    Serial.println(buf);
+}
+
+void displayClock(void)
+{
+  time_t utc = now();
+
+  time_t local = myTZ->toLocal(utc, &tcr);
+  
+  Serial.println();
+  printDateTime(utc, "UTC");
+  printDateTime(local, tcr -> abbrev);
+  delay(10000);
+}
+
+void getNTPTime(void)
+{
+  static bool gotCurrentTime = false;
+  
+  // Just get the correct ime once
+  if (!gotCurrentTime)
   {
-    timeRun = 0;
+    sendNTPpacket(timeServer); // send an NTP packet to a time server
+    // wait to see if a reply is available
+    delay(1000);
 
-    //timer interrupt toggles pin LED_BUILTIN
-    digitalWrite(LED_BUILTIN, toggle);
-    toggle = !toggle;
+    if (Udp.parsePacket())
+    {
+      Serial.println(F("Packet received"));
+      // We've received a packet, read the data from it
+      Udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
+
+      //the timestamp starts at byte 40 of the received packet and is four bytes,
+      // or two words, long. First, esxtract the two words:
+
+      unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
+      unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
+      // combine the four bytes (two words) into a long integer
+      // this is NTP time (seconds since Jan 1 1900):
+      unsigned long secsSince1900 = highWord << 16 | lowWord;
+      Serial.print(F("Seconds since Jan 1 1900 = "));
+      Serial.println(secsSince1900);
+
+      // now convert NTP time into everyday time:
+      Serial.print(F("Unix time = "));
+      // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
+      const unsigned long seventyYears = 2208988800UL;
+      // subtract seventy years:
+      unsigned long epoch = secsSince1900 - seventyYears;
+
+      // Get the time_t from epoch
+      time_t epoch_t = epoch;
+
+      // set the system time to UTC
+      // warning: assumes that compileTime() returns US EDT
+      // adjust the following line accordingly if you're in another time zone
+      setTime(epoch_t);
+      
+      // print Unix time:
+      Serial.println(epoch);
+
+      // print the hour, minute and second:
+      Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
+      Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
+      Serial.print(':');
+
+      if (((epoch % 3600) / 60) < 10)
+      {
+        // In the first 10 minutes of each hour, we'll want a leading '0'
+        Serial.print('0');
+      }
+      Serial.print((epoch  % 3600) / 60); // print the minute (3600 equals secs per minute)
+      Serial.print(':');
+
+      if ((epoch % 60) < 10)
+      {
+        // In the first 10 seconds of each minute, we'll want a leading '0'
+        Serial.print('0');
+      }
+      Serial.println(epoch % 60); // print the second
+
+      gotCurrentTime = true;
+    }
+    else
+    {
+      // wait ten seconds before asking for the time again
+      delay(10000);
+    }
   }
-
-  ////////////////////////////////////////////////////////////
-  // Always call this for MBED RP2040 after processing ISR
-  TIMER_ISR_END(alarm_num);
-  ////////////////////////////////////////////////////////////
 }
 
-/////////////////////////////////////////////////
-
-#define NUMBER_ISR_TIMERS         16
-
-typedef void (*irqCallback)  ();
-
-/////////////////////////////////////////////////
-
-#define USE_COMPLEX_STRUCT      true
-
-#if USE_COMPLEX_STRUCT
-
-typedef struct
-{
-  irqCallback   irqCallbackFunc;
-  uint32_t      TimerInterval;
-  unsigned long deltaMillis;
-  unsigned long previousMillis;
-} ISRTimerData;
-
-// In NRF52, avoid doing something fancy in ISR, for example Serial.print()
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-
-void doingSomething(int index);
-
-#else
-
-volatile unsigned long deltaMillis    [NUMBER_ISR_TIMERS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-volatile unsigned long previousMillis [NUMBER_ISR_TIMERS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-// You can assign any interval for any timer here, in milliseconds
-uint32_t TimerInterval[NUMBER_ISR_TIMERS] =
-{
-  5000L,  10000L,  15000L,  20000L,  25000L,  30000L,  35000L,  40000L,
-  45000L, 50000L,  55000L,  60000L,  65000L,  70000L,  75000L,  80000L
-};
-
-void doingSomething(int index)
-{
-  unsigned long currentMillis  = millis();
-
-  deltaMillis[index]    = currentMillis - previousMillis[index];
-  previousMillis[index] = currentMillis;
-}
-
-#endif
-
-////////////////////////////////////
-// Shared
-////////////////////////////////////
-
-void doingSomething0()
-{
-  doingSomething(0);
-}
-
-void doingSomething1()
-{
-  doingSomething(1);
-}
-
-void doingSomething2()
-{
-  doingSomething(2);
-}
-
-void doingSomething3()
-{
-  doingSomething(3);
-}
-
-void doingSomething4()
-{
-  doingSomething(4);
-}
-
-void doingSomething5()
-{
-  doingSomething(5);
-}
-
-void doingSomething6()
-{
-  doingSomething(6);
-}
-
-void doingSomething7()
-{
-  doingSomething(7);
-}
-
-void doingSomething8()
-{
-  doingSomething(8);
-}
-
-void doingSomething9()
-{
-  doingSomething(9);
-}
-
-void doingSomething10()
-{
-  doingSomething(10);
-}
-
-void doingSomething11()
-{
-  doingSomething(11);
-}
-
-void doingSomething12()
-{
-  doingSomething(12);
-}
-
-void doingSomething13()
-{
-  doingSomething(13);
-}
-
-void doingSomething14()
-{
-  doingSomething(14);
-}
-
-void doingSomething15()
-{
-  doingSomething(15);
-}
-
-#if USE_COMPLEX_STRUCT
-
-ISRTimerData curISRTimerData[NUMBER_ISR_TIMERS] =
-{
-  //irqCallbackFunc, TimerInterval, deltaMillis, previousMillis
-  { doingSomething0,    5000L, 0, 0 },
-  { doingSomething1,   10000L, 0, 0 },
-  { doingSomething2,   15000L, 0, 0 },
-  { doingSomething3,   20000L, 0, 0 },
-  { doingSomething4,   25000L, 0, 0 },
-  { doingSomething5,   30000L, 0, 0 },
-  { doingSomething6,   35000L, 0, 0 },
-  { doingSomething7,   40000L, 0, 0 },
-  { doingSomething8,   45000L, 0, 0 },
-  { doingSomething9,   50000L, 0, 0 },
-  { doingSomething10,  55000L, 0, 0 },
-  { doingSomething11,  60000L, 0, 0 },
-  { doingSomething12,  65000L, 0, 0 },
-  { doingSomething13,  70000L, 0, 0 },
-  { doingSomething14,  75000L, 0, 0 },
-  { doingSomething15,  80000L, 0, 0 }
-};
-
-void doingSomething(int index)
-{
-  unsigned long currentMillis  = millis();
-
-  curISRTimerData[index].deltaMillis    = currentMillis - curISRTimerData[index].previousMillis;
-  curISRTimerData[index].previousMillis = currentMillis;
-}
-
-#else
-
-irqCallback irqCallbackFunc[NUMBER_ISR_TIMERS] =
-{
-  doingSomething0,  doingSomething1,  doingSomething2,  doingSomething3,
-  doingSomething4,  doingSomething5,  doingSomething6,  doingSomething7,
-  doingSomething8,  doingSomething9,  doingSomething10, doingSomething11,
-  doingSomething12, doingSomething13, doingSomething14, doingSomething15
-};
-
-#endif
-///////////////////////////////////////////
-
-#define SIMPLE_TIMER_MS        2000L
-
-// Init SimpleTimer
-SimpleTimer simpleTimer;
-
-// Here is software Timer, you can do somewhat fancy stuffs without many issues.
-// But always avoid
-// 1. Long delay() it just doing nothing and pain-without-gain wasting CPU power.Plan and design your code / strategy ahead
-// 2. Very long "do", "while", "for" loops without predetermined exit time.
-void simpleTimerDoingSomething2s()
-{
-  static unsigned long previousMillis = startMillis;
-
-  unsigned long currMillis = millis();
-
-  Serial.print(F("SimpleTimer : ")); Serial.print(SIMPLE_TIMER_MS / 1000);
-  Serial.print(F(", ms : ")); Serial.print(currMillis);
-  Serial.print(F(", Dms : ")); Serial.println(currMillis - previousMillis);
-
-  for (uint16_t i = 0; i < NUMBER_ISR_TIMERS; i++)
-  {
-#if USE_COMPLEX_STRUCT
-    Serial.print(F("Timer : ")); Serial.print(i);
-    Serial.print(F(", programmed : ")); Serial.print(curISRTimerData[i].TimerInterval);
-    Serial.print(F(", actual : ")); Serial.println(curISRTimerData[i].deltaMillis);
-#else
-    Serial.print(F("Timer : ")); Serial.print(i);
-    Serial.print(F(", programmed : ")); Serial.print(TimerInterval[i]);
-    Serial.print(F(", actual : ")); Serial.println(deltaMillis[i]);
-#endif
-  }
-
-  previousMillis = currMillis;
-}
+//////////////////////////////////////////
 
 void setup()
 {
-  pinMode(LED_BUILTIN, OUTPUT);
-
   Serial.begin(115200);
   while (!Serial);
 
-  delay(100);
+  delay(200);
 
-  Serial.print(F("\nStarting ISR_16_Timers_Array_Complex on ")); Serial.println(BOARD_NAME);
-  Serial.println(MBED_RPI_PICO_TIMER_INTERRUPT_VERSION);
-  Serial.println(TIMER_INTERRUPT_GENERIC_VERSION);
-
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_US, TimerHandler))
+  Serial.print(F("\nStart TZ_NTP_Clock_Ethernet on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+  
+#if defined(TIMEZONE_GENERIC_VERSION_MIN)
+  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
   {
-    startMillis = millis();
-    Serial.print(F("Starting ITimer OK, millis() = ")); Serial.println(startMillis);
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
   }
-  else
-    Serial.println(F("Can't set ITimer. Select another freq. or timer"));
-
-  startMillis = millis();
-
-  // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
-  // You can use up to 16 timer for each MBED_RPI_PICO_ISRTimer
-  for (uint16_t i = 0; i < NUMBER_ISR_TIMERS; i++)
-  {
-#if USE_COMPLEX_STRUCT
-    curISRTimerData[i].previousMillis = startMillis;
-    MBED_RPI_PICO_ISRTimer.setInterval(curISRTimerData[i].TimerInterval, curISRTimerData[i].irqCallbackFunc);
-#else
-    previousMillis[i] = millis();
-    MBED_RPI_PICO_ISRTimer.setInterval(TimerInterval[i], irqCallbackFunc[i]);
 #endif
+
+#if USE_ETHERNET_WRAPPER
+
+  EthernetInit();
+
+#else
+
+#if USE_ETHERNET
+  ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
+#elif USE_ETHERNET2
+  ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
+#elif USE_ETHERNET3
+  ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
+#elif USE_ETHERNET_LARGE
+  ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+#elif USE_ETHERNET_ESP8266
+  ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+#else
+  ET_LOGWARN(F("========================="));
+#endif
+
+  ET_LOGWARN(F("Default SPI pinout:"));
+  ET_LOGWARN1(F("MOSI:"), MOSI);
+  ET_LOGWARN1(F("MISO:"), MISO);
+  ET_LOGWARN1(F("SCK:"),  SCK);
+  ET_LOGWARN1(F("SS:"),   SS);
+  ET_LOGWARN(F("========================="));
+
+#if defined(ESP8266)
+  // For ESP8266, change for other boards if necessary
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   D2    // For ESP8266
+  #endif
+
+  ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
+
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // For ESP8266
+    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+    // Ethernet           0                 X            X            X            X        0
+    // Ethernet2          X                 X            X            X            X        0
+    // Ethernet3          X                 X            X            X            X        0
+    // EthernetLarge      X                 X            X            X            X        0
+    // Ethernet_ESP8266   0                 0            0            0            0        0
+    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    Ethernet.init (USE_THIS_SS_PIN);
+
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN);
+  
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
+#elif defined(ESP32)
+
+  // You can use Ethernet.init(pin) to configure the CS pin
+  //Ethernet.init(10);  // Most Arduino shields
+  //Ethernet.init(5);   // MKR ETH shield
+  //Ethernet.init(0);   // Teensy 2.0
+  //Ethernet.init(20);  // Teensy++ 2.0
+  //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
+  //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
+
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   22    // For ESP32
+  #endif
+
+  ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
+
+  // For other boards, to change if necessary
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
+    // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
+  
+    //Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN); 
+  
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
+#elif ETHERNET_USE_RPIPICO
+
+  pinMode(USE_THIS_SS_PIN, OUTPUT);
+  digitalWrite(USE_THIS_SS_PIN, HIGH);
+  
+  // ETHERNET_USE_RPIPICO, use default SS = 5 or 17
+  #ifndef USE_THIS_SS_PIN
+    #if defined(ARDUINO_ARCH_MBED)
+      #define USE_THIS_SS_PIN   5     // For Arduino Mbed core
+    #else  
+      #define USE_THIS_SS_PIN   17    // For E.Philhower core
+    #endif
+  #endif
+
+  ET_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
+
+  // For other boards, to change if necessary
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    // For RPI Pico using Arduino Mbed RP2040 core
+    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+    // For RPI Pico using E. Philhower RP2040 core
+    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+    // Default pin 5/17 to SS/CS
+  
+    //Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+    
+  #endif    //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  
+#else   //defined(ESP8266)
+  // unknown board, do nothing, use default SS = 10
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   10    // For other boards
+  #endif
+
+  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
+
+  // For other boards, to change if necessary
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+  
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN);
+    
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
+#endif    //defined(ESP8266)
+
+
+#endif  //USE_ETHERNET_WRAPPER
+
+
+  // start the ethernet connection and the server:
+  // Use DHCP dynamic IP and random mac
+  uint16_t index = millis() % NUMBER_OF_MAC;
+  // Use Static IP
+  //Ethernet.begin(mac[index], ip);
+  Ethernet.begin(mac[index]);
+
+  // Just info to know how to connect correctly
+  Serial.println(F("========================="));
+  Serial.println(F("Currently Used SPI pinout:"));
+  Serial.print(F("MOSI:"));
+  Serial.println(MOSI);
+  Serial.print(F("MISO:"));
+  Serial.println(MISO);
+  Serial.print(F("SCK:"));
+  Serial.println(SCK);
+  Serial.print(F("SS:"));
+  Serial.println(SS);
+#if USE_ETHERNET3
+  Serial.print(F("SPI_CS:"));
+  Serial.println(SPI_CS);
+#endif
+  Serial.println(F("========================="));
+
+  Serial.print(F("Using mac index = "));
+  Serial.println(index);
+
+  // you're connected now, so print out the data
+  Serial.print(F("You're connected to the network, IP = "));
+  Serial.println(Ethernet.localIP());
+
+#if (USING_INITIALIZED_TZ)
+
+  myTZ = new Timezone(myDST, mySTD);
+
+#else
+
+  // Can read this info from EEPROM, storage, etc
+  String tzName = "EDT/EST" ;
+
+  // Time zone rules can be set as below or dynamically built, say through a configuration
+  //  interface, or fetched from eeprom, flash etc.
+
+  if ( tzName == "EDT/EST" )
+  {
+    // America Eastern Time
+    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+  }
+  else if ( tzName == "CET/CEST" ) 
+  {
+    // central Europe
+    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
+    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
+  }
+  
+  else if ( tzName == "GMT/BST" ) 
+  {
+    // UK
+    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
+    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
   }
 
-  // You need this timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary.
-  simpleTimer.setInterval(SIMPLE_TIMER_MS, simpleTimerDoingSomething2s);
-}
+  myTZ = new Timezone();
+  myTZ->init( myDST, mySTD );
+  
+#endif
 
-#define BLOCKING_TIME_MS      10000L
+  myTZ->writeRules();
+
+  Udp.begin(localPort);
+}
 
 void loop()
 {
-  // This unadvised blocking task is used to demonstrate the blocking effects onto the execution and accuracy to Software timer
-  // You see the time elapse of MBED_RPI_PICO_ISRTimer still accurate, whereas very unaccurate for Software Timer
-  // The time elapse for 2000ms software timer now becomes 3000ms (BLOCKING_TIME_MS)
-  // While that of MBED_RPI_PICO_ISRTimer is still prefect.
-  delay(BLOCKING_TIME_MS);
-
-  // You need this Software timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary
-  // You don't need to and never call MBED_RPI_PICO_ISRTimer.run() here in the loop(). It's already handled by ISR timer.
-  simpleTimer.run();
+  getNTPTime();
+  displayClock();
 }
 ```
+
+---
+
+#### 2. File [defines.h](examples/Ethernet/TZ_NTP_Clock_Ethernet/defines.h)
+
+```cpp
+#ifndef defines_h
+#define defines_h
+
+#define DEBUG_ETHERNET_WEBSERVER_PORT       Serial
+#define TZ_DBG_PORT                         Serial
+
+// Debug Level from 0 to 4
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       3
+#define _NTP_LOGLEVEL_                      0
+#define _TZ_LOGLEVEL_                       1
+
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+#if defined(ETHERNET_USE_SAMD)
+#undef ETHERNET_USE_SAMD
+#endif
+#define ETHERNET_USE_SAMD      true
+#endif
+
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+#if defined(ETHERNET_USE_NRF528XX)
+#undef ETHERNET_USE_NRF528XX
+#endif
+#define ETHERNET_USE_NRF528XX      true
+#endif
+
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#if defined(ETHERNET_USE_SAM_DUE)
+#undef ETHERNET_USE_SAM_DUE
+#endif
+#define ETHERNET_USE_SAM_DUE      true
+#endif
+
+#if ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+  #if defined(ETHERNET_USE_RPIPICO)
+    #undef ETHERNET_USE_RPIPICO
+  #endif
+  #define ETHERNET_USE_RPIPICO      true
+#endif
+
+#if defined(ETHERNET_USE_SAMD)
+// For SAMD
+// Default pin 10 to SS/CS
+#define USE_THIS_SS_PIN       10
+
+#if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
+#define BOARD_TYPE      "SAMD Zero"
+#elif defined(ARDUINO_SAMD_MKR1000)
+#define BOARD_TYPE      "SAMD MKR1000"
+#elif defined(ARDUINO_SAMD_MKRWIFI1010)
+#define BOARD_TYPE      "SAMD MKRWIFI1010"
+#elif defined(ARDUINO_SAMD_NANO_33_IOT)
+#define BOARD_TYPE      "SAMD NANO_33_IOT"
+#elif defined(ARDUINO_SAMD_MKRFox1200)
+#define BOARD_TYPE      "SAMD MKRFox1200"
+#elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+#define BOARD_TYPE      "SAMD MKRWAN13X0"
+#elif defined(ARDUINO_SAMD_MKRGSM1400)
+#define BOARD_TYPE      "SAMD MKRGSM1400"
+#elif defined(ARDUINO_SAMD_MKRNB1500)
+#define BOARD_TYPE      "SAMD MKRNB1500"
+#elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+#define BOARD_TYPE      "SAMD MKRVIDOR4000"
+#elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+#define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
+#elif defined(ADAFRUIT_FEATHER_M0_EXPRESS)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_FEATHER_M0_EXPRESS"
+#elif defined(ADAFRUIT_METRO_M0_EXPRESS)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_METRO_M0_EXPRESS"
+#elif defined(ADAFRUIT_CIRCUITPLAYGROUND_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_CIRCUITPLAYGROUND_M0"
+#elif defined(ADAFRUIT_GEMMA_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_GEMMA_M0"
+#elif defined(ADAFRUIT_TRINKET_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_TRINKET_M0"
+#elif defined(ADAFRUIT_ITSYBITSY_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_ITSYBITSY_M0"
+#elif defined(ARDUINO_SAMD_HALLOWING_M0)
+#define BOARD_TYPE      "SAMD21 ARDUINO_SAMD_HALLOWING_M0"
+#elif defined(ADAFRUIT_METRO_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_EXPRESS"
+#elif defined(ADAFRUIT_GRAND_CENTRAL_M4)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_GRAND_CENTRAL_M4"
+#elif defined(ADAFRUIT_FEATHER_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_FEATHER_M4_EXPRESS"
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS"
+#define USE_THIS_SS_PIN       10
+#elif defined(ADAFRUIT_TRELLIS_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_TRELLIS_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYPORTAL)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL"
+#elif defined(ADAFRUIT_PYPORTAL_M4_TITANO)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL_M4_TITANO"
+#elif defined(ADAFRUIT_PYBADGE_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_M4_EXPRESS"
+#elif defined(ADAFRUIT_METRO_M4_AIRLIFT_LITE)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_AIRLIFT_LITE"
+#elif defined(ADAFRUIT_PYGAMER_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYBADGE_AIRLIFT_M4)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_AIRLIFT_M4"
+#elif defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_MONSTER_M4SK_EXPRESS"
+#elif defined(ADAFRUIT_HALLOWING_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_HALLOWING_M4_EXPRESS"
+#elif defined(SEEED_WIO_TERMINAL)
+#define BOARD_TYPE      "SAMD SEEED_WIO_TERMINAL"
+#elif defined(SEEED_FEMTO_M0)
+#define BOARD_TYPE      "SAMD SEEED_FEMTO_M0"
+#elif defined(SEEED_XIAO_M0)
+#define BOARD_TYPE      "SAMD SEEED_XIAO_M0"
+#ifdef USE_THIS_SS_PIN
+#undef USE_THIS_SS_PIN
+#endif
+#define USE_THIS_SS_PIN       A1
+#warning define SEEED_XIAO_M0 USE_THIS_SS_PIN == A1
+#elif defined(Wio_Lite_MG126)
+#define BOARD_TYPE      "SAMD SEEED Wio_Lite_MG126"
+#elif defined(WIO_GPS_BOARD)
+#define BOARD_TYPE      "SAMD SEEED WIO_GPS_BOARD"
+#elif defined(SEEEDUINO_ZERO)
+#define BOARD_TYPE      "SAMD SEEEDUINO_ZERO"
+#elif defined(SEEEDUINO_LORAWAN)
+#define BOARD_TYPE      "SAMD SEEEDUINO_LORAWAN"
+#elif defined(SEEED_GROVE_UI_WIRELESS)
+#define BOARD_TYPE      "SAMD SEEED_GROVE_UI_WIRELESS"
+#elif defined(__SAMD21E18A__)
+#define BOARD_TYPE      "SAMD21E18A"
+#elif defined(__SAMD21G18A__)
+#define BOARD_TYPE      "SAMD21G18A"
+#elif defined(__SAMD51G19A__)
+#define BOARD_TYPE      "SAMD51G19A"
+#elif defined(__SAMD51J19A__)
+#define BOARD_TYPE      "SAMD51J19A"
+#elif defined(__SAMD51J20A__)
+#define BOARD_TYPE      "SAMD51J20A"
+#elif defined(__SAM3X8E__)
+#define BOARD_TYPE      "SAM3X8E"
+#elif defined(__CPU_ARC__)
+#define BOARD_TYPE      "CPU_ARC"
+#elif defined(__SAMD51__)
+#define BOARD_TYPE      "SAMD51"
+#else
+#define BOARD_TYPE      "SAMD Unknown"
+#endif
+
+#elif (ETHERNET_USE_SAM_DUE)
+// Default pin 10 to SS/CS
+#define USE_THIS_SS_PIN       10
+#define BOARD_TYPE      "SAM DUE"
+
+#elif (ETHERNET_USE_NRF528XX)
+// Default pin 10 to SS/CS
+#define USE_THIS_SS_PIN       10
+
+#if defined(NRF52840_FEATHER)
+#define BOARD_TYPE      "NRF52840_FEATHER"
+#elif defined(NRF52832_FEATHER)
+#define BOARD_TYPE      "NRF52832_FEATHER"
+#elif defined(NRF52840_FEATHER_SENSE)
+#define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
+#elif defined(NRF52840_ITSYBITSY)
+#define BOARD_TYPE      "NRF52840_ITSYBITSY"
+#define USE_THIS_SS_PIN   10    // For other boards
+#elif defined(NRF52840_CIRCUITPLAY)
+#define BOARD_TYPE      "NRF52840_CIRCUITPLAY"
+#elif defined(NRF52840_CLUE)
+#define BOARD_TYPE      "NRF52840_CLUE"
+#elif defined(NRF52840_METRO)
+#define BOARD_TYPE      "NRF52840_METRO"
+#elif defined(NRF52840_PCA10056)
+#define BOARD_TYPE      "NRF52840_PCA10056"
+#elif defined(NINA_B302_ublox)
+#define BOARD_TYPE      "NINA_B302_ublox"
+#elif defined(NINA_B112_ublox)
+#define BOARD_TYPE      "NINA_B112_ublox"
+#elif defined(PARTICLE_XENON)
+#define BOARD_TYPE      "PARTICLE_XENON"
+#elif defined(ARDUINO_NRF52_ADAFRUIT)
+#define BOARD_TYPE      "ARDUINO_NRF52_ADAFRUIT"
+#else
+#define BOARD_TYPE      "nRF52 Unknown"
+#endif
+
+#elif ( defined(CORE_TEENSY) )
+// Default pin 10 to SS/CS
+#define USE_THIS_SS_PIN       10
+
+#if defined(__IMXRT1062__)
+// For Teensy 4.1/4.0
+#define BOARD_TYPE      "TEENSY 4.1/4.0"
+#elif defined(__MK66FX1M0__)
+#define BOARD_TYPE "Teensy 3.6"
+#elif defined(__MK64FX512__)
+#define BOARD_TYPE "Teensy 3.5"
+#elif defined(__MKL26Z64__)
+#define BOARD_TYPE "Teensy LC"
+#elif defined(__MK20DX256__)
+#define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
+#elif defined(__MK20DX128__)
+#define BOARD_TYPE "Teensy 3.0"
+#elif defined(__AVR_AT90USB1286__)
+#error Teensy 2.0++ not supported yet
+#elif defined(__AVR_ATmega32U4__)
+#error Teensy 2.0 not supported yet
+#else
+// For Other Boards
+#define BOARD_TYPE      "Unknown Teensy Board"
+#endif
+
+#elif ( defined(ESP8266) )
+  // For ESP8266
+  #warning Use ESP8266 architecture
+  #include <ESP8266mDNS.h>
+  #define ETHERNET_USE_ESP8266
+  #define BOARD_TYPE      "ESP8266"
+  
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false
+
+#elif ( defined(ESP32) )
+  // For ESP32
+  #warning Use ESP32 architecture
+  #define ETHERNET_USE_ESP32
+  #define BOARD_TYPE      "ESP32"
+  
+  #define W5500_RST_PORT   21
+
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false 
+
+#elif ETHERNET_USE_RPIPICO
+  
+  // Default pin 5 (in Mbed) or 17 to SS/CS
+  #if defined(ARDUINO_ARCH_MBED)
+    // For RPI Pico using Arduino Mbed RP2040 core
+    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+    
+    #define USE_THIS_SS_PIN       5
+
+    #if defined(BOARD_NAME)
+      #undef BOARD_NAME
+    #endif
+
+    #if defined(ARDUINO_RASPBERRY_PI_PICO) 
+      #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_TYPE      "MBED GENERIC_RP2040"
+    #else
+      #define BOARD_TYPE      "MBED Unknown RP2040"
+    #endif
+    
+  #else
+    // For RPI Pico using E. Philhower RP2040 core
+    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+    #define USE_THIS_SS_PIN       17
+
+  #endif
+    
+  #define SS_PIN_DEFAULT        USE_THIS_SS_PIN
+
+  // For RPI Pico
+  #warning Use RPI-Pico RP2040 architecture
+  
+#else
+// For Mega
+// Default pin 10 to SS/CS
+#define USE_THIS_SS_PIN       10
+#define BOARD_TYPE            "AVR Mega"
+#endif
+
+#ifndef BOARD_NAME
+#define BOARD_NAME    BOARD_TYPE
+#endif
+
+#include <SPI.h>
+
+//#define USE_ETHERNET_WRAPPER    true
+#define USE_ETHERNET_WRAPPER    false
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+
+//#define USE_UIP_ETHERNET   true
+#define USE_UIP_ETHERNET   false
+
+//#define USE_CUSTOM_ETHERNET     true
+
+// Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
+// In order to USE_ETHERNET_ESP8266
+#if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
+
+// To override the default CS/SS pin. Don't use unless you know exactly which pin to use
+// You can define here or customize for each board at same place with BOARD_TYPE
+// Check @ defined(SEEED_XIAO_M0)
+//#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
+
+// Only one if the following to be true
+#define USE_ETHERNET          false
+#define USE_ETHERNET2         false
+#define USE_ETHERNET3         false
+#define USE_ETHERNET_LARGE    true
+#define USE_ETHERNET_ESP8266  false
+#define USE_ETHERNET_ENC      false
+#define USE_CUSTOM_ETHERNET   false
+
+#if !USE_ETHERNET_WRAPPER
+
+#if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+#ifdef USE_CUSTOM_ETHERNET
+#undef USE_CUSTOM_ETHERNET
+#endif
+#define USE_CUSTOM_ETHERNET   false //true
+#endif
+
+#if USE_ETHERNET3
+#include "Ethernet3.h"
+#warning Using Ethernet3 lib
+#define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
+#elif USE_ETHERNET2
+#include "Ethernet2.h"
+#warning Using Ethernet2 lib
+#define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
+#elif USE_ETHERNET_LARGE
+#include "EthernetLarge.h"
+#warning Using EthernetLarge lib
+#define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
+#elif USE_ETHERNET_ESP8266
+#include "Ethernet_ESP8266.h"
+#warning Using Ethernet_ESP8266 lib
+#define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library"
+#elif USE_ETHERNET_ENC
+#include "EthernetENC.h"
+#warning Using EthernetENC lib
+#define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
+#elif USE_CUSTOM_ETHERNET
+//#include "Ethernet_XYZ.h"
+#include "EthernetENC.h"
+#warning Using Custom Ethernet library. You must include a library and initialize.
+#define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
+#else
+#define USE_ETHERNET          true
+#include "Ethernet.h"
+#warning Using Ethernet lib
+#define SHIELD_TYPE           "W5x00 using Ethernet Library"
+#endif
+
+// Ethernet_Shield_W5200, EtherCard, EtherSia not supported
+// Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
+// Otherwise, standard Ethernet library will be used for W5x00
+
+#endif    //  USE_ETHERNET_WRAPPER
+#elif USE_UIP_ETHERNET
+#include "UIPEthernet.h"
+#warning Using UIPEthernet library
+#define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
+#endif      // #if !USE_UIP_ETHERNET
+
+#include <EthernetWebServer.h>
+
+#ifndef SHIELD_TYPE
+#define SHIELD_TYPE     "Unknown Ethernet shield/library"
+#endif
+
+// Enter a MAC address and IP address for your controller below.
+#define NUMBER_OF_MAC      20
+
+byte mac[][NUMBER_OF_MAC] =
+{
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x02 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x03 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x04 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x05 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x06 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x07 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x08 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x09 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0A },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0B },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0C },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0D },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0E },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0F },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x10 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x11 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x12 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x13 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x14 },
+};
+
+// Select the IP address according to your local network
+IPAddress ip(192, 168, 2, 222);
+
+#endif    //defines_h
+```
+
 ---
 ---
 
 ### Debug Terminal Output Samples
 
-### 1. ISR_Timer_Complex_Ethernet on Arduino SAM DUE
+### 1. TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60
 
-The following is the sample terminal output when running example [ISR_Timer_Complex_Ethernet](examples/SAMDUE/ISR_Timer_Complex_Ethernet) on **Arduino SAM DUE** to demonstrate the accuracy of ISR Hardware Timer, **especially when system is very busy**.  The ISR timer is **programmed for 2s, is activated exactly after 2.000s !!!**
-
-While software timer, **programmed for 2s, is activated after 10.917s !!!**. Then in loop(), it's also activated **every 3s**.
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_Ethernet**](examples/Ethernet/TZ_NTP_WorldClock_Ethernet) on Adafruit NRF52840_FEATHER_EXPRESS with ENC28J60 using EthernetENC Library
 
 ```
-Starting ISR_Timer_Complex_Ethernet on SAM DUE
-SAMDUETimerInterrupt v1.2.0
-TimerInterrupt_Generic v1.8.0
-Using Timer(0) = TC0, channel = 0, IRQ = TC0_IRQn
-Timer(0), us = 50000.00
-ITimer attached to Timer(0)
-[5] Getting IP...
-[7] MAC: FE-8A-F1-EA-DE-82
+Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
+Timezone_Generic v1.8.0
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 25
+[ETHERNET_WEBSERVER] MISO: 24
+[ETHERNET_WEBSERVER] SCK: 26
+[ETHERNET_WEBSERVER] SS: 5
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+=========================
+Currently Used SPI pinout:
+MOSI:25
+MISO:24
+SCK:26
+SS:5
+=========================
+Using mac index = 9
+You're connected to the network, IP = 192.168.2.89
+Packet received
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
+
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+```
+
+---
+
+### 2. TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5500
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_Ethernet**](examples/Ethernet/TZ_NTP_WorldClock_Ethernet) on Adafruit NRF52840_FEATHER_EXPRESS with W5500 using EthernetLarge Library
+
+```
+Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
+Timezone_Generic v1.8.0
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 25
+[ETHERNET_WEBSERVER] MISO: 24
+[ETHERNET_WEBSERVER] SCK: 26
+[ETHERNET_WEBSERVER] SS: 5
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
+W5100::init: W5500, SSIZE =8192
+=========================
+Currently Used SPI pinout:
+MOSI:25
+MISO:24
+SCK:26
+SS:5
+=========================
+Using mac index = 0
+You're connected to the network, IP = 192.168.2.84
+Packet received
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
+
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+```
+
+---
+
+### 3. TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_WiFiNINA**](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA) on Arduino SAMD21 SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+
+```
+Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+Timezone_Generic v1.8.0
+Connecting to WPA SSID: HueNet1
+You're connected to the network, IP = 192.168.2.128
+Listening on port 2390
+Packet received
+Seconds since Jan 1 1900 = 3847367660
+Unix time = 1638378860
+The UTC time is 17:14:20
+
+04:14:20 Thu 02 Dec 2021 AEDT Sydney
+20:14:20 Wed 01 Dec 2021 MSK  Moscow
+18:14:20 Wed 01 Dec 2021 CET  Paris
+17:14:20 Wed 01 Dec 2021 GMT  London
+17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:20 Wed 01 Dec 2021 EST  New York
+11:14:20 Wed 01 Dec 2021 CST  Chicago
+10:14:20 Wed 01 Dec 2021 MST  Denver
+10:14:20 Wed 01 Dec 2021 MST  Phoenix
+09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+
+04:14:30 Thu 02 Dec 2021 AEDT Sydney
+20:14:30 Wed 01 Dec 2021 MSK  Moscow
+18:14:30 Wed 01 Dec 2021 CET  Paris
+17:14:30 Wed 01 Dec 2021 GMT  London
+17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
+12:14:30 Wed 01 Dec 2021 EST  New York
+11:14:30 Wed 01 Dec 2021 CST  Chicago
+10:14:30 Wed 01 Dec 2021 MST  Denver
+10:14:30 Wed 01 Dec 2021 MST  Phoenix
+09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+```
+
+---
+
+### 4. RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500
+
+The following is debug terminal output when running example [**RTC_STM32_Ethernet**](examples/Ethernet/RTC_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500 using Ethernet2 Library
+
+```
+Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
+Timezone_Generic v1.8.0
+DS323x_Generic v1.2.2
+[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 11
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 13
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+You're connected to the network, IP = 192.168.2.117
+Packet received
+Seconds since Jan 1 1900 = 3847367857
+Unix time = 1638379057
+The UTC time is 17:17:37
+
+17:17:37 Wed 01 Dec 2021 UTC
+12:17:37 Wed 01 Dec 2021 EST
+
+17:17:47 Wed 01 Dec 2021 UTC
+12:17:47 Wed 01 Dec 2021 EST
+```
+
+---
+
+### 5. RTC_Ethernet on Arduino SAM DUE with W5100
+
+The following is debug terminal output when running example [**RTC_Ethernet**](examples/Ethernet/RTC_Ethernet) on Arduino SAM DUE with W5100 using EthernetLarge Library
+
+```
+Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
+Timezone_Generic v1.8.0
+DS323x_Generic v1.2.2
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 75
+[ETHERNET_WEBSERVER] MISO: 74
+[ETHERNET_WEBSERVER] SCK: 76
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : SAM DUE , setCsPin: 10
 _pinCS = 0
 W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
 W5100::init: W5100, SSIZE =4096
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-[7728] IP:192.168.2.134
-[7728] 
-    ___  __          __
-   / _ )/ /_ _____  / /__
-  / _  / / // / _ \/  '_/
- /____/_/\_, /_//_/_/\_\
-        /___/ v0.6.1 on Arduino Due
+=========================
+Currently Used SPI pinout:
+MOSI:75
+MISO:74
+SCK:76
+SS:10
+=========================
+Using mac index = 5
+You're connected to the network, IP = 192.168.2.108
+============================
+22:24:33 Fri 31 Dec 2021 UTC
+17:24:33 Fri 31 Dec 2021 EST
 
-[7732] BlynkArduinoClient.connect: Connecting to account.duckdns.org:8080
-[7849] Ready (ping: 6ms).
-IP = 192.168.2.134
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 10917
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-11s: Delta ms = 11000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
+22:24:42 Fri 31 Dec 2021 UTC
+17:24:42 Fri 31 Dec 2021 EST
+
+22:24:52 Fri 31 Dec 2021 UTC
+17:24:52 Fri 31 Dec 2021 EST
+
+22:25:01 Fri 31 Dec 2021 UTC
+17:25:01 Fri 31 Dec 2021 EST
+
 
 ```
 
 ---
 
-### 2. ISR_Timer_Complex_Ethernet on Adafruit NRF52840_FEATHER EXPRESS
+### 6. RTC_Ethernet on Adafruit NRF52840_FEATHER with W5500
 
-The following is the sample terminal output when running example [ISR_Timer_Complex_Ethernet](examples/NRF52/ISR_Timer_Complex_Ethernet) on **Adafruit NRF52840_FEATHER EXPRESS using W5500 Ethernet* to demonstrate the accuracy of ISR Hardware Timer, **especially when system is very busy**.  The ISR timer is **programmed for 2s, is activated exactly after 2.000s !!!**
-
-While software timer, **programmed for 2s, is activated after 4.867s !!!**. Then in loop(), it's also activated **every 3s**.
+The following is debug terminal output when running example [**RTC_Ethernet**](examples/Ethernet/RTC_Ethernet) on Adafruit NRF52840_FEATHER with W5500 using EthernetLarge Library
 
 ```
-Starting ISR_Timer_Complex_Ethernet on NRF52840_FEATHER
-NRF52TimerInterrupt v1.3.0
-TimerInterrupt_Generic v1.8.0
-NRF52TimerInterrupt: F_CPU (MHz) = 64, Timer = NRF_TIMER2
-NRF52TimerInterrupt: _fre = 1000000.00, _count = 50000
-Starting  ITimer OK, millis() = 1419
-[1419] Getting IP...
-[1419] MAC: FE-BE-97-DA-C3-EA
+Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
+Timezone_Generic v1.8.0
+DS323x_Generic v1.2.2
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 25
+[ETHERNET_WEBSERVER] MISO: 24
+[ETHERNET_WEBSERVER] SCK: 26
+[ETHERNET_WEBSERVER] SS: 5
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
 _pinCS = 0
 W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
-W5100::init: W5500, SSIZE =4096
-[3104] IP:192.168.2.129
-[3104] 
-    ___  __          __
-   / _ )/ /_ _____  / /__
-  / _  / / // / _ \/  '_/
- /____/_/\_, /_//_/_/\_\
-        /___/ v0.6.1 on ARDUINO_NRF52_ADAFRUIT
+W5100::init: W5500, SSIZE =8192
+=========================
+Currently Used SPI pinout:
+MOSI:25
+MISO:24
+SCK:26
+SS:5
+=========================
+Using mac index = 3
+You're connected to the network, IP = 192.168.2.99
+Packet received
+Seconds since Jan 1 1900 = 3847367857
+Unix time = 1638379057
+The UTC time is 17:17:37
 
-[3106] BlynkArduinoClient.connect: Connecting to account.duckdns.org:8080
-[3218] Ready (ping: 8ms).
-IP = 192.168.2.129
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 4867
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-21s: Delta ms = 21000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-11s: Delta ms = 11000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-2s: Delta ms = 2000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
-2s: Delta ms = 2000
-5s: Delta ms = 5000
-11s: Delta ms = 11000
-blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3000
+22:25:11 Fri 31 Dec 2021 UTC
+17:25:11 Fri 31 Dec 2021 EST
+
+22:25:21 Fri 31 Dec 2021 UTC
+17:25:21 Fri 31 Dec 2021 EST
+
+22:25:30 Fri 31 Dec 2021 UTC
+17:25:30 Fri 31 Dec 2021 EST
 ```
 
 ---
 
-### 3. ISR_16_Timers_Array_Complex on Arduino SAMD21 SAMD_NANO_33_IOT
+### 7. tzTest on Adafruit NRF52840_FEATHER
 
-The following is the sample terminal output when running example [ISR_16_Timers_Array_Complex](examples/SAMD/ISR_16_Timers_Array_Complex) on **Arduino SAMD21 SAMD_NANO_33_IOT** to demonstrate the accuracy of ISR Hardware Timer, **especially when system is very busy or blocked**. The 16 independent ISR timers are **programmed to be activated repetitively after certain intervals, is activated exactly after that programmed interval !!!**
-
-In this example, 16 independent ISR Timers are used, yet utilized just one Hardware Timer. The Timer Intervals and Function Pointers are stored in arrays to facilitate the code modification.
-
+The following is debug terminal output when running example [**tzTest**](examples/tzTest) on NRF52840_FEATHER
 
 ```
-Starting ISR_16_Timers_Array_Complex on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.5.0
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 48 MHz
-Starting ITimer OK, millis() = 1180
-SimpleTimer : 2, ms : 11180, Dms : 10000
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 21184, Dms : 10004
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 31187, Dms : 10003
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 41190, Dms : 10003
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 51194, Dms : 10004
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 61197, Dms : 10003
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 71200, Dms : 10003
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 81203, Dms : 10003
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80000
-SimpleTimer : 2, ms : 91206, Dms : 10003
-```
+Starting TZTest on NRF52840_FEATHER
+Timezone_Generic v1.8.0
+-------- Apr-2018 time change --------
+13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
+13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
+13:59:59 Sat 31 Mar 2018 UTC = 02:59:59 Sun 01 Apr 2018 NZDT
+14:00:00 Sat 31 Mar 2018 UTC = 02:00:00 Sun 01 Apr 2018 NZST
+14:00:01 Sat 31 Mar 2018 UTC = 02:00:01 Sun 01 Apr 2018 NZST
+14:00:02 Sat 31 Mar 2018 UTC = 02:00:02 Sun 01 Apr 2018 NZST
 
+-------- Sep-2018 time change --------
+13:59:57 Sat 29 Sep 2018 UTC = 01:59:57 Sun 30 Sep 2018 NZST
+13:59:58 Sat 29 Sep 2018 UTC = 01:59:58 Sun 30 Sep 2018 NZST
+13:59:59 Sat 29 Sep 2018 UTC = 01:59:59 Sun 30 Sep 2018 NZST
+14:00:00 Sat 29 Sep 2018 UTC = 03:00:00 Sun 30 Sep 2018 NZDT
+14:00:01 Sat 29 Sep 2018 UTC = 03:00:01 Sun 30 Sep 2018 NZDT
+14:00:02 Sat 29 Sep 2018 UTC = 03:00:02 Sun 30 Sep 2018 NZDT
 
----
+-------- Apr-2019 time change --------
+13:59:57 Sat 06 Apr 2019 UTC = 02:59:57 Sun 07 Apr 2019 NZDT
+13:59:58 Sat 06 Apr 2019 UTC = 02:59:58 Sun 07 Apr 2019 NZDT
+13:59:59 Sat 06 Apr 2019 UTC = 02:59:59 Sun 07 Apr 2019 NZDT
+14:00:00 Sat 06 Apr 2019 UTC = 02:00:00 Sun 07 Apr 2019 NZST
+14:00:01 Sat 06 Apr 2019 UTC = 02:00:01 Sun 07 Apr 2019 NZST
+14:00:02 Sat 06 Apr 2019 UTC = 02:00:02 Sun 07 Apr 2019 NZST
 
-### 4. TimerInterruptTest on Teensy 4.1
+-------- Sep-2019 time change --------
+13:59:57 Sat 28 Sep 2019 UTC = 01:59:57 Sun 29 Sep 2019 NZST
+13:59:58 Sat 28 Sep 2019 UTC = 01:59:58 Sun 29 Sep 2019 NZST
+13:59:59 Sat 28 Sep 2019 UTC = 01:59:59 Sun 29 Sep 2019 NZST
+14:00:00 Sat 28 Sep 2019 UTC = 03:00:00 Sun 29 Sep 2019 NZDT
+14:00:01 Sat 28 Sep 2019 UTC = 03:00:01 Sun 29 Sep 2019 NZDT
+14:00:02 Sat 28 Sep 2019 UTC = 03:00:02 Sun 29 Sep 2019 NZDT
 
-The following is the sample terminal output when running example [**TimerInterruptTest**](examples/TEENSY/TimerInterruptTest) on **Teensy 4.1** to demonstrate how to start/stop and the accuracy of Hardware Timers.
+-------- Apr-2020 time change --------
+13:59:57 Sat 04 Apr 2020 UTC = 02:59:57 Sun 05 Apr 2020 NZDT
+13:59:58 Sat 04 Apr 2020 UTC = 02:59:58 Sun 05 Apr 2020 NZDT
+13:59:59 Sat 04 Apr 2020 UTC = 02:59:59 Sun 05 Apr 2020 NZDT
+14:00:00 Sat 04 Apr 2020 UTC = 02:00:00 Sun 05 Apr 2020 NZST
+14:00:01 Sat 04 Apr 2020 UTC = 02:00:01 Sun 05 Apr 2020 NZST
+14:00:02 Sat 04 Apr 2020 UTC = 02:00:02 Sun 05 Apr 2020 NZST
 
-```
-Starting TimerInterruptTest on Teensy 4.0/4.1
-Teensy_TimerInterrupt v1.2.0
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 600 MHz
-TEENSY_TIMER_1, F_BUS_ACTUAL (MHz) = 150, request interval = 30000, actual interval (us) = 29999
-Prescale = 7, _timerCount = 17578
-Starting  ITimer0 OK, millis() = 1128
-Stop ITimer0, millis() = 5001
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-Start ITimer0, millis() = 10002
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-TeensyTimerInterrupt:resumeTimer TEENSY_TIMER_1
-Stop ITimer0, millis() = 15003
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-Start ITimer0, millis() = 20004
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-TeensyTimerInterrupt:resumeTimer TEENSY_TIMER_1
-Stop ITimer0, millis() = 25005
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-Start ITimer0, millis() = 30006
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-TeensyTimerInterrupt:resumeTimer TEENSY_TIMER_1
-Stop ITimer0, millis() = 35007
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-Start ITimer0, millis() = 40008
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-TeensyTimerInterrupt:resumeTimer TEENSY_TIMER_1
-Stop ITimer0, millis() = 45009
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-Start ITimer0, millis() = 50010
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
-TeensyTimerInterrupt:resumeTimer TEENSY_TIMER_1
-Stop ITimer0, millis() = 55011
-TeensyTimerInterrupt:stopTimer TEENSY_TIMER_1
+-------- Sep-2020 time change --------
+13:59:57 Sat 26 Sep 2020 UTC = 01:59:57 Sun 27 Sep 2020 NZST
+13:59:58 Sat 26 Sep 2020 UTC = 01:59:58 Sun 27 Sep 2020 NZST
+13:59:59 Sat 26 Sep 2020 UTC = 01:59:59 Sun 27 Sep 2020 NZST
+14:00:00 Sat 26 Sep 2020 UTC = 03:00:00 Sun 27 Sep 2020 NZDT
+14:00:01 Sat 26 Sep 2020 UTC = 03:00:01 Sun 27 Sep 2020 NZDT
+14:00:02 Sat 26 Sep 2020 UTC = 03:00:02 Sun 27 Sep 2020 NZDT
 
+-------- Mar-2018 time change --------
+06:59:57 Sun 11 Mar 2018 UTC = 01:59:57 Sun 11 Mar 2018 EST
+06:59:58 Sun 11 Mar 2018 UTC = 01:59:58 Sun 11 Mar 2018 EST
+06:59:59 Sun 11 Mar 2018 UTC = 01:59:59 Sun 11 Mar 2018 EST
+07:00:00 Sun 11 Mar 2018 UTC = 03:00:00 Sun 11 Mar 2018 EDT
+07:00:01 Sun 11 Mar 2018 UTC = 03:00:01 Sun 11 Mar 2018 EDT
+07:00:02 Sun 11 Mar 2018 UTC = 03:00:02 Sun 11 Mar 2018 EDT
+
+-------- Nov-2018 time change --------
+05:59:57 Sun 04 Nov 2018 UTC = 01:59:57 Sun 04 Nov 2018 EDT
+05:59:58 Sun 04 Nov 2018 UTC = 01:59:58 Sun 04 Nov 2018 EDT
+05:59:59 Sun 04 Nov 2018 UTC = 01:59:59 Sun 04 Nov 2018 EDT
+06:00:00 Sun 04 Nov 2018 UTC = 01:00:00 Sun 04 Nov 2018 EST
+06:00:01 Sun 04 Nov 2018 UTC = 01:00:01 Sun 04 Nov 2018 EST
+06:00:02 Sun 04 Nov 2018 UTC = 01:00:02 Sun 04 Nov 2018 EST
+
+-------- Mar-2019 time change --------
+06:59:57 Sun 10 Mar 2019 UTC = 01:59:57 Sun 10 Mar 2019 EST
+06:59:58 Sun 10 Mar 2019 UTC = 01:59:58 Sun 10 Mar 2019 EST
+06:59:59 Sun 10 Mar 2019 UTC = 01:59:59 Sun 10 Mar 2019 EST
+07:00:00 Sun 10 Mar 2019 UTC = 03:00:00 Sun 10 Mar 2019 EDT
+07:00:01 Sun 10 Mar 2019 UTC = 03:00:01 Sun 10 Mar 2019 EDT
+07:00:02 Sun 10 Mar 2019 UTC = 03:00:02 Sun 10 Mar 2019 EDT
+
+-------- Nov-2019 time change --------
+05:59:57 Sun 03 Nov 2019 UTC = 01:59:57 Sun 03 Nov 2019 EDT
+05:59:58 Sun 03 Nov 2019 UTC = 01:59:58 Sun 03 Nov 2019 EDT
+05:59:59 Sun 03 Nov 2019 UTC = 01:59:59 Sun 03 Nov 2019 EDT
+06:00:00 Sun 03 Nov 2019 UTC = 01:00:00 Sun 03 Nov 2019 EST
+06:00:01 Sun 03 Nov 2019 UTC = 01:00:01 Sun 03 Nov 2019 EST
+06:00:02 Sun 03 Nov 2019 UTC = 01:00:02 Sun 03 Nov 2019 EST
+
+-------- Mar-2020 time change --------
+06:59:57 Sun 08 Mar 2020 UTC = 01:59:57 Sun 08 Mar 2020 EST
+06:59:58 Sun 08 Mar 2020 UTC = 01:59:58 Sun 08 Mar 2020 EST
+06:59:59 Sun 08 Mar 2020 UTC = 01:59:59 Sun 08 Mar 2020 EST
+07:00:00 Sun 08 Mar 2020 UTC = 03:00:00 Sun 08 Mar 2020 EDT
+07:00:01 Sun 08 Mar 2020 UTC = 03:00:01 Sun 08 Mar 2020 EDT
+07:00:02 Sun 08 Mar 2020 UTC = 03:00:02 Sun 08 Mar 2020 EDT
+
+-------- Nov-2020 time change --------
+05:59:57 Sun 01 Nov 2020 UTC = 01:59:57 Sun 01 Nov 2020 EDT
+05:59:58 Sun 01 Nov 2020 UTC = 01:59:58 Sun 01 Nov 2020 EDT
+05:59:59 Sun 01 Nov 2020 UTC = 01:59:59 Sun 01 Nov 2020 EDT
+06:00:00 Sun 01 Nov 2020 UTC = 01:00:00 Sun 01 Nov 2020 EST
+06:00:01 Sun 01 Nov 2020 UTC = 01:00:01 Sun 01 Nov 2020 EST
+06:00:02 Sun 01 Nov 2020 UTC = 01:00:02 Sun 01 Nov 2020 EST
 ```
 
 ---
 
-### 5. ISR_16_Timers_Array_Complex on ESP32_DEV
+### 8. WriteRules on Adafruit NRF52840_FEATHER using LittleFS
 
-The following is the sample terminal output when running example [ISR_16_Timers_Array_Complex](examples/ESP32/ISR_16_Timers_Array_Complex) on **ESP32_DEV** to demonstrate the accuracy of ISR Hardware Timer.
-
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on NRF52840_FEATHER using **LittleFS**
 
 ```
-Starting ISR_16_Timers_Array_Complex on ESP32_DEV
-ESP32_New_TimerInterrupt v1.0.1
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 240 MHz
-Starting ITimer OK, millis() = 2045
-SimpleTimer : 2, ms : 12044, Dms : 9999
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 0
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 22097, Dms : 10053
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 32160, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 42223, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 52286, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 62349, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 72412, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 82475, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80000
-SimpleTimer : 2, ms : 92538, Dms : 10063
+Start WriteRules on NRF52840_FEATHER
+Timezone_Generic v1.8.0
+[TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
+[TZ] Saving to TZ_file OK
+WriteRules done
+[TZ] Reading m_dst & m_std from TZ_file : /timezone.dat , data offset = 0
+[TZ] Reading from TZ_file OK
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
 ```
 
 ---
 
-### 6. ISR_16_Timers_Array_Complex on ESP8266_NODEMCU_ESP12E
+### 9. WriteRules on SAMD_NANO_33_IOT using FlashStorage_SAMD
 
-The following is the sample terminal output when running example [ISR_16_Timers_Array_Complex](examples/ESP8266/ISR_16_Timers_Array_Complex) on **ESP8266_NODEMCU_ESP12E** to demonstrate of ISR Hardware Timer, especially when system is very busy or blocked. The 16 independent ISR timers are programmed to be activated repetitively after certain intervals, is activated exactly after that programmed interval !!!
-
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on Arduino SAMD21 SAMD_NANO_33_IOT using **FlashStorage_SAMD**
 
 ```
-Starting ISR_16_Timers_Array_Complex on ESP8266_NODEMCU_ESP12E
-ESP8266TimerInterrupt v1.4.1
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 160 MHz
-Starting ITimer OK, millis() = 177
-SimpleTimer : 2, ms : 10179, Dms : 10000
-Timer : 0, programmed : 5000, actual : 5008
-Timer : 1, programmed : 10000, actual : 0
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 20232, Dms : 10053
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15008
-Timer : 3, programmed : 20000, actual : 20008
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 30286, Dms : 10054
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20008
-Timer : 4, programmed : 25000, actual : 25008
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 40341, Dms : 10055
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25008
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35008
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 50396, Dms : 10055
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35008
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45008
-Timer : 9, programmed : 50000, actual : 50008
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 60452, Dms : 10056
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35008
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45008
-Timer : 9, programmed : 50000, actual : 50008
-Timer : 10, programmed : 55000, actual : 55008
-Timer : 11, programmed : 60000, actual : 60008
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 70509, Dms : 10057
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45008
-Timer : 9, programmed : 50000, actual : 50008
-Timer : 10, programmed : 55000, actual : 55008
-Timer : 11, programmed : 60000, actual : 60008
-Timer : 12, programmed : 65000, actual : 65008
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 80566, Dms : 10057
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45008
-Timer : 9, programmed : 50000, actual : 50008
-Timer : 10, programmed : 55000, actual : 55008
-Timer : 11, programmed : 60000, actual : 60008
-Timer : 12, programmed : 65000, actual : 65008
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 75008
-Timer : 15, programmed : 80000, actual : 80008
+Start WriteRules on SAMD_NANO_33_IOT
+Timezone_Generic v1.8.0
+WriteRules done
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
 ```
 
 ---
 
-### 7. ISR_16_Timers_Array_Complex on STM32F7 Nucleo-144 F767ZI
+### 10. WriteRules on STM32F7 Nucleo-144 NUCLEO_F767ZI using EEPROM
 
-The following is the sample terminal output when running example [ISR_16_Timers_Array_Complex](examples/STM32/ISR_16_Timers_Array_Complex) on **STM32F7 Nucleo-144 F767ZI** to demonstrate of ISR Hardware Timer, especially when system is very busy or blocked. The 16 independent ISR timers are programmed to be activated repetitively after certain intervals, is activated exactly after that programmed interval !!!
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on STM32F7 Nucleo-144 NUCLEO_F767ZI using **EEPROM**
 
 ```
-Starting ISR_16_Timers_Array_Complex on NUCLEO_F767ZI
-STM32_TimerInterrupt v1.2.1
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 216 MHz
-Starting ITimer OK, millis() = 105
-SimpleTimer : 2, ms : 10110, Dms : 10005
-Timer : 0, programmed : 5000, actual : 5010
-Timer : 1, programmed : 10000, actual : 10010
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 20169, Dms : 10059
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15010
-Timer : 3, programmed : 20000, actual : 20010
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 30230, Dms : 10061
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20010
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30010
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 40293, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30010
-Timer : 6, programmed : 35000, actual : 35010
-Timer : 7, programmed : 40000, actual : 40010
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 50357, Dms : 10064
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30010
-Timer : 6, programmed : 35000, actual : 35010
-Timer : 7, programmed : 40000, actual : 40010
-Timer : 8, programmed : 45000, actual : 45010
-Timer : 9, programmed : 50000, actual : 50010
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 60421, Dms : 10064
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35010
-Timer : 7, programmed : 40000, actual : 40010
-Timer : 8, programmed : 45000, actual : 45010
-Timer : 9, programmed : 50000, actual : 50010
-Timer : 10, programmed : 55000, actual : 55010
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 70484, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40010
-Timer : 8, programmed : 45000, actual : 45010
-Timer : 9, programmed : 50000, actual : 50010
-Timer : 10, programmed : 55000, actual : 55010
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65010
-Timer : 13, programmed : 70000, actual : 70010
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 80552, Dms : 10068
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45010
-Timer : 9, programmed : 50000, actual : 50010
-Timer : 10, programmed : 55000, actual : 55010
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65010
-Timer : 13, programmed : 70000, actual : 70010
-Timer : 14, programmed : 75000, actual : 75010
-Timer : 15, programmed : 80000, actual : 80010
-SimpleTimer : 2, ms : 90618, Dms : 10066
+Start WriteRules on NUCLEO_F767ZI
+Timezone_Generic v1.8.0
+[TZ] Write to EEPROM, size =  16384 , offset =  0
+WriteRules done
+[TZ] Read from EEPROM, size =  16384 , offset =  0
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
 ```
 
 ---
 
-### 8. TimerInterruptTest on STM32F7 Nucleo-144 F767ZI
+### 11. WriteRules on Arduino SAM DUE using dueFlashStorage
 
-The following is the sample terminal output when running example [**TimerInterruptTest**](examples/STM32/TimerInterruptTest) on **STM32F7 Nucleo-144 F767ZI** to demonstrate how to start/stop Hardware Timers.
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on Arduino SAM DUE using **dueFlashStorage**
 
 ```
-Starting TimerInterruptTest on NUCLEO_F767ZI
-STM32_TimerInterrupt v1.2.1
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 216 MHz
-STM32TimerInterrupt: Timer Input Freq (Hz) = 216000000, _fre = 1000000.00, _count = 1000000
-Starting  ITimer0 OK, millis() = 108
-STM32TimerInterrupt: Timer Input Freq (Hz) = 108000000, _fre = 1000000.00, _count = 3000000
-Starting  ITimer1 OK, millis() = 119
-Stop ITimer0, millis() = 5001
-Start ITimer0, millis() = 10002
-Stop ITimer1, millis() = 15001
-Stop ITimer0, millis() = 15003
-Start ITimer0, millis() = 20004
-Stop ITimer0, millis() = 25005
-Start ITimer1, millis() = 30002
-Start ITimer0, millis() = 30006
-Stop ITimer0, millis() = 35007
-Start ITimer0, millis() = 40008
-Stop ITimer1, millis() = 45003
-Stop ITimer0, millis() = 45009
-Start ITimer0, millis() = 50010
-Stop ITimer0, millis() = 55011
-Start ITimer1, millis() = 60004
-Start ITimer0, millis() = 60012
-Stop ITimer0, millis() = 65013
-Start ITimer0, millis() = 70014
-Stop ITimer1, millis() = 75005
-Stop ITimer0, millis() = 75015
-Start ITimer0, millis() = 80016
-Stop ITimer0, millis() = 85017
-Start ITimer1, millis() = 90006
-Start ITimer0, millis() = 90018
-Stop ITimer0, millis() = 95019
-Start ITimer0, millis() = 100020
-Stop ITimer1, millis() = 105007
-Stop ITimer0, millis() = 105021
-Start ITimer0, millis() = 110022
-Stop ITimer0, millis() = 115023
-Start ITimer1, millis() = 120008
-Start ITimer0, millis() = 120024
-Stop ITimer0, millis() = 125025
-Start ITimer0, millis() = 130026
-Stop ITimer1, millis() = 135009
-Stop ITimer0, millis() = 135027
-Start ITimer0, millis() = 140028
-
+Start WriteRules
+Timezone_Generic v1.8.0
+[TZ] Writing to dueFlashStorage OK
+WriteRules done
+[TZ] Reading from dueFlashStorage OK
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
 ```
 
 ---
 
-### 9. ISR_16_Timers_Array_Complex on Nano 33 BLE
+### 12. WriteRules on ESP32_DEV using new ESP32 LittleFS
 
-The following is the sample terminal output when running example [ISR_16_Timers_Array_Complex](examples/NANO33BLE/ISR_16_Timers_Array_Complex)  on **Nano 33 BLE** to demonstrate the accuracy of ISR Hardware Timer, **especially when system is very busy**.  The ISR timer is **programmed for 2s, is activated exactly after 2.000s !!!**
-
-While software timer, **programmed for 2s, is activated after more than 3.000s in loop().
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on ESP32_DEV using new **ESP32 LittleFS**
 
 ```
-Starting ISR_16_Timers_Array_Complex on Nano 33 BLE
-NRF52_MBED_TimerInterrupt v1.3.0
-TimerInterrupt_Generic v1.8.0
-Starting ITimer OK, millis() = 810
-SimpleTimer : 2, ms : 3810, Dms : 3000
-Timer : 0, programmed : 5000, actual : 0
-Timer : 1, programmed : 10000, actual : 0
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 6822, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5006
-Timer : 1, programmed : 10000, actual : 0
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 9834, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5006
-Timer : 1, programmed : 10000, actual : 0
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 12845, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4995
-Timer : 1, programmed : 10000, actual : 10001
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 15857, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5006
-Timer : 1, programmed : 10000, actual : 10001
-Timer : 2, programmed : 15000, actual : 15007
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 18868, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5006
-Timer : 1, programmed : 10000, actual : 10001
-Timer : 2, programmed : 15000, actual : 15007
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 21880, Dms : 3012
-Timer : 0, programmed : 5000, actual : 4997
-Timer : 1, programmed : 10000, actual : 10003
-Timer : 2, programmed : 15000, actual : 15007
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 24892, Dms : 3012
-Timer : 0, programmed : 5000, actual : 4997
-Timer : 1, programmed : 10000, actual : 10003
-Timer : 2, programmed : 15000, actual : 15007
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 27903, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5006
-Timer : 1, programmed : 10000, actual : 10003
-Timer : 2, programmed : 15000, actual : 15007
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 30914, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4992
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14995
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 33926, Dms : 3012
-Timer : 0, programmed : 5000, actual : 4992
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14995
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 36938, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14995
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 39950, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14995
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 42961, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 14995
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 45972, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4993
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 14999
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 48983, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4993
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 14999
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 25010
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 51994, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9996
-Timer : 2, programmed : 15000, actual : 14999
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 55006, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9996
-Timer : 2, programmed : 15000, actual : 14999
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 58017, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5002
-Timer : 1, programmed : 10000, actual : 9996
-Timer : 2, programmed : 15000, actual : 14999
-Timer : 3, programmed : 20000, actual : 20004
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30002
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 61029, Dms : 3012
-Timer : 0, programmed : 5000, actual : 5004
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 15009
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 64040, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5004
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 15009
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 67051, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4995
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 15009
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 70062, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4995
-Timer : 1, programmed : 10000, actual : 10006
-Timer : 2, programmed : 15000, actual : 15009
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35005
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 73073, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 15009
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24994
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35003
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 76085, Dms : 3012
-Timer : 0, programmed : 5000, actual : 4994
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14992
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24998
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35003
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 75002
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 79096, Dms : 3011
-Timer : 0, programmed : 5000, actual : 4994
-Timer : 1, programmed : 10000, actual : 9998
-Timer : 2, programmed : 15000, actual : 14992
-Timer : 3, programmed : 20000, actual : 20002
-Timer : 4, programmed : 25000, actual : 24998
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35003
-Timer : 7, programmed : 40000, actual : 40008
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 75002
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 82107, Dms : 3011
-Timer : 0, programmed : 5000, actual : 5003
-Timer : 1, programmed : 10000, actual : 9997
-Timer : 2, programmed : 15000, actual : 14992
-Timer : 3, programmed : 20000, actual : 19995
-Timer : 4, programmed : 25000, actual : 24998
-Timer : 5, programmed : 30000, actual : 30008
-Timer : 6, programmed : 35000, actual : 35003
-Timer : 7, programmed : 40000, actual : 39997
-Timer : 8, programmed : 45000, actual : 45001
-Timer : 9, programmed : 50000, actual : 50004
-Timer : 10, programmed : 55000, actual : 55006
-Timer : 11, programmed : 60000, actual : 60010
-Timer : 12, programmed : 65000, actual : 65005
-Timer : 13, programmed : 70000, actual : 70008
-Timer : 14, programmed : 75000, actual : 75002
-Timer : 15, programmed : 80000, actual : 80005
-SimpleTimer : 2, ms : 85118, Dms : 3011
+Start WriteRules on ESP32_DEV
+Timezone_Generic v1.8.0
+[TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
+[TZ] Saving to TZ_file OK
+WriteRules done
+[TZ] Reading m_dst & m_std from TZ_file : /timezone.dat , data offset = 0
+[TZ] Reading from TZ_file OK
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
+```
 
+---
+
+### 13. WriteRules on ESP8266_NODEMCU using LittleFS
+
+The following is debug terminal output when running example [**WriteRules**](examples/WriteRules) on ESP8266_NODEMCU using **LittleFS**
+
+```
+Start WriteRules on ESP8266_NODEMCU
+Timezone_Generic v1.8.0
+[TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
+[TZ] Saving to TZ_file OK
+WriteRules done
+[TZ] Reading m_dst & m_std from TZ_file : /timezone.dat , data offset = 0
+[TZ] Reading from TZ_file OK
+readRules done
+[TZ] DST rule
+[TZ] abbrev : EDT , week : 2
+[TZ] dow : 1 , month : 3
+[TZ] hour : 2 , offset : -240
+[TZ] DST rule
+[TZ] abbrev : EST , week : 1
+[TZ] dow : 1 , month : 11
+[TZ] hour : 2 , offset : -300
+```
+
+---
+
+### 14. BI_RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A
+
+The following is debug terminal output when running example [**BI_RTC_STM32_Ethernet**](examples/Ethernet/BI_RTC_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A using STM32Ethernet Library to demonstrate the usage of STM32 built-in RTC
+
+```
+Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
+Timezone_Generic v1.8.0
+[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 11
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 13
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+You're connected to the network, IP = 192.168.2.97
+Packet received
+Seconds since Jan 1 1900 = 3812898366
+Unix time = 1603909566
+
+Updating Time for STM32 RTC
+The UTC time is 22:26:47
+============================
+22:26:47 Fri 31 Dec 2021 UTC
+17:26:47 Fri 31 Dec 2021 EST
+============================
+22:26:57 Fri 31 Dec 2021 UTC
+17:26:57 Fri 31 Dec 2021 EST
+============================
+22:27:06 Fri 31 Dec 2021 UTC
+17:27:06 Fri 31 Dec 2021 EST
+============================
 ```
 
 
 ---
 
-### 10. ISR_16_Timers_Array_Complex on Arduino megaAVR Nano Every to show accuracy difference.
+### 15. BI_RTC_Alarm_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A
 
-
-### 10.1. TCB Clock Frequency 16MHz for highest accuracy
-
+The following is debug terminal output when running example [**BI_RTC_Alarm_STM32_Ethernet**](examples/Ethernet/BI_RTC_Alarm_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with LAN8742A using STM32Ethernet Library to demonstrate the usage of STM32 built-in RTC Alarm function
 
 ```
-Starting ISR_16_Timers_Array_Complex on megaAVR Nano Every
-megaAVR_TimerInterrupt v1.4.0
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 16 MHz
-TCB Clock Frequency = 16MHz for highest accuracy
-[TISR] TCB 1
-[TISR] ==================
-[TISR] Init, Timer = 1
-[TISR] CTRLB   = 0
-[TISR] CCMP    = 65535
-[TISR] INTCTRL = 0
-[TISR] CTRLA   = 1
-[TISR] ==================
-[TISR] Frequency = 200.00 , CLK_TCB_FREQ = 16000000
-[TISR] setFrequency: _CCMPValueRemaining =  80000
-Starting  ITimer1 OK, millis() = 15
-SimpleTimer : 2, ms : 10016, Dms : 10016
-Timer : 0, programmed : 5000, actual : 5018
-Timer : 1, programmed : 10000, actual : 10018
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 20075, Dms : 10059
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10001
-Timer : 2, programmed : 15000, actual : 15019
-Timer : 3, programmed : 20000, actual : 20019
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 30135, Dms : 10060
-Timer : 0, programmed : 5000, actual : 5000   <========== Very accurate @ clock 16MHz
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20019
-Timer : 4, programmed : 25000, actual : 25019
-Timer : 5, programmed : 30000, actual : 30019
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 40195, Dms : 10060
-...
-Timer : 0, programmed : 5000, actual : 4996
-Timer : 1, programmed : 10000, actual : 9996
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20001
-Timer : 4, programmed : 25000, actual : 25001
-Timer : 5, programmed : 30000, actual : 30001
-Timer : 6, programmed : 35000, actual : 34997
-Timer : 7, programmed : 40000, actual : 40019
-Timer : 8, programmed : 45000, actual : 45020
-Timer : 9, programmed : 50000, actual : 50020
-Timer : 10, programmed : 55000, actual : 55020
-Timer : 11, programmed : 60000, actual : 60020
-Timer : 12, programmed : 65000, actual : 65020
-Timer : 13, programmed : 70000, actual : 70016
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 80442, Dms : 10063
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 14996
-Timer : 3, programmed : 20000, actual : 19996
-Timer : 4, programmed : 25000, actual : 24996
-Timer : 5, programmed : 30000, actual : 30001
-Timer : 6, programmed : 35000, actual : 34997
-Timer : 7, programmed : 40000, actual : 39997
-Timer : 8, programmed : 45000, actual : 45020
-Timer : 9, programmed : 50000, actual : 50020
-Timer : 10, programmed : 55000, actual : 55020
-Timer : 11, programmed : 60000, actual : 60020
-Timer : 12, programmed : 65000, actual : 65020
-Timer : 13, programmed : 70000, actual : 70016
-Timer : 14, programmed : 75000, actual : 75016
-Timer : 15, programmed : 80000, actual : 80016
-SimpleTimer : 2, ms : 90506, Dms : 10064
+Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
+Timezone_Generic v1.8.0
+[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 11
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 13
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+You're connected to the network, IP = 192.168.2.96
+Packet received
+Seconds since Jan 1 1900 = 3812900198
+Unix time = 1603911398
 
+Updating Time for STM32 RTC
+=======RTC ALARM SET========
+18:57:08 Wed 01 Dec 2021 UTC
+14:57:08 Wed 01 Dec 2021 EDT
+============================
+The UTC time is 18:56:38
+============================
+18:56:38 Wed 01 Dec 2021 UTC
+14:56:38 Wed 01 Dec 2021 EDT
+============================
+18:56:47 Wed 01 Dec 2021 UTC
+14:56:47 Wed 01 Dec 2021 EDT
+============================
+18:56:56 Wed 01 Dec 2021 UTC
+14:56:56 Wed 01 Dec 2021 EDT
+============================
+18:57:05 Wed 01 Dec 2021 UTC
+14:57:05 Wed 01 Dec 2021 EDT
+*****RTC ALARM ACTIVATED*****
+*****RTC ALARM ACTIVATED*****
+============================
+18:57:15 Wed 01 Dec 2021 UTC
+14:57:15 Wed 01 Dec 2021 EDT
 ```
 
 ---
 
-### 10.2. TCB Clock Frequency 8MHz for very high accuracy
+### 16. TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_WiFiNINA**](examples/WiFiNINA/TZ_NTP_WorldClock_WiFiNINA) on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
 
 ```
+Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
+Timezone_Generic v1.8.0
+Connecting to WPA SSID: HueNet1
+You're connected to the network, IP = 192.168.2.153
+Listening on port 2390
+Packet received
+Seconds since Jan 1 1900 = 3831822093
+Unix time = 1622833293
+The UTC time is 19:01:33
 
-Starting ISR_16_Timers_Array_Complex on megaAVR Nano Every
-megaAVR_TimerInterrupt v1.4.0
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 16 MHz
-TCB Clock Frequency = 8MHz for very high accuracy
-Starting  ITimer1 OK, millis() = 10
-SimpleTimer : 2, ms : 10011, Dms : 10011
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10011
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
+05:01:33 Sat 05 Jun 2021 AEST Sydney
+22:01:33 Fri 04 Jun 2021 MSK  Moscow
+21:01:33 Fri 04 Jun 2021 CEST Paris
+20:01:33 Fri 04 Jun 2021 BST  London
+19:01:33 Fri 04 Jun 2021 UTC  Universal Coordinated Time
+15:01:33 Fri 04 Jun 2021 EDT  New York
+14:01:33 Fri 04 Jun 2021 CDT  Chicago
+13:01:33 Fri 04 Jun 2021 MDT  Denver
+12:01:33 Fri 04 Jun 2021 MST  Phoenix
+12:01:33 Fri 04 Jun 2021 PDT  Los Angeles
 
-...
+05:01:42 Sat 05 Jun 2021 AEST Sydney
+22:01:42 Fri 04 Jun 2021 MSK  Moscow
+21:01:42 Fri 04 Jun 2021 CEST Paris
+20:01:42 Fri 04 Jun 2021 BST  London
+19:01:42 Fri 04 Jun 2021 UTC  Universal Coordinated Time
+15:01:42 Fri 04 Jun 2021 EDT  New York
+14:01:42 Fri 04 Jun 2021 CDT  Chicago
+13:01:42 Fri 04 Jun 2021 MDT  Denver
+12:01:42 Fri 04 Jun 2021 MST  Phoenix
+12:01:42 Fri 04 Jun 2021 PDT  Los Angeles
 
-
-SimpleTimer : 2, ms : 160949, Dms : 10064
-Timer : 0, programmed : 5000, actual : 5000            <========== Very accurate @ clock 8MHz
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80000
-SimpleTimer : 2, ms : 171013, Dms : 10064
-Timer : 0, programmed : 5000, actual : 5000
-Timer : 1, programmed : 10000, actual : 10000
-Timer : 2, programmed : 15000, actual : 15000
-Timer : 3, programmed : 20000, actual : 20000
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30000
-Timer : 6, programmed : 35000, actual : 35000
-Timer : 7, programmed : 40000, actual : 40000
-Timer : 8, programmed : 45000, actual : 45000
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55000
-Timer : 11, programmed : 60000, actual : 60000
-Timer : 12, programmed : 65000, actual : 65000
-Timer : 13, programmed : 70000, actual : 70000
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80000
-
+05:01:52 Sat 05 Jun 2021 AEST Sydney
+22:01:52 Fri 04 Jun 2021 MSK  Moscow
+21:01:52 Fri 04 Jun 2021 CEST Paris
+20:01:52 Fri 04 Jun 2021 BST  London
+19:01:52 Fri 04 Jun 2021 UTC  Universal Coordinated Time
+15:01:52 Fri 04 Jun 2021 EDT  New York
+14:01:52 Fri 04 Jun 2021 CDT  Chicago
+13:01:52 Fri 04 Jun 2021 MDT  Denver
+12:01:52 Fri 04 Jun 2021 MST  Phoenix
+12:01:52 Fri 04 Jun 2021 PDT  Los Angeles
 ```
 
 ---
 
-### 10.3. TCB Clock Frequency 250KHz for lower accuracy but longer time
+### 17. TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_Ethernet**](examples/Ethernet/TZ_NTP_WorldClock_Ethernet) on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
 
 ```
-Starting ISR_16_Timers_Array_Complex on megaAVR Nano Every
-megaAVR_TimerInterrupt v1.4.0
-TimerInterrupt_Generic v1.8.0
-CPU Frequency = 16 MHz
-TCB Clock Frequency = 250KHz for lower accuracy but longer time
-Starting  ITimer1 OK, millis() = 11
-SimpleTimer : 2, ms : 10012, Dms : 10012
-Timer : 0, programmed : 5000, actual : 5021
-Timer : 1, programmed : 10000, actual : 10015
-Timer : 2, programmed : 15000, actual : 0
-Timer : 3, programmed : 20000, actual : 0
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
-SimpleTimer : 2, ms : 20071, Dms : 10059
-Timer : 0, programmed : 5000, actual : 4994
-Timer : 1, programmed : 10000, actual : 9999
-Timer : 2, programmed : 15000, actual : 15020
-Timer : 3, programmed : 20000, actual : 20014
-Timer : 4, programmed : 25000, actual : 0
-Timer : 5, programmed : 30000, actual : 0
-Timer : 6, programmed : 35000, actual : 0
-Timer : 7, programmed : 40000, actual : 0
-Timer : 8, programmed : 45000, actual : 0
-Timer : 9, programmed : 50000, actual : 0
-Timer : 10, programmed : 55000, actual : 0
-Timer : 11, programmed : 60000, actual : 0
-Timer : 12, programmed : 65000, actual : 0
-Timer : 13, programmed : 70000, actual : 0
-Timer : 14, programmed : 75000, actual : 0
-Timer : 15, programmed : 80000, actual : 0
+Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
+Timezone_Generic v1.8.0
+[EWS] =========== USE_ETHERNET_LARGE ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 3
+[EWS] MISO: 4
+[EWS] SCK: 2
+[EWS] SS: 5
+[EWS] =========================
+[EWS] RPIPICO setCsPin: 5
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 5, new ss_pin = 10, W5100Class::ss_pin = 5
+W5100::init: W5500, SSIZE =8192
+=========================
+Currently Used SPI pinout:
+MOSI:3
+MISO:4
+SCK:2
+SS:5
+=========================
+Using mac index = 8
+You're connected to the network, IP = 192.168.2.99
+Packet received
+Seconds since Jan 1 1900 = 3831845852
+Unix time = 1622857052
+The UTC time is 1:37:32
 
-...
-
-
-SimpleTimer : 2, ms : 845278, Dms : 10063
-Timer : 0, programmed : 5000, actual : 4994            <========== Less accurate @ clock 250KHz
-Timer : 1, programmed : 10000, actual : 9997
-Timer : 2, programmed : 15000, actual : 15001
-Timer : 3, programmed : 20000, actual : 20005
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30004
-Timer : 6, programmed : 35000, actual : 34998
-Timer : 7, programmed : 40000, actual : 40001
-Timer : 8, programmed : 45000, actual : 44995
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55004
-Timer : 11, programmed : 60000, actual : 59998
-Timer : 12, programmed : 65000, actual : 64992
-Timer : 13, programmed : 70000, actual : 70005
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80004
-SimpleTimer : 2, ms : 855342, Dms : 10064
-Timer : 0, programmed : 5000, actual : 5004
-Timer : 1, programmed : 10000, actual : 9999
-Timer : 2, programmed : 15000, actual : 15003
-Timer : 3, programmed : 20000, actual : 20005
-Timer : 4, programmed : 25000, actual : 25000
-Timer : 5, programmed : 30000, actual : 30004
-Timer : 6, programmed : 35000, actual : 34998
-Timer : 7, programmed : 40000, actual : 40001
-Timer : 8, programmed : 45000, actual : 45007
-Timer : 9, programmed : 50000, actual : 50000
-Timer : 10, programmed : 55000, actual : 55004
-Timer : 11, programmed : 60000, actual : 59998
-Timer : 12, programmed : 65000, actual : 64992
-Timer : 13, programmed : 70000, actual : 70005
-Timer : 14, programmed : 75000, actual : 75000
-Timer : 15, programmed : 80000, actual : 80004
-```
-
----
----
-
-
-### Debug
-
-Debug is enabled by default on Serial.
-
-You can also change the debugging level (_TIMERINTERRUPT_LOGLEVEL_) from 0 to 4
-
-```cpp
-// These define's must be placed at the beginning before #include "TimerInterrupt_Generic.h"
-// _TIMERINTERRUPT_LOGLEVEL_ from 0 to 4
-// Don't define _TIMERINTERRUPT_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
-#define TIMER_INTERRUPT_DEBUG         0
-#define _TIMERINTERRUPT_LOGLEVEL_     0
+11:37:32 Sat 05 Jun 2021 AEST Sydney
+04:37:32 Sat 05 Jun 2021 MSK  Moscow
+03:37:32 Sat 05 Jun 2021 CEST Paris
+02:37:32 Sat 05 Jun 2021 BST  London
+01:37:32 Sat 05 Jun 2021 UTC  Universal Coordinated Time
+21:37:32 Fri 04 Jun 2021 EDT  New York
+20:37:32 Fri 04 Jun 2021 CDT  Chicago
+19:37:32 Fri 04 Jun 2021 MDT  Denver
+18:37:32 Fri 04 Jun 2021 MST  Phoenix
+18:37:32 Fri 04 Jun 2021 PDT  Los Angeles
 ```
 
 ---
 
-### Troubleshooting
+### 18. TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00
 
-If you get compilation errors, more often than not, you may need to install a newer version of the core for Arduino boards.
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_Ethernet**](examples/Ethernet/TZ_NTP_WorldClock_Ethernet) on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
 
-Sometimes, the library will only work if you update the board core to the latest version because I am using newly added functions.
+
+```
+Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
+Timezone_Generic v1.8.0
+[EWS] =========== USE_ETHERNET_LARGE ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 19
+[EWS] MISO: 16
+[EWS] SCK: 18
+[EWS] SS: 17
+[EWS] =========================
+[EWS] RPIPICO setCsPin: 17
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 17
+W5100::init: W5500, SSIZE =8192
+=========================
+Currently Used SPI pinout:
+MOSI:19
+MISO:16
+SCK:18
+SS:17
+=========================
+Using mac index = 11
+You're connected to the network, IP = 192.168.2.96
+Packet received
+Seconds since Jan 1 1900 = 3831823507
+Unix time = 1622834707
+The UTC time is 19:25:07
+
+05:25:07 Sat 05 Jun 2021 AEST Sydney
+22:25:07 Fri 04 Jun 2021 MSK  Moscow
+21:25:07 Fri 04 Jun 2021 CEST Paris
+20:25:07 Fri 04 Jun 2021 BST  London
+19:25:07 Fri 04 Jun 2021 UTC  Universal Coordinated Time
+15:25:07 Fri 04 Jun 2021 EDT  New York
+14:25:07 Fri 04 Jun 2021 CDT  Chicago
+13:25:07 Fri 04 Jun 2021 MDT  Denver
+12:25:07 Fri 04 Jun 2021 MST  Phoenix
+12:25:07 Fri 04 Jun 2021 PDT  Los Angeles
+
+05:25:17 Sat 05 Jun 2021 AEST Sydney
+22:25:17 Fri 04 Jun 2021 MSK  Moscow
+21:25:17 Fri 04 Jun 2021 CEST Paris
+20:25:17 Fri 04 Jun 2021 BST  London
+19:25:17 Fri 04 Jun 2021 UTC  Universal Coordinated Time
+15:25:17 Fri 04 Jun 2021 EDT  New York
+14:25:17 Fri 04 Jun 2021 CDT  Chicago
+13:25:17 Fri 04 Jun 2021 MDT  Denver
+12:25:17 Fri 04 Jun 2021 MST  Phoenix
+12:25:17 Fri 04 Jun 2021 PDT  Los Angeles
+```
+
+---
+
+### 19. TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_WT32_ETH01**](examples/WT32-ETH01/TZ_NTP_WorldClock_WT32_ETH01) on WT32-ETH01 with ETH_PHY_LAN8720
+
+
+```
+Start TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
+WebServer_WT32_ETH01 v1.4.1
+Timezone_Generic v1.8.0
+ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232
+FULL_DUPLEX, 100Mbps
+TZ_NTP_WorldClock_WT32_ETH01 started @ IP address: 192.168.2.232
+Listening on port 2390
+Packet received
+Seconds since Jan 1 1900 = 3835448717
+Unix time = 1626459917
+The UTC time is 18:25:17
+
+04:25:17 Sat 17 Jul 2021 AEST Sydney
+21:25:17 Fri 16 Jul 2021 MSK  Moscow
+20:25:17 Fri 16 Jul 2021 CEST Paris
+19:25:17 Fri 16 Jul 2021 BST  London
+18:25:17 Fri 16 Jul 2021 UTC  Universal Coordinated Time
+14:25:17 Fri 16 Jul 2021 EDT  New York
+13:25:17 Fri 16 Jul 2021 CDT  Chicago
+12:25:17 Fri 16 Jul 2021 MDT  Denver
+11:25:17 Fri 16 Jul 2021 MST  Phoenix
+11:25:17 Fri 16 Jul 2021 PDT  Los Angeles
+```
+
+---
+
+### 20. TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
+
+The following is debug terminal output when running example [**TZ_NTP_WorldClock_RTL8720DN**](examples/RTL8720DN/TZ_NTP_WorldClock_RTL8720DN) on Rtlduino RTL8720DN
+
+
+```
+Start TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
+WiFiWebServer_RTL8720 v1.1.0
+Timezone_Generic v1.8.0
+Current Firmware Version = 1.0.0
+Attempting to connect to SSID: HueNet_5G
+TZ_NTP_Clock_RTL8720DN started @ IP address: 192.168.2.111
+Listening on port 2390
+Packet received
+Seconds since Jan 1 1900 = 3837552392
+Unix time = 1628563592
+The UTC time is 2:46:32
+
+12:46:32 Tue 10 Aug 2021 AEST Sydney
+05:46:32 Tue 10 Aug 2021 MSK  Moscow
+04:46:32 Tue 10 Aug 2021 CEST Paris
+03:46:32 Tue 10 Aug 2021 BST  London
+02:46:32 Tue 10 Aug 2021 UTC  Universal Coordinated Time
+22:46:32 Mon 09 Aug 2021 EDT  New York
+21:46:32 Mon 09 Aug 2021 CDT  Chicago
+20:46:32 Mon 09 Aug 2021 MDT  Denver
+19:46:32 Mon 09 Aug 2021 MST  Phoenix
+19:46:32 Mon 09 Aug 2021 PDT  Los Angeles
+
+12:46:42 Tue 10 Aug 2021 AEST Sydney
+05:46:42 Tue 10 Aug 2021 MSK  Moscow
+04:46:42 Tue 10 Aug 2021 CEST Paris
+03:46:42 Tue 10 Aug 2021 BST  London
+02:46:42 Tue 10 Aug 2021 UTC  Universal Coordinated Time
+22:46:42 Mon 09 Aug 2021 EDT  New York
+21:46:42 Mon 09 Aug 2021 CDT  Chicago
+20:46:42 Mon 09 Aug 2021 MDT  Denver
+19:46:42 Mon 09 Aug 2021 MST  Phoenix
+19:46:42 Mon 09 Aug 2021 PDT  Los Angeles
+```
 
 
 ---
@@ -3999,41 +2856,40 @@ Sometimes, the library will only work if you update the board core to the latest
 
 ### Issues
 
-Submit issues to: [TimerInterrupt_Generic issues](https://github.com/khoih-prog/TimerInterrupt_Generic/issues)
+Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezone_Generic/issues)
+
+---
+---
+
+### TO DO
+
+1. Bug Searching and Killing
+2. Add more examples
 
 ---
 
-## TO DO
+### DONE
 
-1. Search for bug and improvement.
-
-
-## DONE
-
-1. Basic hardware timers for 
-
-- [x] AVR
-- [x] megaAVR
-- [x] ESP8266
-- [x] ESP32
-- [x] ESP32-S2
-- [x] SAMD
-- [x] SAM DUE
-- [x] nRF52
-- [x] Teensy
-- [x] Mbed-OS Nano-33-BLE
-- [x] STM32F/L/H/G/WB/MP1
-- [x] Raspberry Pi pico
-- [x] MBED Raspberry Pi pico
-- [ ] Portenta H7
-- [ ] RTL8720DN
-
-2. More hardware-initiated software-enabled timers
-3. Longer time interval
-4. Clean-up all compiler warnings possible.
-5. Add Table of Contents
-6. Add Version String
-7. Add `changelog.md`
+ 1. Add support to **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.) and FlashStorage**
+ 2. Add support to **Adafruit SAMD21 (Itsy-Bitsy M0, Metro M0, Feather M0 Express, etc.) and FlashStorage**.
+ 3. Add support to **Adafruit SAMD51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and FlashStorage**.
+ 4. Add support to **Adafruit nRF52 ( Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc. annd LittleFS**.
+ 5. Add support to **SAM DUE and DueFlashStorage**.
+ 6. Add support to Ethernet W5x00, using either [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`Ethernet2`](https://github.com/adafruit/Ethernet2), [`Ethernet3`](https://github.com/sstaub/Ethernet3) or [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge) library
+ 7. Add support to Ethernet ENC28J60, using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
+ 8. Add support to Seeeduino SAMD21/SAMD51: LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, Wio Terminal, Grove UI Wireless and FlashStorage.
+ 9. Add support to [`EthernetENC`](https://github.com/jandrassy/EthernetENC)
+10. Add support to ESP32/ESP8266 boards using SPIFFS or LittleFS
+11. Add support to Arduino AVR boards (UNO, Nano, Mega, etc.)
+12. Add support to Arduino MegaAVR boards (UNO WiFi Rev 2, Nano Every, etc.)
+13. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
+14. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
+15. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+16. Add support to ESP32-S2 (using SPIFFS or LittleFS) and ESP32-C3 boards (using SPIFFS)
+17. Add support to **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+18. Add support to **RTL8720DN, RTL8722DM, RTL8722CSM, etc.** boards
+19. Fix `multiple-definitions` linker error and weird bug related to `src_cpp`.
+20. Optimize library code by using `reference-passing` instead of `value-passing`
 
 ---
 ---
@@ -4042,31 +2898,25 @@ Submit issues to: [TimerInterrupt_Generic issues](https://github.com/khoih-prog/
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
-1. Use some code from the [**Ivan Seidel's DueTimer Library**](https://github.com/ivanseidel/DueTimer).
-2. Use some code from the [**Tamasa's ZeroTimer Library**](https://github.com/EHbtj/ZeroTimer).
-3. Use some code from the [**Dennis van Gils' SAMD51_InterruptTimer Library**](https://github.com/Dennis-van-Gils/SAMD51_InterruptTimer).
-4. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing.
-5. Thanks to [Holger Lembke](https://github.com/holgerlembke) to report [ESP8266TimerInterrupt Issue 8: **ESP8266Timer and PWM --> wdt reset**](https://github.com/khoih-prog/ESP8266TimerInterrupt/issues/8), leading to the [HOWTO Use PWM analogWrite() with ESP8266 running Timer1 Interrupt](https://github.com/khoih-prog/ESP8266TimerInterrupt#howto-use-pwm-analogwrite-with-esp8266-running-timer1-interrupt) notes.
-6. Thanks to [Jelmer](https://github.com/jjwbruijn) to report and make PR in [Moved the implementation header file to a separate .cpp file](https://github.com/khoih-prog/ESP32TimerInterrupt/pull/6).
-7. Thanks to [Django0](https://github.com/Django0) to provide the following PR [Fixed warnings from cppcheck (platformio) and -Wall arduino-cli. PR#10](https://github.com/khoih-prog/TimerInterrupt/pull/10).
+1. Based on and modified from the [**Jack Christensen's Timezone Library**](https://github.com/JChristensen/Timezone).
+2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing.
+3. Thanks to **6v6gt** to contribute the new feature to allow un-initialized TZ. Check [**Timezone_Generic Library to convert UTC to local time**](https://forum.arduino.cc/index.php?topic=711259).
+4. Thanks to [Maximilian Gerhardt](https://github.com/maxgerhardt) to create bug report [RP2040_RTC_Time crashes Pico, does not work #3](https://github.com/khoih-prog/RP2040_RTC/issues/3) and help investigate and fix the bug, leading to v1.7.2
+
+
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/ivanseidel"><img src="https://github.com/ivanseidel.png" width="100px;" alt="ivanseidel"/><br /><sub><b>⭐️ Ivan Seidel</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/EHbtj"><img src="https://github.com/EHbtj.png" width="100px;" alt="EHbtj"/><br /><sub><b>⭐️ Tamasa</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/Dennis-van-Gils"><img src="https://github.com/Dennis-van-Gils.png" width="100px;" alt="Dennis-van-Gils"/><br /><sub><b> Dennis van Gils</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/JChristensen"><img src="https://github.com/JChristensen.png" width="100px;" alt="JChristensen"/><br /><sub><b>⭐️ Jack Christensen</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b> Miguel Wisintainer</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/holgerlembke"><img src="https://github.com/holgerlembke.png" width="100px;" alt="holgerlembke"/><br /><sub><b>Holger Lembke</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/jjwbruijn"><img src="https://github.com/jjwbruijn.png" width="100px;" alt="jjwbruijn"/><br /><sub><b>Jelmer</b></sub></a><br /></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/Django0"><img src="https://github.com/Django0.png" width="100px;" alt="Django0"/><br /><sub><b>Django0</b></sub></a><br /></td>
+    <td align="center"><a href="https://forum.arduino.cc/index.php?action=profile;u=454553"><img src="https://dcw9y8se13llu.cloudfront.net/avatars/6v6gt.jpg" width="100px;" alt="6v6gt"/><br /><sub><b> 6v6gt</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/maxgerhardt"><img src="https://github.com/maxgerhardt.png" width="100px;" alt="maxgerhardt"/><br /><sub><b>Maximilian Gerhardt</b></sub></a><br /></td>
   </tr> 
 </table>
 
 ---
 
-## Contributing
+### Contributing
 
 If you want to contribute to this project:
 - Report bugs and errors
@@ -4078,12 +2928,14 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [MIT](https://github.com/khoih-prog/TimerInterrupt_Generic/blob/main/LICENSE)
+- The library is licensed under [GPLv3](https://github.com/khoih-prog/Timezone_Generic/blob/main/LICENSE)
 
 ---
 
 ## Copyright
 
-Copyright 2020- Khoi Hoang
+- Copyright 2012- Jack Christensen
+
+- Copyright 2020- Khoi Hoang
 
 
