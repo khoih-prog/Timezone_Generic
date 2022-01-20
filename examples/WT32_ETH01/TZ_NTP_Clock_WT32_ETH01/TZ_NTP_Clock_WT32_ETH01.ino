@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
   TZ_NTP_Clock_WiFiNINA.ino
-  
+
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
 
   Based on and modified from Arduino Timezone Library (https://github.com/JChristensen/Timezone)
@@ -16,29 +16,27 @@
 
 //////////////////////////////////////////
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.8.0"
-#define TIMEZONE_GENERIC_VERSION_MIN             1008000
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1009000
 
 //////////////////////////////////////////
 
-#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
-
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include "Timezone_Generic_Impl.h"      // https://github.com/khoih-prog/Timezone_Generic
+#include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
 
 #define USING_INITIALIZED_TZ      false   //true
 
 #if USING_INITIALIZED_TZ
-  // US Eastern Time Zone (New York, Detroit,Toronto)
-  TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
-  TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
-  Timezone *myTZ;
+// US Eastern Time Zone (New York, Detroit,Toronto)
+TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
+TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
+Timezone *myTZ;
 #else
-  // Allow a "blank" TZ object then use begin() method to set the actual TZ.
-  // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-  Timezone *myTZ;
-  TimeChangeRule myDST;
-  TimeChangeRule mySTD;
+// Allow a "blank" TZ object then use begin() method to set the actual TZ.
+// Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
+Timezone *myTZ;
+TimeChangeRule myDST;
+TimeChangeRule mySTD;
 #endif
 
 // If TimeChangeRules are already stored in EEPROM, comment out the three
@@ -94,12 +92,12 @@ void sendNTPpacket(char *ntpSrv)
 // format and print a time_t value, with a time zone appended.
 void printDateTime(time_t t, const char *tz)
 {
-    char buf[32];
-    char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-    strcpy(m, monthShortStr(month(t)));
-    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
-        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
-    Serial.println(buf);
+  char buf[32];
+  char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+  strcpy(m, monthShortStr(month(t)));
+  sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+          hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+  Serial.println(buf);
 }
 
 void displayClock(void)
@@ -107,7 +105,7 @@ void displayClock(void)
   time_t utc = now();
 
   time_t local = myTZ->toLocal(utc, &tcr);
-  
+
   Serial.println();
   printDateTime(utc, "UTC");
   printDateTime(local, tcr -> abbrev);
@@ -117,7 +115,7 @@ void displayClock(void)
 void getNTPTime(void)
 {
   static bool gotCurrentTime = false;
-  
+
   // Just get the correct ime once
   if (!gotCurrentTime)
   {
@@ -156,7 +154,7 @@ void getNTPTime(void)
       // warning: assumes that compileTime() returns US EDT
       // adjust the following line accordingly if you're in another time zone
       setTime(epoch_t);
-      
+
       // print Unix time:
       Serial.println(epoch);
 
@@ -203,7 +201,7 @@ void setup()
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(TIMEZONE_GENERIC_VERSION);
-  
+
 #if defined(TIMEZONE_GENERIC_VERSION_MIN)
   if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
   {
@@ -215,7 +213,7 @@ void setup()
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();
 
-  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO, 
+  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO,
   //           eth_phy_type_t type=ETH_PHY_TYPE, eth_clock_mode_t clk_mode=ETH_CLK_MODE);
   //ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_TYPE, ETH_CLK_MODE);
   ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER);
@@ -225,7 +223,7 @@ void setup()
   ETH.config(myIP, myGW, mySN, myDNS);
 
   WT32_ETH01_waitForConnect();
-  
+
   Serial.print(F("TZ_NTP_Clock_WT32_ETH01 started @ IP address: "));
   Serial.println(ETH.localIP());
 
@@ -244,26 +242,38 @@ void setup()
   if ( tzName == "EDT/EST" )
   {
     // America Eastern Time
-    myDST = (TimeChangeRule) {"EDT",  Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
-    mySTD = (TimeChangeRule) {"EST",  First,  Sun, Nov, 2, -300};     // Standard time = UTC - 5 hours
+    myDST = (TimeChangeRule) {
+      "EDT",  Second, Sun, Mar, 2, -240
+    };    // Daylight time = UTC - 4 hours
+    mySTD = (TimeChangeRule) {
+      "EST",  First,  Sun, Nov, 2, -300
+    };     // Standard time = UTC - 5 hours
   }
-  else if ( tzName == "CET/CEST" ) 
+  else if ( tzName == "CET/CEST" )
   {
     // central Europe
-    myDST = (TimeChangeRule) {"CEST", Last, Sun, Mar, 2, 120};
-    mySTD = (TimeChangeRule) {"CET",  Last, Sun, Oct, 3, 60};
+    myDST = (TimeChangeRule) {
+      "CEST", Last, Sun, Mar, 2, 120
+    };
+    mySTD = (TimeChangeRule) {
+      "CET",  Last, Sun, Oct, 3, 60
+    };
   }
-  
-  else if ( tzName == "GMT/BST" ) 
+
+  else if ( tzName == "GMT/BST" )
   {
     // UK
-    myDST = (TimeChangeRule) {"BST",  Last, Sun, Mar, 1, 60};
-    mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
+    myDST = (TimeChangeRule) {
+      "BST",  Last, Sun, Mar, 1, 60
+    };
+    mySTD = (TimeChangeRule) {
+      "GMT",  Last, Sun, Oct, 2, 0
+    };
   }
 
   myTZ = new Timezone();
   myTZ->init( myDST, mySTD );
-  
+
 #endif
 
   myTZ->writeRules();

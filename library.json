@@ -1,6 +1,6 @@
 {
   "name": "Timezone_Generic",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "keywords": "timing, device, control, ntp, rtc, wifi, ethernet, WiFiNINA, SAM DUE, SAMD, nRF52, STM32, wt32-eth01, rp2040, nano-rp2040-connect, rtl8720, FlashStorage, DueFlashStorage, LittleFS, EEPROM, rpi-pico",
   "description": "Library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments. For ESP8266, ESP32, WT32-ETH01 (ESP32 + LAN8720), SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, RTL8720DN, RP2040-based (Nano_RP2040_Connect, RASPBERRY_PI_PICO) boards, etc. using W5x00/ENC28J60/LAN8742A Ethernet, ESP or ESP-AT WiFi or WiFiNINA",
   "authors": [
@@ -67,7 +67,7 @@
     {
       "owner": "khoih-prog",
       "name": "EthernetWebServer",
-      "version": ">=1.8.3",
+      "version": ">=2.0.0",
       "platforms": ["*"]
     },
     {
@@ -79,7 +79,7 @@
     {
       "owner": "khoih-prog",
       "name": "WiFiWebServer",
-      "version": ">=1.5.3",
+      "version": ">=1.5.4",
       "platforms": ["*"]
     },
     {
@@ -91,13 +91,13 @@
     {
       "owner": "khoih-prog",
       "name": "WiFiWebServer_RTL8720",
-      "version": ">=1.1.0",
+      "version": ">=1.1.1",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "ESP8266_AT_WebServer",
-      "version": ">=1.5.2",
+      "version": ">=1.5.3",
       "platforms": ["*"]
     },
     {
@@ -127,7 +127,7 @@
     {
       "owner": "jandrassy",
       "name": "EthernetENC",
-      "version": ">=2.0.1",
+      "version": ">=2.0.2",
       "platforms": ["*"]
     },
     {
@@ -165,5 +165,5 @@
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino",
-  "headers": ["Timezone_Generic.h", "Timezone_Generic_Impl.h"]
+  "headers": ["Timezone_Generic.h", "Timezone_Generic.hpp"]
 }

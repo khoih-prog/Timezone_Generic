@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.3](#releases-v173)
   * [Releases v1.7.2](#releases-v172)
@@ -29,6 +30,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.0
+
+1. Make compatible with old code
+2. Update all examples
+3. Update `Packages_Patches`
 
 ### Releases v1.8.0
 
