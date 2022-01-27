@@ -32,7 +32,7 @@
 
 ## Changelog
 
-### Release v1.9.1
+### Releases v1.9.1
 
 1. Update to be compatible with new `FlashStorage_SAMD`
 2. Use better `FlashStorage_STM32` or `FlashStorage_STM32F1` library for STM32
