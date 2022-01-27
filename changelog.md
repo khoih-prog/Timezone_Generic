@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.1](#releases-v191)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.3](#releases-v173)
@@ -30,6 +31,13 @@
 ---
 
 ## Changelog
+
+### Release v1.9.1
+
+1. Update to be compatible with new `FlashStorage_SAMD`
+2. Use better `FlashStorage_STM32` or `FlashStorage_STM32F1` library for STM32
+3. Add support to generic SAMD21 boards : `__SAMD21E1xA__`, `__SAMD21G1xA__` and `__SAMD21J1xA__`
+4. Update `Packages_Patches`
 
 ### Releases v1.9.0
 

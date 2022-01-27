@@ -1,4 +1,4 @@
-/****************************************************************************************************************************
+/*********************************************************************************************************************************
   Timezone_Generic_Impl.h
   
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
@@ -11,7 +11,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
   
-  Version: 1.9.0
+  Version: 1.9.1
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -30,7 +30,8 @@
   1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
   1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
   1.9.0   K Hoang      20/01/2022 Make compatible to old code
- *****************************************************************************************************************************/
+  1.9.1   K Hoang      26/01/2022 Update to be compatible with new FlashStorage libraries. Add support to more SAMD/STM32 boards
+ **********************************************************************************************************************************/
 
 #pragma once
 
@@ -160,10 +161,13 @@
   #warning Use SAM-DUE and DueFlashStorage
   
 #elif ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+     || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+     || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) \
+     || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD51__) || defined(__SAMD51J20A__) \
+     || defined(__SAMD51J19A__) || defined(__SAMD51G19A__) || defined(__SAMD51P19A__)  \
+     || defined(__SAMD21E15A__) || defined(__SAMD21E16A__) || defined(__SAMD21E17A__) || defined(__SAMD21E18A__) \
+     || defined(__SAMD21G15A__) || defined(__SAMD21G16A__) || defined(__SAMD21G17A__) || defined(__SAMD21G18A__) \
+     || defined(__SAMD21J15A__) || defined(__SAMD21J16A__) || defined(__SAMD21J17A__) || defined(__SAMD21J18A__) )
   #if defined(TZ_USE_SAMD)
     #undef TZ_USE_SAMD
   #endif
@@ -204,9 +208,11 @@
   #if defined(TZ_USE_EEPROM)
     #undef TZ_USE_EEPROM
   #endif
-  #define TZ_USE_EEPROM    true
   
-  #warning Use STM32 and EEPROM
+  #define TZ_USE_EEPROM    false
+  #warning Use STM32 and FlashStorage
+  //#define TZ_USE_EEPROM    true
+  //#warning Use STM32 and EEPROM
 
 #elif ( defined(ARDUINO_ARCH_RP2040) && !defined(ARDUINO_ARCH_MBED) )
 
@@ -300,7 +306,26 @@
 /////////////////////////////
 #elif TZ_USE_SAMD
   // Include EEPROM-like API for FlashStorage
-  #include <FlashAsEEPROM_SAMD.h>             //https://github.com/khoih-prog/FlashStorage_SAMD
+  #include <FlashStorage_SAMD.h>             //https://github.com/khoih-prog/FlashStorage_SAMD
+  
+#elif TZ_USE_STM32
+  // Include EEPROM-like API for FlashStorage
+  //#include <FlashStorage_STM32.h>             //https://github.com/khoih-prog/FlashStorage_STM32 
+  /**
+   Most STM32 devices don't have an integrated EEPROM. To emulate a EEPROM, the STM32 Arduino core emulated
+   the operation of an EEPROM with the help of the embedded flash.
+   Writing to a flash is very expensive operation, since a whole flash page needs to be written, even if you only
+   want to access the flash byte-wise.
+   The STM32 Arduino core provides a buffered access API to the emulated EEPROM. The library has allocated the
+   buffer even if you don't use the buffered API, so it's strongly suggested to use the buffered API anyhow.
+   */
+  #if ( defined(STM32F1xx) || defined(STM32F3xx) )
+    #include <FlashStorage_STM32F1.h>       // https://github.com/khoih-prog/FlashStorage_STM32F1
+    #warning STM32F1/F3 devices have no integrated EEPROM. Using buffered API with FlashStorage_STM32F1 library
+  #else
+    #include <FlashStorage_STM32.h>       // https://github.com/khoih-prog/FlashStorage_STM32
+    #warning STM32 devices have no integrated EEPROM. Using buffered API with FlashStorage_STM32 library
+  #endif
   
 /////////////////////////////  
 #elif TZ_USE_SAM_DUE
@@ -451,6 +476,11 @@ void Timezone::initStorage(uint32_t address)
 /////////////////////////////    
 #elif TZ_USE_SAMD
   // Do something to init FlashStorage
+  
+/////////////////////////////    
+#elif TZ_USE_STM32
+  // Do something to init FlashStorage  
+  
 
 /////////////////////////////    
 #elif TZ_USE_SAM_DUE
@@ -1071,6 +1101,81 @@ void Timezone::writeTZData(int address)
   return;  
 }
 
+
+/////////////////////////////////////////////
+
+#elif (TZ_USE_STM32)
+
+  #warning Using STM32 FlashStorage in Timezone_Generic
+  
+  // SAMD code  
+/*----------------------------------------------------------------------*
+   Read the daylight and standard time rules from EEPROM at
+   the given address.
+  ----------------------------------------------------------------------*/
+void Timezone::readTZData()
+{
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // It's too bad that emulate EEPROM.read()/write() can only deal with bytes. 
+  // Have to read/write each byte. To rewrite the library
+  
+  memset(&m_dst, 0, TZ_DATA_SIZE);
+  memset(&m_std, 0, TZ_DATA_SIZE);
+  
+  uint16_t offset   = TZ_DATA_START;               
+  uint8_t* _pointer = (uint8_t *) &m_dst;
+
+  for (uint16_t i = 0; i < TZ_DATA_SIZE; i++, _pointer++, offset++)
+  {              
+    *_pointer = EEPROM.read(offset);
+  }
+            
+  _pointer = (uint8_t *) &m_std;
+
+  for (uint16_t i = 0; i < TZ_DATA_SIZE; i++, _pointer++, offset++)
+  {              
+    *_pointer = EEPROM.read(offset);
+  }
+
+  return;  
+}
+
+/*----------------------------------------------------------------------*
+   Write the daylight and standard time rules to EEPROM at
+   the given address.
+  ----------------------------------------------------------------------*/
+void Timezone::writeTZData(int address)
+{
+  if (!storageSystemInit)
+  {
+    storageSystemInit = true;
+  }
+  
+  // It's too bad that emulate EEPROM.read()/write() can only deal with bytes. 
+  // Have to read/write each byte. To rewrite the library
+  
+  uint16_t offset   = address;               
+  uint8_t* _pointer = (uint8_t *) &m_dst;
+
+  for (uint16_t i = 0; i < TZ_DATA_SIZE; i++, _pointer++, offset++)
+  {              
+    EEPROM.write(offset, *_pointer);
+  }
+            
+  _pointer = (uint8_t *) &m_std;
+
+  for (uint16_t i = 0; i < TZ_DATA_SIZE; i++, _pointer++, offset++)
+  {              
+    EEPROM.write(offset, *_pointer);
+  }
+
+  return;  
+}
+
 /////////////////////////////////////////////
          
 #elif (TZ_USE_SAM_DUE)
@@ -1210,7 +1315,33 @@ void Timezone::writeTZData(int address)
 
 #elif (TZ_USE_STM32)
 
+  #if 1
+  
+  #if defined(DATA_EEPROM_BASE)
+    // For STM32 devices having integrated EEPROM.
+    #include <EEPROM.h>
+    #warning STM32 devices have integrated EEPROM. Not using buffered API.   
+  #else
+    /**
+     Most STM32 devices don't have an integrated EEPROM. To emulate a EEPROM, the STM32 Arduino core emulated
+     the operation of an EEPROM with the help of the embedded flash.
+     Writing to a flash is very expensive operation, since a whole flash page needs to be written, even if you only
+     want to access the flash byte-wise.
+     The STM32 Arduino core provides a buffered access API to the emulated EEPROM. The library has allocated the
+     buffer even if you don't use the buffered API, so it's strongly suggested to use the buffered API anyhow.
+     */
+    #if ( defined(STM32F1xx) || defined(STM32F3xx) )
+      #include <FlashStorage_STM32F1.h>       // https://github.com/khoih-prog/FlashStorage_STM32F1
+      #warning STM32F1/F3 devices have no integrated EEPROM. Using buffered API with FlashStorage_STM32F1 library
+    #else
+      #include <FlashStorage_STM32.h>       // https://github.com/khoih-prog/FlashStorage_STM32
+      #warning STM32 devices have no integrated EEPROM. Using buffered API with FlashStorage_STM32 library
+    #endif
+  #endif    // #if defined(DATA_EEPROM_BASE)  
+  
+  #else
   #warning Using STM32 EEPROM in Timezone_Generic
+  #endif
 
   // STM32 code    
 /*----------------------------------------------------------------------*

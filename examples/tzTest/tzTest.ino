@@ -19,8 +19,8 @@
 #define USE_SPIFFS        false
 #endif
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.0"
-#define TIMEZONE_GENERIC_VERSION_MIN             1009000
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.1"
+#define TIMEZONE_GENERIC_VERSION_MIN             1009001
 
 //////////////////////////////////////////
 
@@ -113,7 +113,7 @@ void setup()
 #endif
 
   Serial.println(TIMEZONE_GENERIC_VERSION);
-  
+
 #if defined(TIMEZONE_GENERIC_VERSION_MIN)
   if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
   {

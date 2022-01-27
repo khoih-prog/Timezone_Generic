@@ -1,4 +1,4 @@
-/****************************************************************************************************************************
+/*********************************************************************************************************************************
   Timezone_Generic.hpp
   
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
@@ -11,7 +11,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
   
-  Version: 1.9.0
+  Version: 1.9.1
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -30,7 +30,8 @@
   1.7.3   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
   1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
   1.9.0   K Hoang      20/01/2022 Make compatible to old code
- *****************************************************************************************************************************/
+  1.9.1   K Hoang      26/01/2022 Update to be compatible with new FlashStorage libraries. Add support to more SAMD/STM32 boards
+ **********************************************************************************************************************************/
 
 #pragma once
 
@@ -45,13 +46,13 @@
 // For ESP8266, use LitteFS, SPIFFS or EEPROM.
 // For ESP32, use SPIFFS or EEPROM.
 
-#define TIMEZONE_GENERIC_VERSION            "Timezone_Generic v1.9.0"
+#define TIMEZONE_GENERIC_VERSION            "Timezone_Generic v1.9.1"
 
 #define TIMEZONE_GENERIC_VERSION_MAJOR      1
 #define TIMEZONE_GENERIC_VERSION_MINOR      9
-#define TIMEZONE_GENERIC_VERSION_PATCH      0
+#define TIMEZONE_GENERIC_VERSION_PATCH      1
 
-#define TIMEZONE_GENERIC_VERSION_INT        1009000
+#define TIMEZONE_GENERIC_VERSION_INT        1009001
 
 
 #if defined(ARDUINO) && (ARDUINO >= 100)

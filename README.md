@@ -228,9 +228,10 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 17. Depending on which board you're using:
    - [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
-   - [`FlashStorage_SAMD library v1.2.1+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_SAMD.svg?)](https://www.ardu-badge.com/FlashStorage_SAMD)
-   - [`FlashStorage_STM32 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
-   - [`FlashStorage_RTL8720 library v1.0.0+`](https://github.com/khoih-prog/FlashStorage_RTL8720) for RTL8720DN. etc. boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_RTL8720.svg?)](https://www.ardu-badge.com/FlashStorage_RTL8720)
+   - [`FlashStorage_SAMD library v1.3.2+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_SAMD.svg?)](https://www.ardu-badge.com/FlashStorage_SAMD)
+   - [`FlashStorage_STM32F1 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32F1) for STM32F1/F3 boards. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32F1.svg?)](https://www.ardu-badge.com/FlashStorage_STM32F1)
+   - [`FlashStorage_STM32 library v1.2.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
+   - [`FlashStorage_RTL8720 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_RTL8720) for RTL8720DN. etc. boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_RTL8720.svg?)](https://www.ardu-badge.com/FlashStorage_RTL8720)
    - [`LittleFS_esp32 v1.0.6+`](https://github.com/lorol/LITTLEFS) for ESP32-based boards using LittleFS. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_esp32.svg?)](https://www.ardu-badge.com/LittleFS_esp32). **Notice**: This [`LittleFS_esp32 library`](https://github.com/lorol/LITTLEFS) has been integrated to Arduino [esp32 core v1.0.6](https://github.com/espressif/arduino-esp32/tree/master/libraries/LITTLEFS).
 
 18. Depending on which Ethernet card/module/shield you're using:
@@ -242,7 +243,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
    - [`UIPEthernet library v2.0.11+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest). To be used with [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest). 
 19. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic) to use WiFiNINA modules/shields. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-20. [`WiFiWebServer library v1.5.4+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+20. [`WiFiWebServer library v1.5.5-1+`](https://github.com/khoih-prog/WiFiWebServer) to use WiFi/WiFiNINA modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
 21. [`EthernetWebServer library v2.0.0+`](https://github.com/khoih-prog/EthernetWebServer) to use Ethernet modules/shields on boards other than STM32F/L/H/G/WB/MP1. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer).
 22. [`EthernetWebServer_STM32 library v1.3.3+`](https://github.com/khoih-prog/EthernetWebServer_STM32) to use Ethernet modules/shields on STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer_STM32.svg?)](https://www.ardu-badge.com/EthernetWebServer_STM32).
 23. [`ESP8266_AT_WebServer library v1.5.3+`](https://github.com/khoih-prog/ESP8266_AT_WebServer) to use ESP8266-AT/ESP32-AT WiFi modules/shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
@@ -387,13 +388,13 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.6) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.6). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.7) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.7). 
 
-Supposing the Adafruit SAMD core version is 1.7.6. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.7. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/cores/arduino/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.7/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.7/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.7/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -1153,8 +1154,8 @@ tz.display_STD_Rule();
 
 //////////////////////////////////////////
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.0"
-#define TIMEZONE_GENERIC_VERSION_MIN             1009000
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.1"
+#define TIMEZONE_GENERIC_VERSION_MIN             1009001
 
 //////////////////////////////////////////
 
@@ -1622,11 +1623,14 @@ void loop()
 #define _NTP_LOGLEVEL_                      0
 #define _TZ_LOGLEVEL_                       1
 
-#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+#if ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+     || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+     || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) \
+     || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD51__) || defined(__SAMD51J20A__) \
+     || defined(__SAMD51J19A__) || defined(__SAMD51G19A__) || defined(__SAMD51P19A__)  \
+     || defined(__SAMD21E15A__) || defined(__SAMD21E16A__) || defined(__SAMD21E17A__) || defined(__SAMD21E18A__) \
+     || defined(__SAMD21G15A__) || defined(__SAMD21G16A__) || defined(__SAMD21G17A__) || defined(__SAMD21G18A__) \
+     || defined(__SAMD21J15A__) || defined(__SAMD21J16A__) || defined(__SAMD21J17A__) || defined(__SAMD21J18A__) )
 #if defined(ETHERNET_USE_SAMD)
 #undef ETHERNET_USE_SAMD
 #endif
@@ -2029,7 +2033,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2047,32 +2051,33 @@ SS:5
 =========================
 Using mac index = 9
 You're connected to the network, IP = 192.168.2.89
+
 Packet received
-Seconds since Jan 1 1900 = 3847367660
-Unix time = 1638378860
-The UTC time is 17:14:20
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-04:14:20 Thu 02 Dec 2021 AEDT Sydney
-20:14:20 Wed 01 Dec 2021 MSK  Moscow
-18:14:20 Wed 01 Dec 2021 CET  Paris
-17:14:20 Wed 01 Dec 2021 GMT  London
-17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:20 Wed 01 Dec 2021 EST  New York
-11:14:20 Wed 01 Dec 2021 CST  Chicago
-10:14:20 Wed 01 Dec 2021 MST  Denver
-10:14:20 Wed 01 Dec 2021 MST  Phoenix
-09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-04:14:30 Thu 02 Dec 2021 AEDT Sydney
-20:14:30 Wed 01 Dec 2021 MSK  Moscow
-18:14:30 Wed 01 Dec 2021 CET  Paris
-17:14:30 Wed 01 Dec 2021 GMT  London
-17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:30 Wed 01 Dec 2021 EST  New York
-11:14:30 Wed 01 Dec 2021 CST  Chicago
-10:14:30 Wed 01 Dec 2021 MST  Denver
-10:14:30 Wed 01 Dec 2021 MST  Phoenix
-09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2083,7 +2088,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2104,32 +2109,33 @@ SS:5
 =========================
 Using mac index = 0
 You're connected to the network, IP = 192.168.2.84
+
 Packet received
-Seconds since Jan 1 1900 = 3847367660
-Unix time = 1638378860
-The UTC time is 17:14:20
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-04:14:20 Thu 02 Dec 2021 AEDT Sydney
-20:14:20 Wed 01 Dec 2021 MSK  Moscow
-18:14:20 Wed 01 Dec 2021 CET  Paris
-17:14:20 Wed 01 Dec 2021 GMT  London
-17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:20 Wed 01 Dec 2021 EST  New York
-11:14:20 Wed 01 Dec 2021 CST  Chicago
-10:14:20 Wed 01 Dec 2021 MST  Denver
-10:14:20 Wed 01 Dec 2021 MST  Phoenix
-09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-04:14:30 Thu 02 Dec 2021 AEDT Sydney
-20:14:30 Wed 01 Dec 2021 MSK  Moscow
-18:14:30 Wed 01 Dec 2021 CET  Paris
-17:14:30 Wed 01 Dec 2021 GMT  London
-17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:30 Wed 01 Dec 2021 EST  New York
-11:14:30 Wed 01 Dec 2021 CST  Chicago
-10:14:30 Wed 01 Dec 2021 MST  Denver
-10:14:30 Wed 01 Dec 2021 MST  Phoenix
-09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2140,36 +2146,37 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Starting TZ_NTP_WorldClock_WiFiNINA on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.128
 Listening on port 2390
+
 Packet received
-Seconds since Jan 1 1900 = 3847367660
-Unix time = 1638378860
-The UTC time is 17:14:20
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-04:14:20 Thu 02 Dec 2021 AEDT Sydney
-20:14:20 Wed 01 Dec 2021 MSK  Moscow
-18:14:20 Wed 01 Dec 2021 CET  Paris
-17:14:20 Wed 01 Dec 2021 GMT  London
-17:14:20 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:20 Wed 01 Dec 2021 EST  New York
-11:14:20 Wed 01 Dec 2021 CST  Chicago
-10:14:20 Wed 01 Dec 2021 MST  Denver
-10:14:20 Wed 01 Dec 2021 MST  Phoenix
-09:14:20 Wed 01 Dec 2021 PST  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-04:14:30 Thu 02 Dec 2021 AEDT Sydney
-20:14:30 Wed 01 Dec 2021 MSK  Moscow
-18:14:30 Wed 01 Dec 2021 CET  Paris
-17:14:30 Wed 01 Dec 2021 GMT  London
-17:14:30 Wed 01 Dec 2021 UTC  Universal Coordinated Time
-12:14:30 Wed 01 Dec 2021 EST  New York
-11:14:30 Wed 01 Dec 2021 CST  Chicago
-10:14:30 Wed 01 Dec 2021 MST  Denver
-10:14:30 Wed 01 Dec 2021 MST  Phoenix
-09:14:30 Wed 01 Dec 2021 PST  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2180,7 +2187,7 @@ The following is debug terminal output when running example [**RTC_STM32_Etherne
 
 ```
 Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2190,16 +2197,23 @@ DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] SS: 10
 [ETHERNET_WEBSERVER] =========================
 You're connected to the network, IP = 192.168.2.117
+
 Packet received
-Seconds since Jan 1 1900 = 3847367857
-Unix time = 1638379057
-The UTC time is 17:17:37
+Seconds since Jan 1 1900 = 3852241530
+Unix time = 1643252730
+The UTC time is 3:05:30
 
-17:17:37 Wed 01 Dec 2021 UTC
-12:17:37 Wed 01 Dec 2021 EST
+03:05:30 Thu 27 Jan 2022 UTC
+22:05:30 Wed 26 Jan 2022 EST
 
-17:17:47 Wed 01 Dec 2021 UTC
-12:17:47 Wed 01 Dec 2021 EST
+03:05:40 Thu 27 Jan 2022 UTC
+22:05:40 Wed 26 Jan 2022 EST
+
+03:05:50 Thu 27 Jan 2022 UTC
+22:05:50 Wed 26 Jan 2022 EST
+
+03:06:00 Thu 27 Jan 2022 UTC
+22:06:00 Wed 26 Jan 2022 EST
 ```
 
 ---
@@ -2210,7 +2224,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on SAM DUE with W5x00 using EthernetLarge Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2233,19 +2247,12 @@ SS:10
 Using mac index = 5
 You're connected to the network, IP = 192.168.2.108
 ============================
-22:24:33 Fri 31 Dec 2021 UTC
-17:24:33 Fri 31 Dec 2021 EST
 
-22:24:42 Fri 31 Dec 2021 UTC
-17:24:42 Fri 31 Dec 2021 EST
+03:06:20 Thu 27 Jan 2022 UTC
+22:06:20 Wed 26 Jan 2022 EST
 
-22:24:52 Fri 31 Dec 2021 UTC
-17:24:52 Fri 31 Dec 2021 EST
-
-22:25:01 Fri 31 Dec 2021 UTC
-17:25:01 Fri 31 Dec 2021 EST
-
-
+03:06:30 Thu 27 Jan 2022 UTC
+22:06:30 Wed 26 Jan 2022 EST
 ```
 
 ---
@@ -2256,7 +2263,7 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 
 ```
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using EthernetLarge Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 DS323x_Generic v1.2.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -2278,19 +2285,20 @@ SS:5
 =========================
 Using mac index = 3
 You're connected to the network, IP = 192.168.2.99
+
 Packet received
-Seconds since Jan 1 1900 = 3847367857
-Unix time = 1638379057
-The UTC time is 17:17:37
+Seconds since Jan 1 1900 = 3852241530
+Unix time = 1643252730
+The UTC time is 3:05:30
 
-22:25:11 Fri 31 Dec 2021 UTC
-17:25:11 Fri 31 Dec 2021 EST
+03:05:30 Thu 27 Jan 2022 UTC
+22:05:30 Wed 26 Jan 2022 EST
 
-22:25:21 Fri 31 Dec 2021 UTC
-17:25:21 Fri 31 Dec 2021 EST
+03:05:40 Thu 27 Jan 2022 UTC
+22:05:40 Wed 26 Jan 2022 EST
 
-22:25:30 Fri 31 Dec 2021 UTC
-17:25:30 Fri 31 Dec 2021 EST
+03:05:50 Thu 27 Jan 2022 UTC
+22:05:50 Wed 26 Jan 2022 EST
 ```
 
 ---
@@ -2301,7 +2309,7 @@ The following is debug terminal output when running example [**tzTest**](example
 
 ```
 Starting TZTest on NRF52840_FEATHER
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 -------- Apr-2018 time change --------
 13:59:57 Sat 31 Mar 2018 UTC = 02:59:57 Sun 01 Apr 2018 NZDT
 13:59:58 Sat 31 Mar 2018 UTC = 02:59:58 Sun 01 Apr 2018 NZDT
@@ -2407,7 +2415,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NRF52840_FEATHER
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2432,7 +2440,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on SAMD_NANO_33_IOT
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 WriteRules done
 readRules done
 [TZ] DST rule
@@ -2453,7 +2461,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on NUCLEO_F767ZI
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [TZ] Write to EEPROM, size =  16384 , offset =  0
 WriteRules done
 [TZ] Read from EEPROM, size =  16384 , offset =  0
@@ -2476,7 +2484,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [TZ] Writing to dueFlashStorage OK
 WriteRules done
 [TZ] Reading from dueFlashStorage OK
@@ -2499,7 +2507,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP32_DEV
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2524,7 +2532,7 @@ The following is debug terminal output when running example [**WriteRules**](exa
 
 ```
 Start WriteRules on ESP8266_NODEMCU
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [TZ] Saving m_dst & m_std to TZ_file : /timezone.dat , data offset = 0
 [TZ] Saving to TZ_file OK
 WriteRules done
@@ -2549,7 +2557,7 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2585,7 +2593,7 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 11
@@ -2631,47 +2639,48 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_WiFiNINA on MBED NANO_RP2040_CONNECT with WiFiNINA using WiFiNINA_Generic Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 Connecting to WPA SSID: HueNet1
 You're connected to the network, IP = 192.168.2.153
 Listening on port 2390
+
 Packet received
-Seconds since Jan 1 1900 = 3831822093
-Unix time = 1622833293
-The UTC time is 19:01:33
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-05:01:33 Sat 05 Jun 2021 AEST Sydney
-22:01:33 Fri 04 Jun 2021 MSK  Moscow
-21:01:33 Fri 04 Jun 2021 CEST Paris
-20:01:33 Fri 04 Jun 2021 BST  London
-19:01:33 Fri 04 Jun 2021 UTC  Universal Coordinated Time
-15:01:33 Fri 04 Jun 2021 EDT  New York
-14:01:33 Fri 04 Jun 2021 CDT  Chicago
-13:01:33 Fri 04 Jun 2021 MDT  Denver
-12:01:33 Fri 04 Jun 2021 MST  Phoenix
-12:01:33 Fri 04 Jun 2021 PDT  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-05:01:42 Sat 05 Jun 2021 AEST Sydney
-22:01:42 Fri 04 Jun 2021 MSK  Moscow
-21:01:42 Fri 04 Jun 2021 CEST Paris
-20:01:42 Fri 04 Jun 2021 BST  London
-19:01:42 Fri 04 Jun 2021 UTC  Universal Coordinated Time
-15:01:42 Fri 04 Jun 2021 EDT  New York
-14:01:42 Fri 04 Jun 2021 CDT  Chicago
-13:01:42 Fri 04 Jun 2021 MDT  Denver
-12:01:42 Fri 04 Jun 2021 MST  Phoenix
-12:01:42 Fri 04 Jun 2021 PDT  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
 
-05:01:52 Sat 05 Jun 2021 AEST Sydney
-22:01:52 Fri 04 Jun 2021 MSK  Moscow
-21:01:52 Fri 04 Jun 2021 CEST Paris
-20:01:52 Fri 04 Jun 2021 BST  London
-19:01:52 Fri 04 Jun 2021 UTC  Universal Coordinated Time
-15:01:52 Fri 04 Jun 2021 EDT  New York
-14:01:52 Fri 04 Jun 2021 CDT  Chicago
-13:01:52 Fri 04 Jun 2021 MDT  Denver
-12:01:52 Fri 04 Jun 2021 MST  Phoenix
-12:01:52 Fri 04 Jun 2021 PDT  Los Angeles
+14:09:20 Thu 27 Jan 2022 AEDT Sydney
+06:09:20 Thu 27 Jan 2022 MSK  Moscow
+04:09:20 Thu 27 Jan 2022 CET  Paris
+03:09:20 Thu 27 Jan 2022 GMT  London
+03:09:20 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:20 Wed 26 Jan 2022 EST  New York
+21:09:20 Wed 26 Jan 2022 CST  Chicago
+20:09:20 Wed 26 Jan 2022 MST  Denver
+20:09:20 Wed 26 Jan 2022 MST  Phoenix
+19:09:20 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2682,7 +2691,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on MBED RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2703,21 +2712,22 @@ SS:5
 =========================
 Using mac index = 8
 You're connected to the network, IP = 192.168.2.99
-Packet received
-Seconds since Jan 1 1900 = 3831845852
-Unix time = 1622857052
-The UTC time is 1:37:32
 
-11:37:32 Sat 05 Jun 2021 AEST Sydney
-04:37:32 Sat 05 Jun 2021 MSK  Moscow
-03:37:32 Sat 05 Jun 2021 CEST Paris
-02:37:32 Sat 05 Jun 2021 BST  London
-01:37:32 Sat 05 Jun 2021 UTC  Universal Coordinated Time
-21:37:32 Fri 04 Jun 2021 EDT  New York
-20:37:32 Fri 04 Jun 2021 CDT  Chicago
-19:37:32 Fri 04 Jun 2021 MDT  Denver
-18:37:32 Fri 04 Jun 2021 MST  Phoenix
-18:37:32 Fri 04 Jun 2021 PDT  Los Angeles
+Packet received
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
+
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2729,7 +2739,7 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 
 ```
 Start TZ_NTP_WorldClock_Ethernet on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2750,32 +2760,44 @@ SS:17
 =========================
 Using mac index = 11
 You're connected to the network, IP = 192.168.2.96
+
 Packet received
-Seconds since Jan 1 1900 = 3831823507
-Unix time = 1622834707
-The UTC time is 19:25:07
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-05:25:07 Sat 05 Jun 2021 AEST Sydney
-22:25:07 Fri 04 Jun 2021 MSK  Moscow
-21:25:07 Fri 04 Jun 2021 CEST Paris
-20:25:07 Fri 04 Jun 2021 BST  London
-19:25:07 Fri 04 Jun 2021 UTC  Universal Coordinated Time
-15:25:07 Fri 04 Jun 2021 EDT  New York
-14:25:07 Fri 04 Jun 2021 CDT  Chicago
-13:25:07 Fri 04 Jun 2021 MDT  Denver
-12:25:07 Fri 04 Jun 2021 MST  Phoenix
-12:25:07 Fri 04 Jun 2021 PDT  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-05:25:17 Sat 05 Jun 2021 AEST Sydney
-22:25:17 Fri 04 Jun 2021 MSK  Moscow
-21:25:17 Fri 04 Jun 2021 CEST Paris
-20:25:17 Fri 04 Jun 2021 BST  London
-19:25:17 Fri 04 Jun 2021 UTC  Universal Coordinated Time
-15:25:17 Fri 04 Jun 2021 EDT  New York
-14:25:17 Fri 04 Jun 2021 CDT  Chicago
-13:25:17 Fri 04 Jun 2021 MDT  Denver
-12:25:17 Fri 04 Jun 2021 MST  Phoenix
-12:25:17 Fri 04 Jun 2021 PDT  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
+
+14:09:20 Thu 27 Jan 2022 AEDT Sydney
+06:09:20 Thu 27 Jan 2022 MSK  Moscow
+04:09:20 Thu 27 Jan 2022 CET  Paris
+03:09:20 Thu 27 Jan 2022 GMT  London
+03:09:20 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:20 Wed 26 Jan 2022 EST  New York
+21:09:20 Wed 26 Jan 2022 CST  Chicago
+20:09:20 Wed 26 Jan 2022 MST  Denver
+20:09:20 Wed 26 Jan 2022 MST  Phoenix
+19:09:20 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2788,26 +2810,27 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_WT32_ETH01 on WT32-ETH01 with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232
 FULL_DUPLEX, 100Mbps
 TZ_NTP_WorldClock_WT32_ETH01 started @ IP address: 192.168.2.232
 Listening on port 2390
-Packet received
-Seconds since Jan 1 1900 = 3835448717
-Unix time = 1626459917
-The UTC time is 18:25:17
 
-04:25:17 Sat 17 Jul 2021 AEST Sydney
-21:25:17 Fri 16 Jul 2021 MSK  Moscow
-20:25:17 Fri 16 Jul 2021 CEST Paris
-19:25:17 Fri 16 Jul 2021 BST  London
-18:25:17 Fri 16 Jul 2021 UTC  Universal Coordinated Time
-14:25:17 Fri 16 Jul 2021 EDT  New York
-13:25:17 Fri 16 Jul 2021 CDT  Chicago
-12:25:17 Fri 16 Jul 2021 MDT  Denver
-11:25:17 Fri 16 Jul 2021 MST  Phoenix
-11:25:17 Fri 16 Jul 2021 PDT  Los Angeles
+Packet received
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
+
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 ---
@@ -2820,37 +2843,38 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_RTL8720DN on Rtlduino RTL8720DN
 WiFiWebServer_RTL8720 v1.1.1
-Timezone_Generic v1.9.0
+Timezone_Generic v1.9.1
 Current Firmware Version = 1.0.0
 Attempting to connect to SSID: HueNet_5G
 TZ_NTP_Clock_RTL8720DN started @ IP address: 192.168.2.111
 Listening on port 2390
+
 Packet received
-Seconds since Jan 1 1900 = 3837552392
-Unix time = 1628563592
-The UTC time is 2:46:32
+Seconds since Jan 1 1900 = 3852241740
+Unix time = 1643252940
+The UTC time is 3:09:00
 
-12:46:32 Tue 10 Aug 2021 AEST Sydney
-05:46:32 Tue 10 Aug 2021 MSK  Moscow
-04:46:32 Tue 10 Aug 2021 CEST Paris
-03:46:32 Tue 10 Aug 2021 BST  London
-02:46:32 Tue 10 Aug 2021 UTC  Universal Coordinated Time
-22:46:32 Mon 09 Aug 2021 EDT  New York
-21:46:32 Mon 09 Aug 2021 CDT  Chicago
-20:46:32 Mon 09 Aug 2021 MDT  Denver
-19:46:32 Mon 09 Aug 2021 MST  Phoenix
-19:46:32 Mon 09 Aug 2021 PDT  Los Angeles
+14:09:00 Thu 27 Jan 2022 AEDT Sydney
+06:09:00 Thu 27 Jan 2022 MSK  Moscow
+04:09:00 Thu 27 Jan 2022 CET  Paris
+03:09:00 Thu 27 Jan 2022 GMT  London
+03:09:00 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:00 Wed 26 Jan 2022 EST  New York
+21:09:00 Wed 26 Jan 2022 CST  Chicago
+20:09:00 Wed 26 Jan 2022 MST  Denver
+20:09:00 Wed 26 Jan 2022 MST  Phoenix
+19:09:00 Wed 26 Jan 2022 PST  Los Angeles
 
-12:46:42 Tue 10 Aug 2021 AEST Sydney
-05:46:42 Tue 10 Aug 2021 MSK  Moscow
-04:46:42 Tue 10 Aug 2021 CEST Paris
-03:46:42 Tue 10 Aug 2021 BST  London
-02:46:42 Tue 10 Aug 2021 UTC  Universal Coordinated Time
-22:46:42 Mon 09 Aug 2021 EDT  New York
-21:46:42 Mon 09 Aug 2021 CDT  Chicago
-20:46:42 Mon 09 Aug 2021 MDT  Denver
-19:46:42 Mon 09 Aug 2021 MST  Phoenix
-19:46:42 Mon 09 Aug 2021 PDT  Los Angeles
+14:09:10 Thu 27 Jan 2022 AEDT Sydney
+06:09:10 Thu 27 Jan 2022 MSK  Moscow
+04:09:10 Thu 27 Jan 2022 CET  Paris
+03:09:10 Thu 27 Jan 2022 GMT  London
+03:09:10 Thu 27 Jan 2022 UTC  Universal Coordinated Time
+22:09:10 Wed 26 Jan 2022 EST  New York
+21:09:10 Wed 26 Jan 2022 CST  Chicago
+20:09:10 Wed 26 Jan 2022 MST  Denver
+20:09:10 Wed 26 Jan 2022 MST  Phoenix
+19:09:10 Wed 26 Jan 2022 PST  Los Angeles
 ```
 
 
@@ -2893,6 +2917,10 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
 18. Add support to **RTL8720DN, RTL8722DM, RTL8722CSM, etc.** boards
 19. Fix `multiple-definitions` linker error and weird bug related to `src_cpp`.
 20. Optimize library code by using `reference-passing` instead of `value-passing`
+21. Update to be compatible with new `FlashStorage_SAMD`
+22. Use better `FlashStorage_STM32` or `FlashStorage_STM32F1` library for STM32
+23. Add support to generic SAMD21 boards : `__SAMD21E1xA__`, `__SAMD21G1xA__` and `__SAMD21J1xA__`
+
 
 ---
 ---

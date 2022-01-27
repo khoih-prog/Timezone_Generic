@@ -18,8 +18,8 @@
 
 //////////////////////////////////////////
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.0"
-#define TIMEZONE_GENERIC_VERSION_MIN             1009000
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.1"
+#define TIMEZONE_GENERIC_VERSION_MIN             1009001
 
 //////////////////////////////////////////
 
