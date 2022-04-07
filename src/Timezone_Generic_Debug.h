@@ -11,7 +11,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
   
-  Version: 1.9.1
+  Version: 1.10.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
   1.9.0   K Hoang      20/01/2022 Make compatible to old code
   1.9.1   K Hoang      26/01/2022 Update to be compatible with new FlashStorage libraries. Add support to more SAMD/STM32 boards
+  1.10.0  K Hoang      06/04/2022 Use Ethernet_Generic library as default. Add support to Portenta_H7 Ethernet and WiFi
  **********************************************************************************************************************************/
 
 #pragma once
@@ -72,6 +73,7 @@ const char TZ_SPACE[] = " ";
 #define TZ_LOGERROR(x)         if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
 #define TZ_LOGERROR0(x)        if(_TZ_LOGLEVEL_>0) { TZ_PRINT(x); }
 #define TZ_LOGERROR1(x,y)      if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_HEXLOGERROR1(x,y)   if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y, HEX); }
 #define TZ_LOGERROR2(x,y,z)    if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
 #define TZ_LOGERROR3(x,y,z,w)  if(_TZ_LOGLEVEL_>0) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
 
@@ -80,6 +82,7 @@ const char TZ_SPACE[] = " ";
 #define TZ_LOGWARN(x)          if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
 #define TZ_LOGWARN0(x)         if(_TZ_LOGLEVEL_>1) { TZ_PRINT(x); }
 #define TZ_LOGWARN1(x,y)       if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_HEXLOGWARN1(x,y)    if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y, HEX); }
 #define TZ_LOGWARN2(x,y,z)     if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
 #define TZ_LOGWARN3(x,y,z,w)   if(_TZ_LOGLEVEL_>1) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
 
@@ -88,6 +91,7 @@ const char TZ_SPACE[] = " ";
 #define TZ_LOGINFO(x)          if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
 #define TZ_LOGINFO0(x)         if(_TZ_LOGLEVEL_>2) { TZ_PRINT(x); }
 #define TZ_LOGINFO1(x,y)       if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_HEXLOGINFO1(x,y)    if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y, HEX); }
 #define TZ_LOGINFO2(x,y,z)     if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
 #define TZ_LOGINFO3(x,y,z,w)   if(_TZ_LOGLEVEL_>2) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
 
@@ -96,6 +100,7 @@ const char TZ_SPACE[] = " ";
 #define TZ_LOGDEBUG(x)         if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINTLN(x); }
 #define TZ_LOGDEBUG0(x)        if(_TZ_LOGLEVEL_>3) { TZ_PRINT(x); }
 #define TZ_LOGDEBUG1(x,y)      if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y); }
+#define TZ_HEXLOGDEBUG1(x,y)   if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINTLN(y, HEX); }
 #define TZ_LOGDEBUG2(x,y,z)    if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINTLN(z); }
 #define TZ_LOGDEBUG3(x,y,z,w)  if(_TZ_LOGLEVEL_>3) { TZ_PRINT_MARK; TZ_PRINT(x); TZ_PRINT_SP; TZ_PRINT(y); TZ_PRINT_SP; TZ_PRINT(z); TZ_PRINT_SP; TZ_PRINTLN(w); }
 

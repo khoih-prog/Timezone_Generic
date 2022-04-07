@@ -11,7 +11,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
   
-  Version: 1.9.1
+  Version: 1.10.0
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.8.0   K Hoang      31/12/2021 Fix `multiple-definitions` linker error
   1.9.0   K Hoang      20/01/2022 Make compatible to old code
   1.9.1   K Hoang      26/01/2022 Update to be compatible with new FlashStorage libraries. Add support to more SAMD/STM32 boards
+  1.10.0  K Hoang      06/04/2022 Use Ethernet_Generic library as default. Add support to Portenta_H7 Ethernet and WiFi
  **********************************************************************************************************************************/
 
 #pragma once
@@ -123,6 +124,8 @@
     #define FileFS        SPIFFS
   #endif
 
+//////////////////////////////////////////////////////////////
+
 #elif defined(ESP8266)
   #if defined(TZ_USE_ESP8266)
     #undef TZ_USE_ESP8266
@@ -159,6 +162,8 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use SAM-DUE and DueFlashStorage
+
+//////////////////////////////////////////////////////////////
   
 #elif ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -179,6 +184,8 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use SAMD and FlashStorage
+
+//////////////////////////////////////////////////////////////
   
 #elif ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
@@ -195,6 +202,38 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use NRF52 and LittleFS / InternalFS
+
+
+//////////////////////////////////////////////////////////////
+
+#elif ( ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) ) && defined(ARDUINO_ARCH_MBED) )
+
+  #if MBED_PORTENTA_H7_INITIALIZED
+    #define MBED_PORTENTA_H7_TO_BE_INITIALIZED     false
+    #warning MBED_PORTENTA_H7_INITIALIZED in another place
+  #else
+    // Better to delay until init done
+    #if defined(MBED_PORTENTA_H7_INITIALIZED)
+      #undef MBED_PORTENTA_H7_INITIALIZED
+    #endif
+    #define MBED_PORTENTA_H7_INITIALIZED           true
+    
+    #define MBED_PORTENTA_H7_TO_BE_INITIALIZED     true
+    //#warning MBED_PORTENTA_H7_TO_BE_INITIALIZED here
+  #endif
+    
+  #if defined(TZ_USE_MBED_PORTENTA)
+    #undef TZ_USE_MBED_PORTENTA
+  #endif
+  #define TZ_USE_MBED_PORTENTA      true
+  
+  #if defined(TZ_USE_EEPROM)
+    #undef TZ_USE_EEPROM
+  #endif
+  #define TZ_USE_EEPROM    false
+  
+  #warning Use MBED PORTENTA_H7 and LittleFS
+//////////////////////////////////////////////////////////////
 
 #elif ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
@@ -214,6 +253,8 @@
   //#define TZ_USE_EEPROM    true
   //#warning Use STM32 and EEPROM
 
+//////////////////////////////////////////////////////////////
+
 #elif ( defined(ARDUINO_ARCH_RP2040) && !defined(ARDUINO_ARCH_MBED) )
 
   // For Earle' arduino-pico core
@@ -228,6 +269,8 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use RP2040 (such as RASPBERRY_PI_PICO) and LittleFS
+
+//////////////////////////////////////////////////////////////
 
 #elif ( defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_ARCH_MBED) )
 
@@ -259,6 +302,7 @@
   
   #warning Use MBED RP2040 (such as NANO_RP2040_CONNECT, RASPBERRY_PI_PICO) and LittleFS
 
+//////////////////////////////////////////////////////////////
 
 #elif ( defined(CONFIG_PLATFORM_8721D) || defined(BOARD_RTL8722D) || defined(BOARD_RTL8722DM_MINI) || defined(BOARD_RTL8720DN_BW16) )
   #if defined(TZ_USE_RTL8720)
@@ -272,8 +316,9 @@
   #define TZ_USE_EEPROM    false
   
   #warning Use TZ_USE_RTL8720 and FlashStorage_TZ_USE_RTL8720
-  
-             
+
+//////////////////////////////////////////////////////////////
+            
 #else
   #if defined(CORE_TEENSY)
     #define TZ_USE_EENSY      true
@@ -397,6 +442,43 @@
   #define  TZ_FILENAME     "/fs/timezone.dat"
   
   #warning MBED_RP2040_TO_BE_INITIALIZED locally in Timezone_Generic
+
+/////////////////////////////
+
+#elif (TZ_USE_MBED_PORTENTA && MBED_PORTENTA_H7_TO_BE_INITIALIZED)
+
+  //Use LittleFS for MBED RPI Pico
+  #include "FlashIAPBlockDevice.h"
+  #include "LittleFileSystem.h"
+  #include "mbed.h"
+
+  #include <stdio.h>
+  #include <errno.h>
+  #include <functional>
+
+  #include "BlockDevice.h"
+  
+  #include "mbed_portenta/FlashIAPLimits.h"
+  
+  #if !defined(FORCE_REFORMAT)
+    #define FORCE_REFORMAT            false
+  #elif FORCE_REFORMAT
+    #warning FORCE_REFORMAT enable. Are you sure ?
+  #endif
+
+  static FlashIAPBlockDevice* blockDevicePtr = nullptr;
+
+  mbed::LittleFileSystem fs("littlefs");
+  
+  struct FlashIAPLimits _flashIAPLimits;
+  
+  #if defined(TZ_FILENAME)
+    #undef TZ_FILENAME
+  #endif
+  #define  TZ_FILENAME     "/littlefs/timezone.dat"
+  
+  #warning MBED_PORTENTA_H7_TO_BE_INITIALIZED locally in Timezone_Generic
+
 
 /////////////////////////////
 #elif TZ_USE_RTL8720
@@ -541,6 +623,7 @@ void Timezone::initStorage(uint32_t address)
       }
   
 /////////////////////////////
+
 #elif TZ_USE_MBED_RP2040
  
       TZ_LOGDEBUG1("LittleFS size (KB) = ", RP2040_FS_SIZE_KB);
@@ -564,7 +647,54 @@ void Timezone::initStorage(uint32_t address)
         TZ_LOGERROR("LittleFS error");
       }
 
-/////////////////////////////    
+/////////////////////////////
+
+#elif TZ_USE_MBED_PORTENTA
+
+      if (blockDevicePtr != nullptr)
+        return;
+
+      // Get limits of the the internal flash of the microcontroller
+      _flashIAPLimits = getFlashIAPLimits();
+      
+      TZ_LOGDEBUG1("Flash Size: (KB) = ", _flashIAPLimits.flash_size / 1024.0);
+      TZ_HEXLOGDEBUG1("FlashIAP Start Address: = 0x", _flashIAPLimits.start_address);
+      TZ_LOGDEBUG1("LittleFS size (KB) = ", _flashIAPLimits.available_size / 1024.0);
+      
+      blockDevicePtr = new FlashIAPBlockDevice(_flashIAPLimits.start_address, _flashIAPLimits.available_size);
+      
+      if (!blockDevicePtr)
+      {    
+        TZ_LOGERROR("Error init FlashIAPBlockDevice");
+
+        return;
+      }
+      
+  #if FORCE_REFORMAT
+      fs.reformat(blockDevicePtr);
+  #endif
+
+      int err = fs.mount(blockDevicePtr);
+      
+      TZ_LOGDEBUG(err ? "LittleFS Mount Fail" : "LittleFS Mount OK");
+  
+      if (err)
+      {
+        // Reformat if we can't mount the filesystem
+        TZ_LOGDEBUG("Formatting... ");
+  
+        err = fs.reformat(blockDevicePtr);
+      }
+  
+      bool beginOK = (err == 0);
+  
+      if (!beginOK)
+      {
+        TZ_LOGERROR("\nLittleFS error");
+      }
+      
+/////////////////////////////  
+ 
 #elif TZ_USE_RTL8720
   // Do something to init FlashStorage_RTL8720
     
@@ -1466,6 +1596,7 @@ void Timezone::writeTZData(int address)
 }
 
 /////////////////////////////////////////////
+
 #elif (TZ_USE_MBED_RP2040)
 
   #warning Using MBED RP2040 LittleFS in Timezone_Generic
@@ -1548,6 +1679,88 @@ void Timezone::writeTZData(int address)
   else
   {
     TZ_LOGERROR("Saving to TZ_file failed");
+  }
+}
+
+/////////////////////////////////////////////
+
+#elif (TZ_USE_MBED_PORTENTA)
+
+  #warning Using MBED PORTENTA LittleFS in Timezone_Generic
+  
+  // MBED PORTENTA code  
+/*----------------------------------------------------------------------*
+   Read the daylight and standard time rules from LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::readTZData()
+{
+  TZ_LOGDEBUG3("Start readTZData from ", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+   
+  // MBED PORTENTA code
+  FILE *file = fopen(TZ_FILENAME, "r");
+  
+  TZ_LOGDEBUG3("Reading m_dst & m_std from TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {
+    memset(&m_dst, 0, TZ_DATA_SIZE);
+    memset(&m_std, 0, TZ_DATA_SIZE);
+    
+    fseek(file, TZ_DATA_OFFSET, SEEK_SET);
+    fread((uint8_t *) &m_dst, 1, TZ_DATA_SIZE, file);
+        
+    // Seek to be sure
+    fseek(file, TZ_DATA_OFFSET + TZ_DATA_SIZE, SEEK_SET);
+    fread((uint8_t *) &m_std, 1, TZ_DATA_SIZE, file);
+
+    TZ_LOGDEBUG("Reading from TZ_file OK");
+
+    fclose(file);
+  }
+  else
+  {
+    TZ_LOGERROR("Reading from TZ_file failed");
+    
+    //fs.reformat(blockDevicePtr);
+  }
+}
+
+/*----------------------------------------------------------------------*
+   Write the daylight and standard time rules to LittleFS at
+   the given offset.
+  ----------------------------------------------------------------------*/
+void Timezone::writeTZData(int address)
+{ 
+
+  (void) address;
+  
+  TZ_LOGDEBUG3("Start writeTZData to ", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+  
+ 
+  // MBED PORTENTA code
+  FILE *file = fopen(TZ_FILENAME, "w");
+
+  TZ_LOGDEBUG3("Saving m_dst & m_std to TZ_file :", TZ_FILENAME, ", data offset =", TZ_DATA_OFFSET);
+
+  if (file)
+  {   
+    fseek(file, TZ_DATA_OFFSET, SEEK_SET);
+    fwrite((uint8_t *) &m_dst, 1, sizeof(m_dst) /*TZ_DATA_SIZE*/, file);
+    
+    // Seek to be sure
+    fseek(file, TZ_DATA_OFFSET + TZ_DATA_SIZE, SEEK_SET);
+    fwrite((uint8_t *) &m_std, 1, sizeof(m_std) /*TZ_DATA_SIZE*/, file);
+    
+    fclose(file);
+
+    TZ_LOGDEBUG("Saving to TZ_file OK");
+  }
+  else
+  {
+    TZ_LOGERROR("Saving to TZ_file failed");
+    
+    //fs.reformat(blockDevicePtr);
   }
 }
 

@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.10.0](#releases-v1100)
   * [Releases v1.9.1](#releases-v191)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
@@ -31,6 +32,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.10.0
+
+1. Add support to Portenta_H7 Ethernet and WiFi
+2. Use [Ethernet_Generic](https://github.com/khoih-prog/Ethernet_Generic) library as default for W5x00 Ethernet.
+3. Update `Packages_Patches`
 
 ### Releases v1.9.1
 
