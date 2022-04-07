@@ -15,15 +15,15 @@
  *****************************************************************************************************************************/
 
 #if (ESP8266 || ESP32)
-#define USE_LITTLEFS      true
-#define USE_SPIFFS        false
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false
 #endif
 
 #define TZ_DBG_PORT         Serial
 #define _TZ_LOGLEVEL_       1
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.1"
-#define TIMEZONE_GENERIC_VERSION_MIN             1009001
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1010000
 
 //////////////////////////////////////////
 
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef LED_BUILTIN
-#define LED_BUILTIN       13
+  #define LED_BUILTIN       13
 #endif
 
 void setup()
@@ -93,20 +93,26 @@ void setup()
   if ( tzName == "EDT/EST" )
   {
     // America Eastern Time
-    myDST = (TimeChangeRule) {
+    myDST = (TimeChangeRule) 
+    {
       "EDT",  Second, Sun, Mar, 2, -240
     };     // Daylight time = UTC - 4 hours
-    mySTD = (TimeChangeRule) {
+    
+    mySTD = (TimeChangeRule) 
+    {
       "EST",  First,  Sun, Nov, 2, -300
     };     // Standard time = UTC - 5 hours
   }
   else if ( tzName == "CET/CEST" )
   {
     // central Europe
-    myDST = (TimeChangeRule) {
+    myDST = (TimeChangeRule) 
+    {
       "CEST", Last, Sun, Mar, 2, 120
     };
-    mySTD = (TimeChangeRule) {
+    
+    mySTD = (TimeChangeRule) 
+    {
       "CET",  Last, Sun, Oct, 3, 60
     };
   }
@@ -114,10 +120,13 @@ void setup()
   else if ( tzName == "GMT/BST" )
   {
     // UK
-    myDST = (TimeChangeRule) {
+    myDST = (TimeChangeRule) 
+    {
       "BST",  Last, Sun, Mar, 1, 60
     };
-    mySTD = (TimeChangeRule) {
+    
+    mySTD = (TimeChangeRule) 
+    {
       "GMT",  Last, Sun, Oct, 2, 0
     };
   }

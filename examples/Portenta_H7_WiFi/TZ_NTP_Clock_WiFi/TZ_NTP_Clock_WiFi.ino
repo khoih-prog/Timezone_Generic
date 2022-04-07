@@ -1,7 +1,5 @@
 /****************************************************************************************************************************
-  TZ_NTP_Clock_STM32_Ethernet.ino
-
-  For STM32 with built-in Ethernet (Nucleo-144, DISCOVERY, etc) or W5x00/ENC28J60 Ethernet
+  TZ_NTP_Clock_WiFi.ino
   
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
 
@@ -15,8 +13,6 @@
  *****************************************************************************************************************************/
 
 #include "defines.h"
-
-//////////////////////////////////////////
 
 #define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.0"
 #define TIMEZONE_GENERIC_VERSION_MIN             1010000
@@ -32,11 +28,11 @@
   // US Eastern Time Zone (New York, Detroit,Toronto)
   TimeChangeRule myDST = {"EDT", Second, Sun, Mar, 2, -240};    // Daylight time = UTC - 4 hours
   TimeChangeRule mySTD = {"EST", First,  Sun, Nov, 2, -300};    // Standard time = UTC - 5 hours
-  Timezone myTZ(myDST, mySTD);
+  Timezone *myTZ;
 #else
   // Allow a "blank" TZ object then use begin() method to set the actual TZ.
   // Feature added by 6v6gt (https://forum.arduino.cc/index.php?topic=711259)
-  Timezone myTZ ;
+  Timezone *myTZ;
   TimeChangeRule myDST;
   TimeChangeRule mySTD;
 #endif
@@ -49,6 +45,8 @@ TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ ab
 
 //////////////////////////////////////////
 
+int status = WL_IDLE_STATUS;      // the Wifi radio's status
+
 char timeServer[]         = "time.nist.gov";  // NTP server
 unsigned int localPort    = 2390;             // local port to listen for UDP packets
 
@@ -58,7 +56,7 @@ const int UDP_TIMEOUT     = 2000;     // timeout in miliseconds to wait for an U
 byte packetBuffer[NTP_PACKET_SIZE];   // buffer to hold incoming and outgoing packets
 
 // A UDP instance to let us send and receive packets over UDP
-EthernetUDP Udp;
+WiFiUDP Udp;
 
 // send an NTP request to the time server at the given address
 void sendNTPpacket(char *ntpSrv)
@@ -69,9 +67,9 @@ void sendNTPpacket(char *ntpSrv)
   // (see URL above for details on the packets)
 
   packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-  packetBuffer[1] = 0;     // Stratum, or type of clock
-  packetBuffer[2] = 6;     // Polling Interval
-  packetBuffer[3] = 0xEC;  // Peer Clock Precision
+  packetBuffer[1] = 0;            // Stratum, or type of clock
+  packetBuffer[2] = 6;            // Polling Interval
+  packetBuffer[3] = 0xEC;         // Peer Clock Precision
   // 8 bytes of zero for Root Delay & Root Dispersion
   packetBuffer[12]  = 49;
   packetBuffer[13]  = 0x4E;
@@ -104,7 +102,7 @@ void displayClock(void)
 {
   time_t utc = now();
 
-  time_t local = myTZ.toLocal(utc, &tcr);
+  time_t local = myTZ->toLocal(utc, &tcr);
   
   Serial.println();
   printDateTime(utc, "UTC");
@@ -197,10 +195,9 @@ void setup()
 
   delay(200);
 
-  Serial.print(F("\nStart TZ_NTP_Clock_STM32_Ethernet on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.print(F("\nStart TZ_NTP_Clock_WiFi on ")); Serial.println(BOARD_NAME);
   Serial.println(TIMEZONE_GENERIC_VERSION);
-  
+
 #if defined(TIMEZONE_GENERIC_VERSION_MIN)
   if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
   {
@@ -209,42 +206,32 @@ void setup()
   }
 #endif
 
-#if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
+  // check for the presence of the shield
+  if (WiFi.status() == WL_NO_SHIELD)
+  {
+    Serial.println(F("WiFi shield not present"));
+    // don't continue
+    while (true);
+  }
 
-  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
-
-  ET_LOGWARN(F("Default SPI pinout:"));
-  ET_LOGWARN1(F("MOSI:"), MOSI);
-  ET_LOGWARN1(F("MISO:"), MISO);
-  ET_LOGWARN1(F("SCK:"),  SCK);
-  ET_LOGWARN1(F("SS:"),   SS);
-  ET_LOGWARN(F("========================="));
-
-  // For other boards, to change if necessary
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-    Ethernet.init (USE_THIS_SS_PIN);
-   
-  #elif USE_CUSTOM_ETHERNET
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    //Ethernet.init(USE_THIS_SS_PIN);
-  
-  #endif  //( ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-#endif
-  
-  // start the ethernet connection and the server:
-  // Use DHCP dynamic IP and random mac
-  uint16_t index = millis() % NUMBER_OF_MAC;
-  // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  Ethernet.begin(mac[index]);
+  // attempt to connect to WiFi network
+  while ( status != WL_CONNECTED)
+  {
+    Serial.print(F("Connecting to WPA SSID: "));
+    Serial.println(ssid);
+    // Connect to WPA/WPA2 network
+    status = WiFi.begin(ssid, pass);
+  }
 
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
-  Serial.println(Ethernet.localIP());
+  Serial.println(WiFi.localIP());
 
-#if !(USING_INITIALIZED_TZ)
+#if (USING_INITIALIZED_TZ)
+
+  myTZ = new Timezone(myDST, mySTD);
+
+#else
 
   // Can read this info from EEPROM, storage, etc
   String tzName = "EDT/EST" ;
@@ -272,13 +259,17 @@ void setup()
     mySTD = (TimeChangeRule) {"GMT",  Last, Sun, Oct, 2, 0};
   }
 
-  myTZ.init( myDST, mySTD ) ;
+  myTZ = new Timezone();
+  myTZ->init( myDST, mySTD );
   
 #endif
 
-  myTZ.writeRules();
+  myTZ->writeRules();
 
   Udp.begin(localPort);
+
+  Serial.print(F("Listening on port "));
+  Serial.println(localPort);
 }
 
 void loop()

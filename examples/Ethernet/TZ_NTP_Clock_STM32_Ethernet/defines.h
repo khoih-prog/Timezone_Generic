@@ -1,18 +1,14 @@
 /****************************************************************************************************************************
   defines.h
-  
-  For STM32 with built-in Ethernet (Nucleo-144, DISCOVERY, etc) or W5x00/ENC28J60 Ethernet
-  
-  For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
 
-  Based on and modified from Arduino Timezone Library (https://github.com/JChristensen/Timezone)
-  to support other boards such as ESP8266/ESP32, SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
+  For STM32 with built-in Ethernet LAN8742A (Nucleo-144, DISCOVERY, etc) or W5x00/ENC28J60 shield/module
 
-  Copyright (C) 2018 by Jack Christensen and licensed under GNU GPL v3.0, https://www.gnu.org/licenses/gpl.html
+  EthernetWebServer_STM32 is a library for the STM32 running Ethernet WebServer
 
-  Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
+  Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+  Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer_STM32
   Licensed under MIT license
- *****************************************************************************************************************************/
+ ***************************************************************************************************************************************/
 
 #ifndef defines_h
 #define defines_h
@@ -27,8 +23,6 @@
 
 // Debug Level from 0 to 4
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       2
-#define _NTP_LOGLEVEL_                      0
-#define _TZ_LOGLEVEL_                       3
 
 // If USE_BUILTIN_ETHERNET == false and USE_UIP_ETHERNET == false => 
 // either use W5x00 with EthernetXYZ library
@@ -47,20 +41,17 @@
 
 #if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
   // Only one if the following to be true
-  #define USE_ETHERNET          false
-  #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         true
-  #define USE_ETHERNET_LARGE    false
-  #define USE_ETHERNET_ESP8266  false
+  #define USE_ETHERNET_GENERIC  true
+  #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
 #endif
 
-#if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
   #ifdef USE_CUSTOM_ETHERNET
     #undef USE_CUSTOM_ETHERNET
   #endif
-  #define USE_CUSTOM_ETHERNET   false
+  #define USE_CUSTOM_ETHERNET   false //true
 #endif
 
 #if (USE_BUILTIN_ETHERNET)
@@ -69,18 +60,15 @@
 #elif (USE_UIP_ETHERNET)
   #warning Using ENC28J60 & UIPEthernet lib
   #define SHIELD_TYPE           "ENC28J60 & UIPEthernet Library"
-#elif USE_ETHERNET3
-  #include "Ethernet3.h"
-  #warning Using W5x00 & Ethernet3 lib
-  #define SHIELD_TYPE           "W5x00 & Ethernet3 Library"
-#elif USE_ETHERNET2
-  #include "Ethernet2.h"
-  #warning Using W5x00 & Ethernet2 lib
-  #define SHIELD_TYPE           "W5x00 & Ethernet2 Library"
-#elif USE_ETHERNET_LARGE
-  #include "EthernetLarge.h"
-  #warning Using W5x00 & EthernetLarge lib
-  #define SHIELD_TYPE           "W5x00 & EthernetLarge Library"
+#elif USE_ETHERNET_GENERIC
+  #include "Ethernet_Generic.h"
+
+  #define ETHERNET_LARGE_BUFFERS
+
+  #define _ETG_LOGLEVEL_                      1
+      
+  #warning Using W5x00 & Ethernet_Generic lib
+  #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
 #elif USE_ETHERNET_ESP8266
   #include "Ethernet_ESP8266.h"
   #warning Using W5x00 & Ethernet_ESP8266 lib 
@@ -91,14 +79,14 @@
   #define SHIELD_TYPE           "ENC28J60 & EthernetENC Library"
 #elif USE_CUSTOM_ETHERNET
   //#include "Ethernet_XYZ.h"
-  #include "EthernetENC.h"
+  #include "Ethernet.h"
   #warning Using Custom Ethernet library. You must include a library and initialize.
   #define SHIELD_TYPE           "Custom Ethernet & Ethernet_XYZ Library"
 #else
-  #define USE_ETHERNET          true
-  #include "Ethernet.h"
-  #warning Using Ethernet lib
-  #define SHIELD_TYPE           "W5x00 & Ethernet Library"
+   #define USE_ETHERNET_GENERIC   true
+  #include "Ethernet_Generic.h"
+  #warning Using default Ethernet_Generic lib
+  #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
 #endif
 
 #if defined(STM32F0)

@@ -15,12 +15,12 @@
  *****************************************************************************************************************************/
 
 #if (ESP8266 || ESP32)
-#define USE_LITTLEFS      true
-#define USE_SPIFFS        false
+  #define USE_LITTLEFS      true
+  #define USE_SPIFFS        false
 #endif
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.9.1"
-#define TIMEZONE_GENERIC_VERSION_MIN             1009001
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.0"
+#define TIMEZONE_GENERIC_VERSION_MIN             1010000
 
 //////////////////////////////////////////
 
@@ -42,7 +42,7 @@ TimeChangeRule etSTD = {"EST", First, Sun, Nov, 2, -300};   // Standard time = U
 Timezone *et;
 
 #ifndef LED_BUILTIN
-#define LED_BUILTIN       13
+  #define LED_BUILTIN       13
 #endif
 
 // format and print a time_t value, with a time zone appended.
