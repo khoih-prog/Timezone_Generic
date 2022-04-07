@@ -1208,14 +1208,14 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
 Timezone_Generic v1.10.0
-[ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 25
-[ETHERNET_WEBSERVER] MISO: 24
-[ETHERNET_WEBSERVER] SCK: 26
-[ETHERNET_WEBSERVER] SS: 5
-[ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+[EWS] =========================
+[EWS] Default SPI pinout:
+[EWS] MOSI: 25
+[EWS] MISO: 24
+[EWS] SCK: 26
+[EWS] SS: 5
+[EWS] =========================
+[EWS] Board : NRF52840_FEATHER , setCsPin: 10
 =========================
 Currently Used SPI pinout:
 MOSI:25
@@ -1263,14 +1263,14 @@ The following is debug terminal output when running example [**TZ_NTP_WorldClock
 ```
 Start TZ_NTP_WorldClock_Ethernet on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library
 Timezone_Generic v1.10.0
-[ETHERNET_WEBSERVER] =========== USE_ETHERNET_GENERIC ===========
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 25
-[ETHERNET_WEBSERVER] MISO: 24
-[ETHERNET_WEBSERVER] SCK: 26
-[ETHERNET_WEBSERVER] SS: 5
-[ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+[EWS] =========== USE_ETHERNET_GENERIC ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 25
+[EWS] MISO: 24
+[EWS] SCK: 26
+[EWS] SS: 5
+[EWS] =========================
+[EWS] Board : NRF52840_FEATHER , setCsPin: 10
 _pinCS = 0
 W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
 W5100::init: W5500, SSIZE =8192
@@ -1357,19 +1357,19 @@ The UTC time is 3:18:20
 
 ### 4. RTC_STM32_Ethernet on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500
 
-The following is debug terminal output when running example [**RTC_STM32_Ethernet**](examples/Ethernet/RTC_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500 using Ethernet2 Library
+The following is debug terminal output when running example [**RTC_STM32_Ethernet**](examples/Ethernet/RTC_STM32_Ethernet) on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500 using Ethernet_Generic Library
 
 ```
-Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet2 Library
+Start RTC_STM32_Ethernet on NUCLEO_F767ZI, using W5x00 & Ethernet_Generic Library
 Timezone_Generic v1.10.0
 DS323x_Generic v1.2.2
-[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 11
-[ETHERNET_WEBSERVER] MISO: 12
-[ETHERNET_WEBSERVER] SCK: 13
-[ETHERNET_WEBSERVER] SS: 10
-[ETHERNET_WEBSERVER] =========================
+[EWS] Board : NUCLEO_F767ZI , setCsPin: 10
+[EWS] Default SPI pinout:
+[EWS] MOSI: 11
+[EWS] MISO: 12
+[EWS] SCK: 13
+[EWS] SS: 10
+[EWS] =========================
 You're connected to the network, IP = 192.168.2.117
 
 Packet received
@@ -1398,14 +1398,14 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 Start RTC_Ethernet on SAM DUE with W5x00 using Ethernet_Generic Library
 Timezone_Generic v1.10.0
 DS323x_Generic v1.2.2
-[ETHERNET_WEBSERVER] =========== USE_ETHERNET_GENERIC ===========
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 75
-[ETHERNET_WEBSERVER] MISO: 74
-[ETHERNET_WEBSERVER] SCK: 76
-[ETHERNET_WEBSERVER] SS: 10
-[ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Board : SAM DUE , setCsPin: 10
+[EWS] =========== USE_ETHERNET_GENERIC ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 75
+[EWS] MISO: 74
+[EWS] SCK: 76
+[EWS] SS: 10
+[EWS] =========================
+[EWS] Board : SAM DUE , setCsPin: 10
 _pinCS = 0
 W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
 W5100::init: W5100, SSIZE =4096
@@ -1437,14 +1437,14 @@ The following is debug terminal output when running example [**RTC_Ethernet**](e
 Start RTC_Ethernet on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library
 Timezone_Generic v1.10.0
 DS323x_Generic v1.2.2
-[ETHERNET_WEBSERVER] =========== USE_ETHERNET_GENERIC ===========
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 25
-[ETHERNET_WEBSERVER] MISO: 24
-[ETHERNET_WEBSERVER] SCK: 26
-[ETHERNET_WEBSERVER] SS: 5
-[ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+[EWS] =========== USE_ETHERNET_GENERIC ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 25
+[EWS] MISO: 24
+[EWS] SCK: 26
+[EWS] SS: 5
+[EWS] =========================
+[EWS] Board : NRF52840_FEATHER , setCsPin: 10
 _pinCS = 0
 W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
 W5100::init: W5500, SSIZE =8192
@@ -1730,13 +1730,13 @@ The following is debug terminal output when running example [**BI_RTC_STM32_Ethe
 ```
 Start BI_RTC_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
 Timezone_Generic v1.10.0
-[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 11
-[ETHERNET_WEBSERVER] MISO: 12
-[ETHERNET_WEBSERVER] SCK: 13
-[ETHERNET_WEBSERVER] SS: 10
-[ETHERNET_WEBSERVER] =========================
+[EWS] Board : NUCLEO_F767ZI , setCsPin: 10
+[EWS] Default SPI pinout:
+[EWS] MOSI: 11
+[EWS] MISO: 12
+[EWS] SCK: 13
+[EWS] SS: 10
+[EWS] =========================
 You're connected to the network, IP = 192.168.2.97
 Packet received
 Seconds since Jan 1 1900 = 3858289514
@@ -1766,13 +1766,13 @@ The following is debug terminal output when running example [**BI_RTC_Alarm_STM3
 ```
 Start BI_RTC_Alarm_STM32_Ethernet on NUCLEO_F767ZI, using LAN8742A Ethernet & STM32Ethernet Library
 Timezone_Generic v1.10.0
-[ETHERNET_WEBSERVER] Board : NUCLEO_F767ZI , setCsPin: 10
-[ETHERNET_WEBSERVER] Default SPI pinout:
-[ETHERNET_WEBSERVER] MOSI: 11
-[ETHERNET_WEBSERVER] MISO: 12
-[ETHERNET_WEBSERVER] SCK: 13
-[ETHERNET_WEBSERVER] SS: 10
-[ETHERNET_WEBSERVER] =========================
+[EWS] Board : NUCLEO_F767ZI , setCsPin: 10
+[EWS] Default SPI pinout:
+[EWS] MOSI: 11
+[EWS] MISO: 12
+[EWS] SCK: 13
+[EWS] SS: 10
+[EWS] =========================
 You're connected to the network, IP = 192.168.2.96
 Packet received
 Seconds since Jan 1 1900 = 3812900198
