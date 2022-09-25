@@ -22,8 +22,8 @@
 #define TZ_DBG_PORT         Serial
 #define _TZ_LOGLEVEL_       1
 
-#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.0"
-#define TIMEZONE_GENERIC_VERSION_MIN             1010000
+#define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.1"
+#define TIMEZONE_GENERIC_VERSION_MIN             1010001
 
 //////////////////////////////////////////
 
