@@ -227,25 +227,8 @@ void getNTPTime(void)
 
 //////////////////////////////////////////
 
-void setup()
+void initEthernet()
 {
-  Serial.begin(115200);
-  while (!Serial);
-
-  delay(200);
-
-  Serial.print(F("\nStart TZ_NTP_WorldClock_STM32_Ethernet on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
-  Serial.println(TIMEZONE_GENERIC_VERSION);
-  
-#if defined(TIMEZONE_GENERIC_VERSION_MIN)
-  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
-  {
-    Serial.print("Warning. Must use this example on Version equal or later than : ");
-    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
-  }
-#endif
-
 #if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
 
   ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
@@ -269,7 +252,7 @@ void setup()
   
   #endif  //( ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 #endif
-  
+
   // start the ethernet connection and the server:
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
@@ -279,7 +262,20 @@ void setup()
 
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
-  Serial.println(Ethernet.localIP());
+  Serial.println(Ethernet.localIP());  
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  while (!Serial && millis() < 5000);
+
+  Serial.print(F("\nStart TZ_NTP_WorldClock_STM32_Ethernet on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.println(ETHERNET_WEBSERVER_STM32_VERSION);
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+
+  initEthernet();
 
   Udp.begin(localPort);
 }

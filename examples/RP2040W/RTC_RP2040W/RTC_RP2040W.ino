@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
-  TZ_NTP_Clock_STM32_Ethernet.ino
+  RTC_RP2040W.ino
 
-  For STM32 with built-in Ethernet (Nucleo-144, DISCOVERY, etc) or W5x00/ENC28J60 Ethernet
+  Self-adjusting clock for one time zone using an external DS3231 RTC
   
   For AVR, ESP8266/ESP32, SAMD21/SAMD51, nRF52, STM32, WT32_ETH01 boards
 
@@ -16,8 +16,6 @@
 
 #include "defines.h"
 
-//////////////////////////////////////////
-
 #define TIMEZONE_GENERIC_VERSION_MIN_TARGET      "Timezone_Generic v1.10.0"
 #define TIMEZONE_GENERIC_VERSION_MIN             1010000
 
@@ -25,6 +23,12 @@
 
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include <Timezone_Generic.h>           // https://github.com/khoih-prog/Timezone_Generic
+
+#include <DS323x_Generic.h>               // https://github.com/khoih-prog/DS323x_Generic
+
+DS323x rtc;
+
+//////////////////////////////////////////
 
 #define USING_INITIALIZED_TZ      false   //true
 
@@ -41,13 +45,11 @@
   TimeChangeRule mySTD;
 #endif
 
-// If TimeChangeRules are already stored in EEPROM, comment out the three
-// lines above and uncomment the line below.
-//Timezone myTZ(100);       // assumes rules stored at EEPROM address 100
-
-TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ abbrev
+TimeChangeRule *tcr;        //pointer to the time change rule, use to get TZ abbrev
 
 //////////////////////////////////////////
+
+int status = WL_IDLE_STATUS;      // the Wifi radio's status
 
 char timeServer[]         = "time.nist.gov";  // NTP server
 unsigned int localPort    = 2390;             // local port to listen for UDP packets
@@ -58,7 +60,7 @@ const int UDP_TIMEOUT     = 2000;     // timeout in miliseconds to wait for an U
 byte packetBuffer[NTP_PACKET_SIZE];   // buffer to hold incoming and outgoing packets
 
 // A UDP instance to let us send and receive packets over UDP
-EthernetUDP Udp;
+WiFiUDP Udp;
 
 // send an NTP request to the time server at the given address
 void sendNTPpacket(char *ntpSrv)
@@ -87,35 +89,10 @@ void sendNTPpacket(char *ntpSrv)
   Udp.endPacket();
 }
 
-//////////////////////////////////////////
-
-// format and print a time_t value, with a time zone appended.
-void printDateTime(time_t t, const char *tz)
-{
-    char buf[32];
-    char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
-    strcpy(m, monthShortStr(month(t)));
-    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
-        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
-    Serial.println(buf);
-}
-
-void displayClock(void)
-{
-  time_t utc = now();
-
-  time_t local = myTZ.toLocal(utc, &tcr);
-  
-  Serial.println();
-  printDateTime(utc, "UTC");
-  printDateTime(local, tcr -> abbrev);
-  delay(10000);
-}
-
 void getNTPTime(void)
 {
   static bool gotCurrentTime = false;
-  
+
   // Just get the correct ime once
   if (!gotCurrentTime)
   {
@@ -147,6 +124,9 @@ void getNTPTime(void)
       // subtract seventy years:
       unsigned long epoch = secsSince1900 - seventyYears;
 
+      // print Unix time:
+      Serial.println(epoch);
+      
       // Get the time_t from epoch
       time_t epoch_t = epoch;
 
@@ -154,10 +134,24 @@ void getNTPTime(void)
       // warning: assumes that compileTime() returns US EDT
       // adjust the following line accordingly if you're in another time zone
       setTime(epoch_t);
-      
-      // print Unix time:
-      Serial.println(epoch);
 
+      // Update RTC
+      // Can use either one of these functions
+      
+      // 1) DateTime(tmElements_t). Must create tmElements_t if not present
+      //tmElements_t tm;
+      //breakTime(epoch_t, tm);
+      //rtc.now( DateTime(tm) );
+      
+      // 2) DateTime(year, month, day, hour, min, sec)
+      //rtc.now( DateTime(year(epoch_t), month(epoch_t), day(epoch_t), hour(epoch_t), minute(epoch_t), second(epoch_t) ) );
+
+      // 3) DateTime (time_t)
+      //rtc.now( DateTime(epoch_t) );
+
+      // 4) DateTime(unsigned long epoch). The best and easiest way
+      rtc.now( DateTime((uint32_t) epoch) );
+       
       // print the hour, minute and second:
       Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
       Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
@@ -190,42 +184,15 @@ void getNTPTime(void)
 
 //////////////////////////////////////////
 
-void initEthernet()
+// format and print a time_t value, with a time zone appended.
+void printDateTime(time_t t, const char *tz)
 {
-#if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
-
-  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
-
-  ET_LOGWARN(F("Default SPI pinout:"));
-  ET_LOGWARN1(F("MOSI:"), MOSI);
-  ET_LOGWARN1(F("MISO:"), MISO);
-  ET_LOGWARN1(F("SCK:"),  SCK);
-  ET_LOGWARN1(F("SS:"),   SS);
-  ET_LOGWARN(F("========================="));
-
-  // For other boards, to change if necessary
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-    Ethernet.init (USE_THIS_SS_PIN);
-   
-  #elif USE_CUSTOM_ETHERNET
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    //Ethernet.init(USE_THIS_SS_PIN);
-  
-  #endif  //( ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-#endif
-
-  // start the ethernet connection and the server:
-  // Use DHCP dynamic IP and random mac
-  uint16_t index = millis() % NUMBER_OF_MAC;
-  // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  Ethernet.begin(mac[index]);
-
-  // you're connected now, so print out the data
-  Serial.print(F("You're connected to the network, IP = "));
-  Serial.println(Ethernet.localIP());  
+  char buf[32];
+  char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+  strcpy(m, monthShortStr(month(t)));
+  sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+          hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+  Serial.println(buf);
 }
 
 void setup()
@@ -233,12 +200,53 @@ void setup()
   Serial.begin(115200);
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStart TZ_NTP_Clock_STM32_Ethernet on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
-  Serial.println(ETHERNET_WEBSERVER_STM32_VERSION);
-  Serial.println(TIMEZONE_GENERIC_VERSION);
+  delay(200);
 
-  initEthernet();
+  Serial.print(F("\nStart RTC_RP2040W on ")); Serial.println(BOARD_NAME);
+  Serial.println(TIMEZONE_GENERIC_VERSION);
+  Serial.println(DS323X_GENERIC_VERSION);
+
+#if defined(TIMEZONE_GENERIC_VERSION_MIN)
+  if (TIMEZONE_GENERIC_VERSION_INT < TIMEZONE_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(TIMEZONE_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
+
+  Wire.begin();
+
+  ///////////////////////////////////
+
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE)
+  {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true);
+  }
+
+  Serial.print(F("Connecting to SSID: "));
+  Serial.println(ssid);
+
+  status = WiFi.begin(ssid, pass);
+
+  delay(1000);
+   
+  // attempt to connect to WiFi network
+  while ( status != WL_CONNECTED)
+  {
+    delay(500);
+        
+    // Connect to WPA/WPA2 network
+    status = WiFi.status();
+  }
+
+  // you're connected now, so print out the data
+  Serial.print(F("You're connected to the network, IP = "));
+  Serial.println(WiFi.localIP());
+
+  ///////////////////////////////////
 
 #if !(USING_INITIALIZED_TZ)
 
@@ -272,13 +280,27 @@ void setup()
   
 #endif
 
-  myTZ.writeRules();
-
   Udp.begin(localPort);
+
+  rtc.attach(Wire);
 }
 
 void loop()
 {
+  // Get time from NTP once, then update RTC
+  // You certainly can make NTP check every hour/day to update RTC ti have better accuracy
   getNTPTime();
-  displayClock();
+
+  // Display time from RTC
+  DateTime now = rtc.now();
+
+  Serial.println("============================");
+
+  time_t utc = now.get_time_t();
+  time_t local = myTZ.toLocal(utc, &tcr);
+  
+  printDateTime(utc, "UTC");
+  printDateTime(local, tcr -> abbrev);
+  
+  delay(10000);
 }
