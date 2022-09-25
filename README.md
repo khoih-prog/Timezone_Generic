@@ -244,7 +244,7 @@ This [**Timezone_Generic library**](https://github.com/khoih-prog/Timezone_Gener
 15. [`Arduino AmebaD core 3.1.4+`](https://github.com/ambiot/ambd_arduino) for Realtek RTL8720DN, RTL8722DM and RTL8722CSM. [![GitHub release](https://img.shields.io/github/release/ambiot/ambd_arduino.svg)](https://github.com/ambiot/ambd_arduino/releases/latest)
 16. [`Time v1.6.1+`](https://github.com/PaulStoffregen/Time). [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/Time.svg)](https://github.com/PaulStoffregen/Time/releases/latest). For PIO [`Time library`](https://platformio.org/lib/show/44/Time)
 17. Depending on which board you're using:
-   - [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. [![GitHub release](https://img.shields.io/github/release/sebnil/DueFlashStorage.svg)](https://github.com/sebnil/DueFlashStorage/releases/latest)
+   - [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE.
    - [`FlashStorage_SAMD library v1.3.2+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
    - [`FlashStorage_STM32F1 library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32F1) for STM32F1/F3 boards. [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_STM32F1.svg)](https://github.com/khoih-prog/FlashStorage_STM32F1/releases/latest)
    - [`FlashStorage_STM32 library v1.2.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_STM32.svg)](https://github.com/khoih-prog/FlashStorage_STM32/releases/latest)
@@ -1197,13 +1197,13 @@ tz.display_STD_Rule();
 
 #### 1. File [TZ_NTP_Clock_Ethernet.ino](examples/Ethernet/TZ_NTP_Clock_Ethernet/TZ_NTP_Clock_Ethernet.ino)
 
-https://github.com/khoih-prog/Timezone_Generic/blob/1ae8583ed1270116fb97c065f6cbb711e8e94e43/examples/Ethernet/TZ_NTP_Clock_Ethernet/TZ_NTP_Clock_Ethernet.ino#L21-L434
+https://github.com/khoih-prog/Timezone_Generic/blob/89a32d8fa53577523b3826f08071fd4f546ab44a/examples/Ethernet/TZ_NTP_Clock_Ethernet/TZ_NTP_Clock_Ethernet.ino#L21-L434
 
 ---
 
 #### 2. File [defines.h](examples/Ethernet/TZ_NTP_Clock_Ethernet/defines.h)
 
-https://github.com/khoih-prog/Timezone_Generic/blob/1ae8583ed1270116fb97c065f6cbb711e8e94e43/examples/Ethernet/TZ_NTP_Clock_Ethernet/defines.h#L10-L475
+https://github.com/khoih-prog/Timezone_Generic/blob/89a32d8fa53577523b3826f08071fd4f546ab44a/examples/Ethernet/TZ_NTP_Clock_Ethernet/defines.h#L10-L475
 
 ---
 ---
