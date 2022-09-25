@@ -11,7 +11,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Timezone_Generic
   Licensed under MIT license
   
-  Version: 1.10.0
+  Version: 1.10.1
 
   Version Modified By  Date      Comments
   ------- -----------  ---------- -----------
@@ -32,6 +32,7 @@
   1.9.0   K Hoang      20/01/2022 Make compatible to old code
   1.9.1   K Hoang      26/01/2022 Update to be compatible with new FlashStorage libraries. Add support to more SAMD/STM32 boards
   1.10.0  K Hoang      06/04/2022 Use Ethernet_Generic library as default. Add support to Portenta_H7 Ethernet and WiFi
+  1.10.1  K Hoang      25/09/2022 Add support to `RP2040W` using `CYW43439 WiFi` with `arduino-pico` core
  **********************************************************************************************************************************/
 
 #pragma once
