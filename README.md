@@ -64,8 +64,8 @@
 * [Usage](#usage)
   * [TimeChangeRules struct](#timechangerules-struct)
   * [Timezone class](#timezone-class)
-    * [1. Using initialzed Timezone](#1-using-initialzed-timezone)
-    * [2. Using un-initialzed Timezone (from v1.2.6)](#2-using-un-initialzed-timezone-from-v126)
+    * [1. Using initialized Timezone](#1-using-initialized-timezone)
+    * [2. Using un-initialized Timezone (from v1.2.6)](#2-using-un-initialized-timezone-from-v126)
   * [Timezone_Generic library methods](#timezone_generic-library-methods)
     * [time_t toLocal(time_t utc);](#time_t-tolocaltime_t-utc)
     * [time_t toLocal(time_t utc, TimeChangeRule **tcr);](#time_t-tolocaltime_t-utc-timechangerule-tcr)
@@ -290,7 +290,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**Timezone_Generic** library](https://platformio.org/lib/show/11329/Timezone_Generic) by using [Library Manager](https://platformio.org/lib/show/11329/Timezone_Generic/installation). Search for **Timezone_Generic** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**Timezone_Generic** library](https://registry.platformio.org/libraries/khoih-prog/Timezone_Generic) by using [Library Manager](https://registry.platformio.org/libraries/khoih-prog/Timezone_Generic/installation). Search for **Timezone_Generic** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 
@@ -454,7 +454,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
@@ -470,7 +470,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h`
@@ -790,7 +790,7 @@ TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
 
 There are several ways to define **Timezone** objects.
 
-#### 1. Using initialzed Timezone
+#### 1. Using initialized Timezone
 
 By first defining **TimeChangeRule**s and giving the daylight time rule and the standard time rule (assuming usEDT and usEST defined as above):
 
@@ -814,7 +814,7 @@ By reading rules previously stored in **EEPROM/DueFlashStorage/FlashStorage/Litt
 
 Note that **TimeChangeRule**s require TZ_DATA_SIZE (12) bytes of storage each, so the pair of rules associated with a Timezone object requires 24 bytes total.  This could possibly change in future versions of the library.  The size of a **TimeChangeRule** can be checked with `TZ_DATA_SIZE` or `sizeof(TimeChangeRule)`.
 
-#### 2. Using un-initialzed Timezone (from v1.2.6)
+#### 2. Using un-initialized Timezone (from v1.2.6)
 
 Just initialize the Timezone object without any TimeChangeRule.
 
@@ -835,7 +835,7 @@ Just initialize the Timezone object without any TimeChangeRule.
 #endif
 ```
 
-then in setup(), get the correct TimeChangeRule (from SAM DUE DueFlashStorage, SAMD FlashStorage, nRF52 LittleFS, STM32 and AVR EEPROM, etc. or from any input), and initialzed the Timezone.
+then in setup(), get the correct TimeChangeRule (from SAM DUE DueFlashStorage, SAMD FlashStorage, nRF52 LittleFS, STM32 and AVR EEPROM, etc. or from any input), and initialized the Timezone.
 
 ```
 #if (USING_INITIALIZED_TZ)
@@ -2107,7 +2107,7 @@ Submit issues to: [Timezone_Generic issues](https://github.com/khoih-prog/Timezo
  1. Add support to **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.) and FlashStorage**
  2. Add support to **Adafruit SAMD21 (Itsy-Bitsy M0, Metro M0, Feather M0 Express, etc.) and FlashStorage**.
  3. Add support to **Adafruit SAMD51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and FlashStorage**.
- 4. Add support to **Adafruit nRF52 ( Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc. annd LittleFS**.
+ 4. Add support to **Adafruit nRF52 ( Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc. and LittleFS**.
  5. Add support to **SAM DUE and DueFlashStorage**.
  6. Add support to Ethernet W5x00, using either [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`Ethernet2`](https://github.com/adafruit/Ethernet2), [`Ethernet3`](https://github.com/sstaub/Ethernet3) or [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge) library
  7. Add support to Ethernet ENC28J60, using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
